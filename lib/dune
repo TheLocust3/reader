@@ -1,4 +1,4 @@
 (library
  (name reader)
- (libraries dream cohttp-lwt-unix cohttp-async)
+ (libraries dream cohttp-lwt-unix cohttp-async markup)
  (preprocess (pps lwt_ppx ppx_yojson_conv)))
