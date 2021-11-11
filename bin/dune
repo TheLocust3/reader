@@ -1,4 +1,4 @@
 (executable
- (public_name reader_ocaml)
+ (public_name reader)
  (name main)
- (libraries reader_ocaml))
+ (libraries reader))

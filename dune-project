@@ -1,2 +1,2 @@
 (lang dune 2.9)
-(name reader_ocaml)
+(name reader)

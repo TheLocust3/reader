@@ -1,2 +1,3 @@
 (library
- (name reader_ocaml))
+ (name reader)
+ (libraries dream))
