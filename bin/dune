@@ -1,0 +1,4 @@
+(executable
+ (public_name reader_ocaml)
+ (name main)
+ (libraries reader_ocaml))
