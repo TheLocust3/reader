@@ -8,6 +8,7 @@ type feed = {
 }
 
 let show { title } = "(Feed title = " ^ title ^ ")"
+let empty = { title = "" }
 
 let fromUri uri = 
   Client.get uri >>= fun (_, body) ->
@@ -18,11 +19,17 @@ let fromBody body =
     ~text: (fun ss -> Content (String.concat "" ss))
     ~element: (fun (_, name) _ children -> Node (name, children))
 
-let fromXml _ = Some { title = "test" }
+let fromXml = function
+  Node ("rss", [Node ("channel", children)]) ->
+   Some (List.fold_left(fun feed child -> match child with
+     | Node ("title", [Content title]) -> { title = title }
+     | _ -> feed
+   )(empty)(children))
+  | _ -> None
 
 let feedFromUri uri = 
   fromUri uri >|= fun (body) ->
-    let feed = body |> string |> fromBody |> fromXml in
+    let feed = body |> string |> fromBody |> Option.map(fromXml) |> Option.join in
     print_endline (show (Option.get feed));
     ()
 
