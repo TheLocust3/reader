@@ -9,13 +9,7 @@ module Item = struct
     title : string;
     link : string;
     description : string;
-  }
-
-  let show { title; link; description; } =
-    "  (Item
-         title = \"" ^ title ^ "\"
-         link = \"" ^ link ^ "\"
-         description = \"" ^ description ^ "\")"
+  } [@@deriving yojson]
 
   let empty = { title = ""; link = ""; description = ""; }
 
@@ -36,14 +30,7 @@ module Feed = struct
     link : string;
     description : string;
     items : Item.item list;
-  }
-
-  let show { title; link; description; items; } =
-    "(Feed
-       title = \"" ^ title ^ "\"
-       link = \"" ^ link ^ "\"
-       description = \"" ^ description ^ "\"
-       items = [\n" ^ String.concat "\n" (List.map Item.show items) ^ "])"
+  } [@@deriving yojson]
 
   let empty = { title = ""; link = ""; description = ""; items = []; }
 
@@ -71,9 +58,9 @@ let fromBody body =
 let feedFromUri uri = 
   fromUri uri >|= fun (body) ->
     let feed = body |> string |> fromBody |> Option.map(Feed.fromXml) |> Option.join in
-    print_endline (Feed.show (Option.get feed));
-    ()
+    feed
 
 let run () =
-  let _ = Lwt_main.run (feedFromUri (Uri.of_string "https://hnrss.org/frontpage")) in
+  let feed = Lwt_main.run (feedFromUri (Uri.of_string "https://hnrss.org/frontpage")) in
+  Format.printf "Read feed:\n%a" Yojson.Safe.pp (feed |> Option.get |> Feed.feed_to_yojson);
   ()

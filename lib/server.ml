@@ -1,5 +1,10 @@
-type message_object = {
-  message : string;
+
+type feed_request = {
+  uri : string;
+} [@@deriving yojson]
+
+type feed_response = {
+  feed : string;
 } [@@deriving yojson]
 
 let run () =
@@ -7,19 +12,12 @@ let run () =
   @@ Dream.logger
   @@ Dream.router [
 
-    Dream.post "/feed/read"
-      (fun request ->
-        let%lwt body = Dream.body request in
+    Dream.post "/feed/read" (fun request ->
+      let%lwt body = Dream.body request in
 
-        let message_object =
-          body
-          |> Yojson.Safe.from_string
-          |> message_object_of_yojson
-        in
-
-        `String message_object.message
-        |> Yojson.Safe.to_string
-        |> Dream.json);
-
+      let _ = body |> Yojson.Safe.from_string |> feed_request_of_yojson
+      in
+        { feed = "" } |> feed_response_to_yojson |> Yojson.Safe.to_string |> Dream.json
+    );
   ]
   @@ Dream.not_found
