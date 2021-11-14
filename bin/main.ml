@@ -1,2 +1,2 @@
-(*let () = Reader.Server.run()*)
-let () = Reader.Rss.run()
+let () = Reader.Server.run()
+(*let () = Reader.Rss.run()*)
