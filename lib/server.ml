@@ -19,7 +19,7 @@ let run () =
       let req = body |> Yojson.Safe.from_string |> feed_request_of_yojson in
         match req with
           | Ok { uri } ->
-            (Rss.feedFromUri (Uri.of_string uri)) >>= (fun (feed) ->
+            (Rss.fromUri (Uri.of_string uri)) >>= (fun (feed) ->
               { feed = feed } |> feed_response_to_yojson |> Yojson.Safe.to_string |> Dream.json
             )
           | _ ->
