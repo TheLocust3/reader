@@ -4,11 +4,15 @@ open Markup
 
 type xml = Content of string | Node of string * xml list
 
-let fromBody body =
-  body |> parse_xml |> signals |> tree
+let fromBody parse body =
+  body |> parse |> signals |> tree
     ~text: (fun ss -> Content (String.concat "" ss))
     ~element: (fun (_, name) _ children -> Node (name, children))
 
-let fromUri uri = 
+let fromUri parse uri = 
   Client.get uri >>= fun (_, body) ->
-    body |> Cohttp_lwt.Body.to_string >|= fun body -> body |> string |> fromBody
+    body |> Cohttp_lwt.Body.to_string >|= fun body -> body |> string |> (fromBody parse)
+
+
+let xmlFromUri uri = fromUri parse_xml uri
+let htmlFromUri uri = fromUri parse_html uri

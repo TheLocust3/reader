@@ -43,7 +43,7 @@ module Feed = struct
 end
 
 let fromUri uri = 
-  Xml.fromUri uri >|= fun (body) ->
+  Xml.xmlFromUri uri >|= fun (body) ->
     body |> Option.map(Feed.fromXml) |> Option.join
 
 let run () =
