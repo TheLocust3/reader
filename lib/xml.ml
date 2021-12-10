@@ -2,12 +2,16 @@ open Lwt
 open Cohttp_lwt_unix
 open Markup
 
-type xml = Content of string | Node of string * xml list
+module StringMap = Map.Make(String)
+type xml = Content of string | Node of string * string StringMap.t * xml list
 
 let fromBody parse body =
   body |> parse |> signals |> tree
     ~text: (fun ss -> Content (String.concat "" ss))
-    ~element: (fun (_, name) _ children -> Node (name, children))
+    ~element: (fun (_, name) attrs children ->
+      Node (name, List.fold_left(fun acc ((_, name), value) -> 
+        StringMap.add (String.lowercase_ascii name) value acc
+      )(StringMap.empty)(attrs), children))
 
 let fromUri parse uri = 
   Client.get uri >>= fun (_, body) ->

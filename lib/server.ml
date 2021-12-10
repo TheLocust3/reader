@@ -13,7 +13,7 @@ type scrape_request = {
 } [@@deriving yojson]
 
 type scrape_response = {
-  source : Scraper.Source.source;
+  source : Scraper.Source.t option;
 } [@@deriving yojson]
 
 let run () =
