@@ -18,21 +18,21 @@ module Source = struct
   } [@@deriving yojson]
 
   let empty uri = { uri = uri; links = StringSet.empty }
-  let withLink link source = (match (link |> Uri.of_string |> Uri.host) with
+  let with_link link source = (match (link |> Uri.of_string |> Uri.host) with
     | Some(host) -> { source with links = StringSet.add host source.links }
     | None -> source)
 
-  let rec fromXml source = function
+  let rec from_xml source = function
     Xml.Node ("a", attrs, _) ->
-      (match (Option.map(fun link -> withLink link source)(Xml.StringMap.find_opt "href" attrs)) with
+      (match (Option.map(fun link -> with_link link source)(Xml.StringMap.find_opt "href" attrs)) with
       | Some source -> source
       | None -> source)
   | Xml.Node (_, _, children) ->
-    List.fold_left(fromXml)(source)(children)
+    List.fold_left(from_xml)(source)(children)
   | Xml.Content _ ->
     source
 end
 
 let scrape uri =
-  Xml.htmlFromUri uri >|= fun (root) ->
-    root |> Option.map(Source.fromXml (Source.empty (Uri.to_string uri)))
+  Xml.html_from_uri uri >|= fun (root) ->
+    root |> Option.map(Source.from_xml (Source.empty (Uri.to_string uri)))
