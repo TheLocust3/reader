@@ -6,7 +6,6 @@
 `curl -XPOST http://localhost:8080/feeds/discover -d'{uri: "https://astralcodexten.substack.com"}'`
 
 ## TODO
- - Scrape wesbite for RSS feed
  - Pipeline: link to RSS feed => RSS feed => Ring from feed => RSS feeds from links in Ring
    - Dump various outputs in database
  - Proper error handling in feed parsing
