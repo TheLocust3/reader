@@ -5,7 +5,7 @@ type feed_request = {
 } [@@deriving yojson]
 
 type feed_response = {
-  feed : Rss.Feed.feed option;
+  feed : Feed.t option;
 } [@@deriving yojson]
 
 type scrape_request = {
@@ -13,7 +13,7 @@ type scrape_request = {
 } [@@deriving yojson]
 
 type scrape_response = {
-  source : Scraper.Source.t option;
+  source : Ring.t option;
 } [@@deriving yojson]
 
 type discover_request = {
@@ -21,7 +21,7 @@ type discover_request = {
 } [@@deriving yojson]
 
 type discover_response = {
-  feeds : Discover.Source.t list;
+  feeds : Source.t list;
 } [@@deriving yojson]
 
 let run () =

@@ -1,18 +1,7 @@
 open Lwt
+open Source
 
-module Source = struct
-  type t = {
-    source : string;
-    name : string option;
-  } [@@deriving yojson]
-
-  let create uri href name =
-    let sourceUri = Uri.of_string href in
-    let source = (match Uri.host sourceUri with
-        | Some(_) -> Uri.to_string sourceUri
-        | None -> Uri.to_string(Uri.with_path uri href)) in
-    { source = source; name = name }
-
+module ToSource = struct
   let (let*) x f = Option.bind x f
   let filter_opt f x = List.nth_opt(List.filter(f)(Option.to_list x))(0)
 
@@ -32,4 +21,4 @@ end
 
 let discover uri =
   Xml.html_from_uri uri >|= fun (root) ->
-    root |> Option.map(Source.from_xml uri []) |> Option.to_list |> List.flatten
+    root |> Option.map(ToSource.from_xml uri []) |> Option.to_list |> List.flatten
