@@ -1,5 +1,5 @@
 open Lwt
-open Ring
+open Model.Ring
 
 module ToRing = struct
   let rec from_xml source = function
@@ -15,4 +15,4 @@ end
 
 let scrape uri =
   Xml.html_from_uri uri >|= fun (root) ->
-    root |> Option.map(ToRing.from_xml (Ring.empty (Uri.to_string uri)))
+    root |> Option.map(ToRing.from_xml (Model.Ring.empty (Uri.to_string uri)))

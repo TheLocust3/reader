@@ -1,0 +1,8 @@
+(library
+  (name model)
+  (libraries
+    cohttp-lwt-unix
+    cohttp-async
+    yojson
+    ppx_deriving_yojson.runtime)
+  (preprocess (pps ppx_deriving_yojson)))

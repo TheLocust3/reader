@@ -1,0 +1,10 @@
+(library
+  (name reader)
+  (libraries
+    model
+    source
+    database
+    dream
+    yojson
+    ppx_deriving_yojson.runtime)
+  (preprocess (pps lwt_ppx ppx_deriving_yojson)))

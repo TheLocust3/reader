@@ -1,7 +1,7 @@
 open Lwt
 
 module ToItem = struct
-  open Feed.Item
+  open Model.Feed.Item
 
   let from_xml = function
     Xml.Node ("item", _, children) ->
@@ -15,7 +15,7 @@ module ToItem = struct
 end
 
 module ToFeed = struct
-  open Feed
+  open Model.Feed
 
   let from_xml = function
     Xml.Node ("rss", _, [Xml.Node ("channel", _, children)]) ->

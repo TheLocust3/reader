@@ -1,5 +1,5 @@
 open Lwt
-open Source
+open Model.Source
 
 module ToSource = struct
   let (let*) x f = Option.bind x f

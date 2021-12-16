@@ -5,7 +5,7 @@ type feed_request = {
 } [@@deriving yojson]
 
 type feed_response = {
-  feed : Feed.t option;
+  feed : Model.Feed.t option;
 } [@@deriving yojson]
 
 type scrape_request = {
@@ -13,7 +13,7 @@ type scrape_request = {
 } [@@deriving yojson]
 
 type scrape_response = {
-  source : Ring.t option;
+  source : Model.Ring.t option;
 } [@@deriving yojson]
 
 type discover_request = {
@@ -21,12 +21,13 @@ type discover_request = {
 } [@@deriving yojson]
 
 type discover_response = {
-  feeds : Source.t list;
+  feeds : Model.Source.t list;
 } [@@deriving yojson]
 
 let run () =
   Dream.run
   @@ Dream.logger
+  @@ Dream.sql_pool "sqlite3:db.sqlite"
   @@ Dream.router [
 
     Dream.post "/feeds/read" (fun request ->
@@ -35,7 +36,7 @@ let run () =
       let req = body |> Yojson.Safe.from_string |> feed_request_of_yojson in
         match req with
           | Ok { uri } ->
-            (Rss.from_uri (Uri.of_string uri)) >>= (fun (feed) ->
+            (Source.Rss.from_uri (Uri.of_string uri)) >>= (fun (feed) ->
               { feed = feed } |> feed_response_to_yojson |> Yojson.Safe.to_string |> Dream.json
             )
           | _ ->
@@ -48,7 +49,7 @@ let run () =
       let req = body |> Yojson.Safe.from_string |> discover_request_of_yojson in
         match req with
           | Ok { uri } ->
-            (Discover.discover (Uri.of_string uri)) >>= (fun (feeds) ->
+            (Source.Discover.discover (Uri.of_string uri)) >>= (fun (feeds) ->
               { feeds = feeds } |> discover_response_to_yojson |> Yojson.Safe.to_string |> Dream.json
             )
           | _ ->
@@ -61,7 +62,7 @@ let run () =
       let req = body |> Yojson.Safe.from_string |> scrape_request_of_yojson in
         match req with
           | Ok { uri } ->
-            (Scraper.scrape (Uri.of_string uri)) >>= (fun (source) ->
+            (Source.Scraper.scrape (Uri.of_string uri)) >>= (fun (source) ->
               { source = source } |> scrape_response_to_yojson |> Yojson.Safe.to_string |> Dream.json
             )
           | _ ->

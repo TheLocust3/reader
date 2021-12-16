@@ -1,0 +1,8 @@
+(library
+  (name database)
+  (libraries
+    model
+    caqti
+    caqti-lwt
+    caqti-driver-sqlite3)
+  (preprocess (pps lwt_ppx)))
