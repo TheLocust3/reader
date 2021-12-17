@@ -4,5 +4,6 @@
     model
     caqti
     caqti-lwt
-    caqti-driver-sqlite3)
-  (preprocess (pps lwt_ppx)))
+    caqti-driver-sqlite3
+    ppx_rapper_lwt)
+  (preprocess (pps lwt_ppx ppx_rapper)))

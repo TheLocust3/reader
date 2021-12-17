@@ -27,7 +27,7 @@ type discover_response = {
 let run () =
   Dream.run
   @@ Dream.logger
-  @@ Dream.sql_pool "sqlite3:db.sqlite"
+  @@ Dream.sql_pool Database.Connect.url
   @@ Dream.router [
 
     Dream.post "/feeds/read" (fun request ->
