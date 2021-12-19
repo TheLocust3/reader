@@ -1,2 +1,2 @@
-val migrate : unit -> (unit, Error.t) result Lwt.t
-val rollback : unit -> (unit, Error.t) result Lwt.t
+val migrate : unit -> unit Lwt.t
+val rollback : unit -> unit Lwt.t

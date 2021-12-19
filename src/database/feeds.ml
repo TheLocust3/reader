@@ -10,7 +10,7 @@ let migrate_query = [%rapper
 
 let rollback_query = [%rapper
   execute {sql|
-    DROP TABLE feeds;
+    DROP TABLE feeds
   |sql}
   syntax_off
 ]
@@ -18,9 +18,9 @@ let rollback_query = [%rapper
 let migrate () =
   let pool = Connect.testPool() in
   let query = migrate_query() in
-    Caqti_lwt.Pool.use query pool |> Error.or_error
+    Caqti_lwt.Pool.use query pool |> Error.or_print
 
 let rollback () =
   let pool = Connect.testPool() in
   let query = rollback_query() in
-    Caqti_lwt.Pool.use query pool |> Error.or_error
+    Caqti_lwt.Pool.use query pool |> Error.or_print
