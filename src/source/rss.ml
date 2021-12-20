@@ -17,18 +17,18 @@ end
 module ToFeed = struct
   open Model.Feed
 
-  let from_xml = function
+  let from_xml feed = function
     Xml.Node ("rss", _, [Xml.Node ("channel", _, children)]) ->
      Some (List.fold_left(fun feed child -> match child with
        | Xml.Node ("title", _, [Xml.Content title]) -> { feed with title = title }
-       | Xml.Node ("link", _, [Xml.Content link]) -> { feed with link = link }
+       | Xml.Node ("link", _, [Xml.Content link]) -> { feed with link = Uri.of_string link }
        | Xml.Node ("description", _, [Xml.Content description]) -> { feed with description = description }
        | Xml.Node ("item", _, _) as node -> { feed with items = Option.get (ToItem.from_xml(node)) :: feed.items }
        | _ -> feed
-    )(empty)(children))
+    )(feed)(children))
   | _ -> None
 end
 
 let from_uri uri = 
   Xml.xml_from_uri uri >|= fun (body) ->
-    body |> Option.map(ToFeed.from_xml) |> Option.join
+    body |> Option.map(uri |> Model.Feed.create |> ToFeed.from_xml) |> Option.join

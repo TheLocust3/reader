@@ -9,10 +9,11 @@ module Item = struct
 end
 
 type t = {
+  source: Uri.t [@to_yojson Codec.uri_to_yojson] [@of_yojson Codec.uri_of_yojson];
   title : string;
-  link : string;
+  link : Uri.t [@to_yojson Codec.uri_to_yojson] [@of_yojson Codec.uri_of_yojson];
   description : string;
   items : Item.t list;
 } [@@deriving yojson]
 
-let empty = { title = ""; link = ""; description = ""; items = []; }
+let create source = { source = source; title = ""; link = Uri.of_string ""; description = ""; items = []; }

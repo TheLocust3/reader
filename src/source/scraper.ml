@@ -15,4 +15,4 @@ end
 
 let scrape uri =
   Xml.html_from_uri uri >|= fun (root) ->
-    root |> Option.map(ToRing.from_xml (Model.Ring.empty (Uri.to_string uri)))
+    root |> Option.map(ToRing.from_xml (Model.Ring.empty uri))
