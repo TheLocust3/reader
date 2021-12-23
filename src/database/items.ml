@@ -1,13 +1,14 @@
-open Model.Feed
+open Model.Feed.Item
 
 let migrate_query = [%rapper
   execute {sql|
-    CREATE TABLE feeds (
+    CREATE TABLE items (
       uid TEXT NOT NULL PRIMARY KEY,
-      source TEXT UNIQUE,
       title TEXT,
+      link TEXT,
       description TEXT,
-      link TEXT
+      feed INT,
+      FOREIGN KEY(feed) REFERENCES feeds(id)
     )
   |sql}
   syntax_off
@@ -15,14 +16,14 @@ let migrate_query = [%rapper
 
 let rollback_query = [%rapper
   execute {sql|
-    DROP TABLE feeds
+    DROP TABLE items
   |sql}
   syntax_off
 ]
 
 let create_query = [%rapper
   execute {sql|
-    INSERT INTO feeds (source, title, description, link) VALUES(%string{source}, %string{title}, %string{description}, %string{link})
+    INSERT INTO items (title, link, description, feed) VALUES(%string{title}, %string{link}, %string{description}, %int{feed})
   |sql}
   syntax_off
 ]
@@ -37,9 +38,6 @@ let rollback () =
   let query = rollback_query() in
     Caqti_lwt.Pool.use query pool |> Error.or_print
 
-let get_by_source _ =
-  Ok [] |> Lwt.return
-
-let create connection { source; title; link; description; _ } =
-  let query = create_query ~source: (Uri.to_string source) ~title: title ~description: description ~link: (Uri.to_string link) in
+let create connection { title; link; description } feed =
+  let query = create_query ~title: title ~link: link ~description: description ~feed: feed in
     query connection |> Error.or_error

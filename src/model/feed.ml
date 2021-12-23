@@ -17,3 +17,5 @@ type t = {
 } [@@deriving yojson]
 
 let create source = { source = source; title = ""; link = Uri.of_string ""; description = ""; items = []; }
+
+type ref = int
