@@ -40,6 +40,8 @@ let rollback () =
 let get_by_source _ =
   Ok [] |> Lwt.return
 
-let create connection { source; title; link; description; _ } =
+let create connection { source; title; link; description; items } =
   let query = create_query ~source: (Uri.to_string source) ~title: title ~description: description ~link: (Uri.to_string link) in
-    query connection |> Error.or_error
+  let%lwt _ = query connection |> Error.or_error in
+  let%lwt _ = Util.Lwt.flatmap(fun item -> Items.create connection item 0)(items) in
+    Lwt.return_ok ()
