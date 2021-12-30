@@ -3,13 +3,13 @@ open Model.Feed.Item
 let migrate_query = [%rapper
   execute {sql|
     CREATE TABLE items (
-      uid TEXT NOT NULL PRIMARY KEY,
+      feed TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
       title TEXT,
       link TEXT,
       description TEXT,
-      feed INT,
-      FOREIGN KEY(feed) REFERENCES feeds(id)
+      FOREIGN KEY(feed) REFERENCES feeds(source),
+      PRIMARY KEY (feed, link)
     )
   |sql}
   syntax_off
@@ -25,7 +25,7 @@ let rollback_query = [%rapper
 let create_query = [%rapper
   execute {sql|
     INSERT INTO items (title, link, description, feed)
-    VALUES (%string{title}, %string{link}, %string{description}, %int{feed})
+    VALUES (%string{title}, %string{link}, %string{description}, %string{feed})
     ON CONFLICT (feed, link)
     DO UPDATE SET title=excluded.title, link=excluded.link, description=excluded.description
   |sql}
@@ -36,7 +36,7 @@ let by_feed_query = [%rapper
   get_many {sql|
     SELECT @string{items.title}, @string{items.link}, @string{items.description}
     FROM items
-    WHERE feed = %int{feed}
+    WHERE feed = %string{feed}
     ORDER BY items.created_at DESC
   |sql}
   record_out
