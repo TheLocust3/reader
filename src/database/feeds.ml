@@ -1,5 +1,8 @@
 open Model.Feed
 
+let make ~source ~title ~description ~link =
+  { source = Uri.of_string source; title = title; description = description; link = Uri.of_string link; items = [] }
+
 let migrate_query = [%rapper
   execute {sql|
     CREATE TABLE feeds (
@@ -29,6 +32,16 @@ let create_query = [%rapper
   syntax_off
 ]
 
+let by_source_query = [%rapper
+  get_opt {sql|
+    SELECT @string{feeds.source}, @string{feeds.title}, @string{feeds.description}, @string{feeds.link}
+    FROM feeds
+    WHERE source = %string{source}
+  |sql}
+  function_out
+  syntax_off
+](make)
+
 let migrate () =
   let pool = Connect.testPool() in
   let query = migrate_query() in
@@ -39,8 +52,12 @@ let rollback () =
   let query = rollback_query() in
     Caqti_lwt.Pool.use query pool |> Error.or_print
 
-let get_by_source _ =
-  Ok [] |> Lwt.return
+let by_source connection source =
+  let feed_ref = (Uri.to_string source) in
+  let query = by_source_query ~source: feed_ref in
+    match%lwt (query connection |> Error.or_error_opt) with
+    | Ok feed -> Items.by_feed connection feed_ref |> Lwt.map(Result.map(fun items -> { feed with items = items }))
+    | Error e -> Error e |> Lwt.return
 
 let create connection { source; title; link; description; items } =
   let feed_ref = (Uri.to_string source) in

@@ -3,10 +3,10 @@ open Model.Feed.Item
 let migrate_query = [%rapper
   execute {sql|
     CREATE TABLE items (
-      feed TEXT,
+      feed TEXT NOT NULL,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
       title TEXT,
-      link TEXT,
+      link TEXT NOT NULL,
       description TEXT,
       FOREIGN KEY(feed) REFERENCES feeds(source),
       PRIMARY KEY (feed, link)

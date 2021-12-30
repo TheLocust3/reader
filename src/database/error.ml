@@ -1,10 +1,17 @@
 type t =
-  | Database_error of string
+  | DatabaseError of string
+  | NotFound
 
 let or_error m =
   match%lwt m with
   | Ok a -> Ok a |> Lwt.return
-  | Error e -> Error (Database_error (Caqti_error.show e)) |> Lwt.return
+  | Error e -> Error (DatabaseError (Caqti_error.show e)) |> Lwt.return
+
+let or_error_opt m =
+  match%lwt m with
+  | Ok Some a -> Ok a |> Lwt.return
+  | Ok None -> Error NotFound |> Lwt.return
+  | Error e -> Error (DatabaseError (Caqti_error.show e)) |> Lwt.return
 
 let or_print m =
   match%lwt m with
