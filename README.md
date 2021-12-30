@@ -11,15 +11,20 @@
  - Endpoint to read feed by RSS URI
    - 1) Read from the database, if it exists return that
    - 2) Scrape the feed, return that. In the background, dump it into the database
+ - Basic UI
+ - Basic user management
+   - One user, no password
+ - Feedlist management
+   - Create/add/remove feeds to user's feedlist
+ - "Read watermark"
+   - Only return unread items
  - Endpoint to read feed by website URI
-   - 1) Read the website => RSS URI mapping from the database, if it exists return that
-   - 2) Scrape the website for the feed. In the background, dump it into the database
- - Endpoint to read Ring of feed
-   - 1) Read from the database, if it exists return that
-   - 2) Scrape the Ring, return that. In the background, dump it into the database
+   - Pull website, if it's already RSS, return that, otherwise, scrape website for feed
 
 ### miscellaneous
-- Pipeline: link to RSS feed => RSS feed => Ring from feed =>? links in Ring
+ - Run RSS feed scraper periodically
+   - How can missing items be avoided?
+ - Pipeline: link to RSS feed => RSS feed => Ring from feed =>? links in Ring
    - Dump various outputs in database
  - Proper error handling in feed parsing
    - Not found, invalid RSS, etc
