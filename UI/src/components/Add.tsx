@@ -12,6 +12,8 @@ const Container = styled.div`
   border: 1px solid ${colors.black};
   border-radius: 100%;
 
+  box-shadow: 0px 3px 10px ${colors.lightBlack};
+
   display: flex;
   align-items: center;
   justify-content: center;

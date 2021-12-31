@@ -4,6 +4,6 @@ export const colors = {
   lighterBlack: '#aaa',
   lightestBlack: '#bbb',
 
-  whiteHover: '#eee',
-  whiteActive: '#ddd',
+  whiteHover: '#f7f7f7',
+  whiteActive: '#eee',
 };
