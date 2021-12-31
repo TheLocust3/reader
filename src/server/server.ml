@@ -46,12 +46,20 @@ let run () =
       let req = body |> Yojson.Safe.from_string |> feed_request_of_yojson in
         match req with
           | Ok { uri } ->
+            Dream.log "[/feeds/insert] uri: %s" uri;
             (match%lwt (Source.Rss.from_uri (Uri.of_string uri)) with
             | Some feed ->
+              Dream.log "[/feeds/insert] uri: %s - found %s" uri feed.title;
               (match%lwt Dream.sql request (Database.Feeds.create feed) with
-              | Ok _ -> json { message = "ok" } status_response_to_yojson
-              | Error e -> json ~status: `Internal_Server_Error { message = Database.Error.to_string e } status_response_to_yojson)
+              | Ok _ ->
+                Dream.log "[/feeds/insert] uri: %s - insert success" uri;
+                json { message = "ok" } status_response_to_yojson
+              | Error e ->
+                let message = Database.Error.to_string e in
+                  Dream.log "[/feeds/insert] uri: %s - insert failed with %s" uri message;
+                  json ~status: `Internal_Server_Error { message = message } status_response_to_yojson)
             | None ->
+              Dream.log "[/feeds/insert] uri: %s - Not found" uri;
               json ~status: `Not_Found { message = "Feed not found" } status_response_to_yojson)
           | _ ->
             bad_request
@@ -63,6 +71,7 @@ let run () =
       let req = body |> Yojson.Safe.from_string |> feed_request_of_yojson in
         match req with
           | Ok { uri } ->
+            Dream.log "[/feeds/read] uri: %s" uri;
             (Source.Rss.from_uri (Uri.of_string uri)) >>= (fun (feed) ->
               json { feed = feed } feed_response_to_yojson
             )
@@ -76,6 +85,7 @@ let run () =
       let req = body |> Yojson.Safe.from_string |> discover_request_of_yojson in
         match req with
           | Ok { uri } ->
+            Dream.log "[/feeds/discover] uri: %s" uri;
             (Source.Discover.discover (Uri.of_string uri)) >>= (fun (feeds) ->
               json { feeds = feeds } discover_response_to_yojson
             )
@@ -89,6 +99,7 @@ let run () =
       let req = body |> Yojson.Safe.from_string |> scrape_request_of_yojson in
         match req with
           | Ok { uri } ->
+            Dream.log "[/feeds/scrape] uri: %s" uri;
             (Source.Scraper.scrape (Uri.of_string uri)) >>= (fun (source) ->
               json { source = source } scrape_response_to_yojson
             )
