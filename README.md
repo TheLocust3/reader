@@ -5,13 +5,11 @@
 `curl -XPOST http://localhost:8080/rings/scrape -d'{uri: "https://astralcodexten.substack.com/p/does-georgism-work-is-land-really"}'`  
 `curl -XPOST http://localhost:8080/feeds/discover -d'{uri: "https://astralcodexten.substack.com"}'`  
 `curl -XPOST http://localhost:8080/feeds/insert -d'{uri: "https://hnrss.org/frontpage"}'`  
+`curl -XPOST http://localhost:8080/feeds/insert -d'{uri: "https://astralcodexten.substack.com/feed"}'`  
 
 ## TODO
 
 ### main
- - Endpoint to read feed by RSS URI
-   - 1) Read from the database, if it exists return that
-   - 2) Scrape the feed, return that. In the background, dump it into the database
  - Basic UI
  - Basic user management
    - One user, no password

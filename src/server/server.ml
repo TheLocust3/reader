@@ -72,9 +72,14 @@ let run () =
         match req with
           | Ok { uri } ->
             Dream.log "[/feeds/read] uri: %s" uri;
-            (Source.Rss.from_uri (Uri.of_string uri)) >>= (fun (feed) ->
+            let parsed = (Uri.of_string uri) in
+            let%lwt feed = (match%lwt Dream.sql request (Database.Feeds.by_source parsed) with
+                | Ok feed ->
+                  Lwt.return (Some feed)
+                | Error e ->
+                  Dream.log "[/feeds/read] uri: %s - lookup failed with %s" uri (Database.Error.to_string e);
+                  Source.Rss.from_uri parsed) in
               json { feed = feed } feed_response_to_yojson
-            )
           | _ ->
             bad_request
     );
