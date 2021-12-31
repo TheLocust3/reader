@@ -12,6 +12,6 @@ let rollback () =
 let () =
   let mode = Sys.argv.(1) in
     (match mode with
-    | "migrate" -> migrate()
-    | "rollback" -> rollback()
-    | _ -> Printf.printf("Invalid mode argument\n"))
+      | "migrate" -> migrate()
+      | "rollback" -> rollback()
+      | _ -> Printf.printf("Invalid mode argument\n"))

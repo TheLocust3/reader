@@ -56,8 +56,8 @@ let by_source source connection =
   let feed_ref = (Uri.to_string source) in
   let query = by_source_query ~source: feed_ref in
     match%lwt (query connection |> Error.or_error_opt) with
-    | Ok feed -> Items.by_feed feed_ref connection |> Lwt.map(Result.map(fun items -> { feed with items = items }))
-    | Error e -> Error e |> Lwt.return
+      | Ok feed -> Items.by_feed feed_ref connection |> Lwt.map(Result.map(fun items -> { feed with items = items }))
+      | Error e -> Error e |> Lwt.return
 
 let create { source; title; link; description; items } connection =
   let feed_ref = (Uri.to_string source) in

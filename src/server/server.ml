@@ -48,19 +48,19 @@ let run () =
           | Ok { uri } ->
             Dream.log "[/feeds/insert] uri: %s" uri;
             (match%lwt (Source.Rss.from_uri (Uri.of_string uri)) with
-            | Some feed ->
-              Dream.log "[/feeds/insert] uri: %s - found %s" uri feed.title;
-              (match%lwt Dream.sql request (Database.Feeds.create feed) with
-              | Ok _ ->
-                Dream.log "[/feeds/insert] uri: %s - insert success" uri;
-                json { message = "ok" } status_response_to_yojson
-              | Error e ->
-                let message = Database.Error.to_string e in
-                  Dream.log "[/feeds/insert] uri: %s - insert failed with %s" uri message;
-                  json ~status: `Internal_Server_Error { message = message } status_response_to_yojson)
-            | None ->
-              Dream.log "[/feeds/insert] uri: %s - Not found" uri;
-              json ~status: `Not_Found { message = "Feed not found" } status_response_to_yojson)
+              | Some feed ->
+                Dream.log "[/feeds/insert] uri: %s - found %s" uri feed.title;
+                (match%lwt Dream.sql request (Database.Feeds.create feed) with
+                  | Ok _ ->
+                    Dream.log "[/feeds/insert] uri: %s - insert success" uri;
+                    json { message = "ok" } status_response_to_yojson
+                  | Error e ->
+                    let message = Database.Error.to_string e in
+                      Dream.log "[/feeds/insert] uri: %s - insert failed with %s" uri message;
+                      json ~status: `Internal_Server_Error { message = message } status_response_to_yojson)
+              | None ->
+                Dream.log "[/feeds/insert] uri: %s - Not found" uri;
+                json ~status: `Not_Found { message = "Feed not found" } status_response_to_yojson)
           | _ ->
             bad_request
     );
