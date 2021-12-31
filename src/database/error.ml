@@ -2,6 +2,10 @@ type t =
   | DatabaseError of string
   | NotFound
 
+let to_string e = match e with
+  | DatabaseError e -> e
+  | NotFound -> "Not found"
+
 let or_error m =
   match%lwt m with
   | Ok a -> Ok a |> Lwt.return

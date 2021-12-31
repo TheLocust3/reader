@@ -53,10 +53,10 @@ let rollback () =
   let query = rollback_query() in
     Caqti_lwt.Pool.use query pool |> Error.or_print
 
-let by_feed connection feed =
+let by_feed feed connection =
   let query = by_feed_query ~feed: feed in
     query connection |> Error.or_error
 
-let create connection { title; link; description } feed =
+let create { title; link; description } feed connection =
   let query = create_query ~title: title ~link: link ~description: description ~feed: feed in
     query connection |> Error.or_error

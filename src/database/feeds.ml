@@ -52,16 +52,16 @@ let rollback () =
   let query = rollback_query() in
     Caqti_lwt.Pool.use query pool |> Error.or_print
 
-let by_source connection source =
+let by_source source connection =
   let feed_ref = (Uri.to_string source) in
   let query = by_source_query ~source: feed_ref in
     match%lwt (query connection |> Error.or_error_opt) with
-    | Ok feed -> Items.by_feed connection feed_ref |> Lwt.map(Result.map(fun items -> { feed with items = items }))
+    | Ok feed -> Items.by_feed feed_ref connection |> Lwt.map(Result.map(fun items -> { feed with items = items }))
     | Error e -> Error e |> Lwt.return
 
-let create connection { source; title; link; description; items } =
+let create { source; title; link; description; items } connection =
   let feed_ref = (Uri.to_string source) in
   let query = create_query ~source: feed_ref ~title: title ~description: description ~link: (Uri.to_string link) in
   let%lwt _ = query connection |> Error.or_error in
-  let%lwt _ = Util.Lwt.flatmap(fun item -> Items.create connection item feed_ref)(items) in
+  let%lwt _ = Util.Lwt.flatmap(fun item -> Items.create item feed_ref connection)(items) in
     Lwt.return_ok ()
