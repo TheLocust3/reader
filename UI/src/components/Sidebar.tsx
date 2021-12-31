@@ -20,7 +20,7 @@ const Spacer = styled.div`
 `;
 
 const Header = styled.div`
-  padding-left: 18px;
+  padding-left: 20px;
   padding-top: 5px;
   padding-bottom: 5px;
 
@@ -28,7 +28,7 @@ const Header = styled.div`
 `;
 
 const ClickableHeader = styled.div`
-  padding-left: 18px;
+  padding-left: 20px;
   padding-top: 5px;
   padding-bottom: 5px;
 
@@ -42,7 +42,7 @@ const ClickableHeader = styled.div`
 `;
 
 const Item = styled.div`
-  padding-left: 28px;
+  padding-left: 30px;
 
   font-size: 15px;
 
@@ -61,7 +61,6 @@ function Sidebar() {
 
       <Spacer />
       <Divider />
-      <Spacer />
       <Spacer />
 
       <Header>Lists</Header>
