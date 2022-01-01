@@ -1,4 +1,4 @@
 export interface Board {
-  id: number;
+  id: string;
   name: string;
 }

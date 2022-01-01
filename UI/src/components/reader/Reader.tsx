@@ -17,7 +17,9 @@ const Root = styled.div`
 
 const SidebarPane = styled.div`
   min-width: 250px;
+  z-index: 10;
 
+  background-color: white;
   border-right: 1px solid ${colors.black};
 `;
 
@@ -39,11 +41,16 @@ function Reader() {
   return (
     <Root>
       <SidebarPane>
-        <Sidebar boards={[{ id: 1, name: "Read Later" }]} feeds={[]} />
+        <Sidebar boards={[{ id: "1", name: "Read Later" }]} feeds={[]} />
       </SidebarPane>
 
       <MainPane>
-        <View />
+        <View
+          title="All Feeds"
+          items={[
+            { id: "1", title: "Article title", description: "Article description", link: "https://www.google.com/" },
+            { id: "2", title: "Article title 2", description: "Article description", link: "https://www.google.com/" }
+          ]} />
       </MainPane>
 
       <AddPane>
