@@ -5,7 +5,7 @@ import { colors } from '../../constants';
 import { Item } from '../../models/item';
 
 const Container = styled.div`
-  height: 100px;
+  max-height: 100px;
 
   padding-top: 10px;
   padding-left: 10px;
@@ -25,10 +25,10 @@ const Container = styled.div`
 `;
 
 const ContainerInner = styled.div`
-  height: 99px;
 
   padding-left: 20px;
   padding-right: 20px;
+  padding-bottom: 20px;
 
   border-bottom: 1px solid ${colors.black};
 `;
