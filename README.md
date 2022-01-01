@@ -11,6 +11,7 @@
 
 ### main
  - Basic UI
+ - Add id to feed
  - Basic user management
    - One user, no password
  - Feedlist management

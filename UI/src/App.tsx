@@ -1,9 +1,8 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled from '@emotion/styled';
 
-import Sidebar from './components/Sidebar';
-import View from './components/View';
-import Add from './components/Add';
+import Reader from './components/reader/Reader';
 
 import './global-styles';
 import { colors } from './constants';
@@ -22,36 +21,16 @@ const Root = styled.div`
   font-weight: 100;
 `;
 
-const SidebarPane = styled.div`
-  min-width: 250px;
-
-  border-right: 1px solid ${colors.black};
-`;
-
-const MainPane = styled.div`
-  width: 100%;
-`;
-
-const AddPane = styled.div`
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
-`;
-
 function App() {
   return (
     <Root>
-      <SidebarPane>
-        <Sidebar />
-      </SidebarPane>
-
-      <MainPane>
-        <View />
-      </MainPane>
-
-      <AddPane>
-        <Add />
-      </AddPane>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Reader />} />
+          <Route path="/feeds/:feedId" element={<Reader />} />
+          <Route path="/boards/:boardId" element={<Reader />} />
+        </Routes>
+      </Router>
     </Root>
   );
 }
