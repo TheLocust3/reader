@@ -19,7 +19,7 @@ const Toolbar = styled.div`
 
   border-bottom: 1px solid ${colors.black};
 
-  box-shadow: 0px 0px 5px ${colors.lightBlack};
+  box-shadow: 0px 0px 3px ${colors.lightBlack};
 `;
 
 const Title = styled.div`
