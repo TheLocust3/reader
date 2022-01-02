@@ -1,8 +1,8 @@
 open Lwt
 open Model.Source
+open Model.Util
 
 module ToSource = struct
-  let (let*) x f = Option.bind x f
   let filter_opt f x = List.nth_opt(List.filter(f)(Option.to_list x))(0)
 
   let rec from_xml uri feeds = function

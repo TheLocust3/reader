@@ -35,8 +35,8 @@ const AddPane = styled.div`
 
 function Reader() {
   const params = useParams();
-  const boardId = params.boardId;
   const feedId = params.feedId;
+  const boardId = params.boardId;
 
   return (
     <Root>

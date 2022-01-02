@@ -10,7 +10,8 @@
 ## TODO
 
 ### main
- - Add id to feed + items
+ - Add id to items
+   - Handle potential guid, otherwise, hash feed + link
  - Basic user management
    - One user, no password
  - Feedlist management
