@@ -4,5 +4,6 @@
     cohttp-lwt-unix
     cohttp-async
     yojson
-    ppx_deriving_yojson.runtime)
+    ppx_deriving_yojson.runtime
+    uuidm)
   (preprocess (pps ppx_deriving_yojson)))

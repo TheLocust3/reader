@@ -9,6 +9,7 @@ module ToItem = struct
        | Xml.Node ("title", _, [Xml.Content title]) -> { item with title = Some title }
        | Xml.Node ("link", _, [Xml.Content link]) -> { item with link = Some link }
        | Xml.Node ("description", _, [Xml.Content description]) -> { item with description = Some description }
+       | Xml.Node ("guid", _, [Xml.Content guid]) -> { item with id = Some guid }
        | _ -> item
     )(empty)(children))
   | _ -> None
