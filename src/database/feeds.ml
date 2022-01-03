@@ -43,15 +43,13 @@ let by_source_query = [%rapper
   syntax_off
 ](make)
 
-let migrate () =
-  let pool = Connect.testPool() in
+let migrate connection =
   let query = migrate_query() in
-    Caqti_lwt.Pool.use query pool |> Error.or_print
+    query connection |> Error.or_print
 
-let rollback () =
-  let pool = Connect.testPool() in
+let rollback connection =
   let query = rollback_query() in
-    Caqti_lwt.Pool.use query pool |> Error.or_print
+    query connection |> Error.or_print
 
 let by_source source connection =
   let query = by_source_query ~source: (Uri.to_string source) in

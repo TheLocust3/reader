@@ -43,15 +43,13 @@ let by_feed_query = [%rapper
   syntax_off
 ]
 
-let migrate () =
-  let pool = Connect.testPool() in
+let migrate connection =
   let query = migrate_query() in
-    Caqti_lwt.Pool.use query pool |> Error.or_print
+    query connection |> Error.or_print
 
-let rollback () =
-  let pool = Connect.testPool() in
+let rollback connection =
   let query = rollback_query() in
-    Caqti_lwt.Pool.use query pool |> Error.or_print
+    query connection |> Error.or_print
 
 let by_feed feed connection =
   let query = by_feed_query ~feed: feed in

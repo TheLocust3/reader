@@ -5,5 +5,6 @@
     cohttp-async
     yojson
     ppx_deriving_yojson.runtime
-    uuidm)
+    uuidm
+    safepass)
   (preprocess (pps ppx_deriving_yojson)))

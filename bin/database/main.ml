@@ -1,13 +1,18 @@
 let migrate () =
-  let _ = Lwt_main.run (Database.Feeds.migrate()) in
-  let _ = Lwt_main.run (Database.Items.migrate()) in
+  let test_user = Model.User.build ~email: "jake.kinsella@gmail.com" ~password: "foobar" in
+  let connection = Lwt_main.run (Database.Connect.connect()) in
+  let _ = Lwt_main.run (Database.Feeds.migrate connection) in
+  let _ = Lwt_main.run (Database.Items.migrate connection) in
+  let _ = Lwt_main.run (Database.Users.migrate connection) in
+  let _ = Lwt_main.run (Database.Users.create test_user connection) in
     Printf.printf("Migration complete\n")
 
 let rollback () =
-  let _ = Lwt_main.run (Database.Items.rollback()) in
-  let _ = Lwt_main.run (Database.Feeds.rollback()) in
+  let connection = Lwt_main.run (Database.Connect.connect()) in
+  let _ = Lwt_main.run (Database.Users.rollback connection) in
+  let _ = Lwt_main.run (Database.Items.rollback connection) in
+  let _ = Lwt_main.run (Database.Feeds.rollback connection) in
     Printf.printf("Rollback complete\n")
-
 
 let () =
   let mode = Sys.argv.(1) in
