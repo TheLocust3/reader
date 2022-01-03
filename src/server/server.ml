@@ -28,6 +28,11 @@ type status_response = {
   message : string;
 } [@@deriving yojson]
 
+type login_request = {
+  email : string;
+  password : string;
+} [@@deriving yojson]
+
 let json ?(status = `OK) response encoder =
   response |> encoder |> Yojson.Safe.to_string |> Dream.json ~status: status
 
@@ -39,6 +44,27 @@ let run () =
   @@ Dream.logger
   @@ Dream.sql_pool Database.Connect.url
   @@ Dream.router [
+
+    Dream.post "/users/login" (fun request ->
+      let%lwt body = Dream.body request in
+
+      let req = body |> Yojson.Safe.from_string |> login_request_of_yojson in
+        match req with
+          | Ok { email; password = password } ->
+            Dream.log "[/users/login] email: %s" email;
+            (match%lwt Dream.sql request (Database.Users.by_email email) with
+              | Ok user ->
+                Dream.log "[/users/login] email: %s - lookup success" email;
+                if Model.User.verify password user
+                  then json { message = "ok" } status_response_to_yojson
+                  else json ~status: `Not_Found { message = "Not found" } status_response_to_yojson
+              | Error e ->
+                let message = Database.Error.to_string e in
+                  Dream.log "[/users/login] email: %s - lookup failed with %s" email message;
+                  json ~status: `Not_Found { message = "Not found" } status_response_to_yojson)
+          | _ ->
+            bad_request
+    );
 
     Dream.post "/feeds/insert" (fun request ->
       let%lwt body = Dream.body request in

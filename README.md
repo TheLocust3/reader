@@ -6,12 +6,13 @@
 `curl -XPOST http://localhost:8080/feeds/discover -d'{uri: "https://astralcodexten.substack.com"}'`  
 `curl -XPOST http://localhost:8080/feeds/insert -d'{uri: "https://hnrss.org/frontpage"}'`  
 `curl -XPOST http://localhost:8080/feeds/insert -d'{uri: "https://astralcodexten.substack.com/feed"}'`  
+`curl -XPOST http://localhost:8080/users/login -d'{email: "jake.kinsella@gmail.com", password: "password"}'`  
 
 ## TODO
 
 ### main
- - Basic user management
-   - One user, no password
+ - User JWT
+ - Login UI
  - Feedlist management
    - Create/add/remove feeds to user's feedlist
  - "Read watermark"

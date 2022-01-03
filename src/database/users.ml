@@ -31,7 +31,7 @@ let create_query = [%rapper
 
 let by_email_query = [%rapper
   get_opt {sql|
-    SELECT @string{feeds.id}, @string{feeds.email}, @string{feeds.password}
+    SELECT @string{users.id}, @string{users.email}, @string{users.password}
     FROM users
     WHERE email = %string{email}
   |sql}
