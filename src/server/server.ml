@@ -33,11 +33,18 @@ type login_request = {
   password : string;
 } [@@deriving yojson]
 
+type login_response = {
+  token : string;
+} [@@deriving yojson]
+
 let json ?(status = `OK) response encoder =
   response |> encoder |> Yojson.Safe.to_string |> Dream.json ~status: status
 
 let bad_request =
   Dream.empty `Bad_Request
+
+let jwk =
+  Jose.Jwk.make_oct "secret_key"
 
 let run () =
   Dream.run
@@ -56,7 +63,9 @@ let run () =
               | Ok user ->
                 Dream.log "[/users/login] email: %s - lookup success" email;
                 if Model.User.verify password user
-                  then json { message = "ok" } status_response_to_yojson
+                  then
+                    let token = Model.User.sign jwk user in
+                      json { token = token } login_response_to_yojson
                   else json ~status: `Not_Found { message = "Not found" } status_response_to_yojson
               | Error e ->
                 let message = Database.Error.to_string e in

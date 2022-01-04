@@ -1,3 +1,5 @@
+open Util
+
 type t = {
   id : string;
   email : string;
@@ -11,3 +13,26 @@ let build ~email ~password =
 
 let verify tryPassword { id = _; email = _; password } =
   Bcrypt.verify tryPassword password
+
+type payload = {
+  user_id : string;
+  expires : int;
+} [@@deriving yojson]
+
+let sign jwk { id = id; email = _; password = _ } =
+  let header = Jose.Header.make_header ~typ:"JWT" jwk in
+  let expires = int_of_float(Unix.time()) + (60 * 60) in (* 1 hour *)
+  let payload = { user_id = id; expires = expires } |> payload_to_yojson in
+    Jose.Jwt.sign ~header ~payload jwk |> Result.map(Jose.Jwt.to_string) |> Result.value ~default: ""
+
+let validate jwk token =
+  let** jwt : Jose.Jwt.t = token
+  |> Jose.Jwt.of_string
+  |> Result.map(Jose.Jwt.validate ~jwk) 
+  |> Result.join in
+    match payload_of_yojson jwt.payload with
+      | Ok { user_id; expires } ->
+        if int_of_float(Unix.time()) > expires
+        then Error `Expired
+        else Ok user_id
+      | Error e -> Error (`Msg e)

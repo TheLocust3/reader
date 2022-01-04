@@ -1,4 +1,5 @@
 let (let*) x f = Option.bind x f
+let (let**) x f = Result.bind x f
 
 let strict_flatten l = List.fold_left
   (fun acc item ->

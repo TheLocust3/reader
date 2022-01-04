@@ -6,7 +6,7 @@
 `curl -XPOST http://localhost:8080/feeds/discover -d'{uri: "https://astralcodexten.substack.com"}'`  
 `curl -XPOST http://localhost:8080/feeds/insert -d'{uri: "https://hnrss.org/frontpage"}'`  
 `curl -XPOST http://localhost:8080/feeds/insert -d'{uri: "https://astralcodexten.substack.com/feed"}'`  
-`curl -XPOST http://localhost:8080/users/login -d'{email: "jake.kinsella@gmail.com", password: "password"}'`  
+`curl -XPOST http://localhost:8080/users/login -d'{email: "jake.kinsella@gmail.com", password: "foobar"}'`  
 
 ## TODO
 
@@ -28,6 +28,7 @@
  - Proper error handling in feed parsing
    - Not found, invalid RSS, etc
  - Render website with Javascript before parsing
+ - Pull secret key from environment
 
 ## Notes
  - Feed model
