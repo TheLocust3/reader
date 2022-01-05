@@ -1,17 +1,16 @@
 # reader
 
-`curl -XPOST http://localhost:8080/feeds/read -d'{uri: "https://hnrss.org/frontpage"}'`  
-`curl -XPOST http://localhost:8080/feeds/read -d'{uri: "https://astralcodexten.substack.com/feed"}'`  
-`curl -XPOST http://localhost:8080/rings/scrape -d'{uri: "https://astralcodexten.substack.com/p/does-georgism-work-is-land-really"}'`  
-`curl -XPOST http://localhost:8080/feeds/discover -d'{uri: "https://astralcodexten.substack.com"}'`  
-`curl -XPOST http://localhost:8080/feeds/insert -d'{uri: "https://hnrss.org/frontpage"}'`  
-`curl -XPOST http://localhost:8080/feeds/insert -d'{uri: "https://astralcodexten.substack.com/feed"}'`  
+`curl -H "authentication: Bearer ${TOKEN}" -XPOST http://localhost:8080/feeds/read -d'{uri: "https://hnrss.org/frontpage"}'`  
+`curl -H "authentication: Bearer ${TOKEN}" -XPOST http://localhost:8080/feeds/read -d'{uri: "https://astralcodexten.substack.com/feed"}'`  
+`curl -H "authentication: Bearer ${TOKEN}" -XPOST http://localhost:8080/rings/scrape -d'{uri: "https://astralcodexten.substack.com/p/does-georgism-work-is-land-really"}'`  
+`curl -H "authentication: Bearer ${TOKEN}" -XPOST http://localhost:8080/feeds/discover -d'{uri: "https://astralcodexten.substack.com"}'`  
+`curl -H "authentication: Bearer ${TOKEN}" -XPOST http://localhost:8080/feeds/insert -d'{uri: "https://hnrss.org/frontpage"}'`  
+`curl -H "authentication: Bearer ${TOKEN}" -XPOST http://localhost:8080/feeds/insert -d'{uri: "https://astralcodexten.substack.com/feed"}'`  
 `curl -XPOST http://localhost:8080/users/login -d'{email: "jake.kinsella@gmail.com", password: "foobar"}'`  
 
 ## TODO
 
 ### main
- - User JWT
  - Login UI
  - Feedlist management
    - Create/add/remove feeds to user's feedlist
@@ -21,6 +20,8 @@
    - Pull website, if it's already RSS, return that, otherwise, scrape website for feed
 
 ### miscellaneous
+ - Remove `insert` endpoint
+   - Should be triggered internally
  - Run RSS feed scraper periodically
    - How can missing items be avoided?
  - Pipeline: link to RSS feed => RSS feed => Ring from feed =>? links in Ring
