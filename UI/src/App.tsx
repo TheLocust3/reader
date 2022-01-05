@@ -6,6 +6,7 @@ import Reader from './components/reader/Reader';
 import Login from './components/Login';
 
 import './global-styles';
+import User from './api/user';
 import { colors } from './constants';
 
 const Root = styled.div`
@@ -23,6 +24,7 @@ const Root = styled.div`
 `;
 
 function App() {
+  console.log(User.token());
   return (
     <Root>
       <Router>

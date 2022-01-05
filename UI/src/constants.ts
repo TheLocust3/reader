@@ -1,3 +1,5 @@
+export const apiHost = 'http://localhost:8080';
+
 export const colors = {
   black: '#444',
   black2: '#666',

@@ -11,7 +11,7 @@
 ## TODO
 
 ### main
- - Login UI
+ - CORS
  - Feedlist management
    - Create/add/remove feeds to user's feedlist
  - "Read watermark"

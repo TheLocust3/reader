@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 
+import User from '../api/user';
 import { colors } from '../constants';
 
 const Container = styled.div`
@@ -15,7 +17,7 @@ const Container = styled.div`
 
 const LoginContainer = styled.div`
   width: 400px;
-  height: 275px;
+  height: 300px;
 
   padding-top: 20px;
   padding-bottom: 20px;
@@ -33,8 +35,18 @@ const Title = styled.div`
   font-size: 36px;
 `;
 
+const ErrorLabel = styled.div`
+  height: 30px;
+
+  font-size: 14px;
+`;
+
 const Label = styled.div`
   padding-bottom: 3px;
+`;
+
+const Spacer = styled.div`
+  height: 15px;
 `;
 
 const Textbox = styled.input`
@@ -47,18 +59,12 @@ const Textbox = styled.input`
   padding-left: 10px;
   padding-right: 10px;
 
-  margin-bottom: 15px;
-
   border: 1px solid ${colors.lightBlack};
   border-radius: 5px;
 
   font-size: 15px;
   font-family: 'Roboto', sans-serif;
   font-weight: 100;
-`;
-
-const Spacer = styled.div`
-  height: 10px;
 `;
 
 const Submit = styled.button`
@@ -86,19 +92,35 @@ const Submit = styled.button`
 `;
 
 function Login() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const onSubmit = (event: any) => {
+    event.preventDefault();
+    User.login(email, password)
+      .then(() => navigate('/'))
+      .catch(() => setError('Invalid email/password'));
+  }
+
   return (
     <Container>
       <LoginContainer>
         <Title>Sign In</Title>
 
-        <Label>Email:</Label>
-        <Textbox type="text" />
+        <form onSubmit={onSubmit}>
+          <Label>Email:</Label>
+          <Textbox type="text" onChange={(event) => setEmail(event.target.value)} required />
+          <Spacer />
 
-        <Label>Password:</Label>
-        <Textbox type="password" />
-        <Spacer />
+          <Label>Password:</Label>
+          <Textbox type="password" onChange={(event) => setPassword(event.target.value)} required />
+          
+          <ErrorLabel>{error}</ErrorLabel>
 
-        <Submit>Submit</Submit>
+          <Submit>Submit</Submit>
+          <input type="submit" style={{ display: "none" }} />
+        </form>
       </LoginContainer>
     </Container>
   );
