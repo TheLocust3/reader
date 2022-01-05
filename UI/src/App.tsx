@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 import Reader from './components/reader/Reader';
+import Login from './components/Login';
 
 import './global-styles';
 import { colors } from './constants';
@@ -29,6 +30,7 @@ function App() {
           <Route path="/" element={<Reader />} />
           <Route path="/feeds/:feedId" element={<Reader />} />
           <Route path="/boards/:boardId" element={<Reader />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </Router>
     </Root>
