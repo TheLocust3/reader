@@ -1,8 +1,14 @@
 # reader
 
+## setup
+Dependencies:
+ - [dune](https://dune.build)
+ - [yarn](https://yarnpkg.com)
+
+## example requests
+
 `curl -H "authentication: Bearer ${TOKEN}" -XPOST http://localhost:8080/feeds/read -d'{uri: "https://hnrss.org/frontpage"}'`  
 `curl -H "authentication: Bearer ${TOKEN}" -XPOST http://localhost:8080/feeds/read -d'{uri: "https://astralcodexten.substack.com/feed"}'`  
-`curl -H "authentication: Bearer ${TOKEN}" -XPOST http://localhost:8080/rings/scrape -d'{uri: "https://astralcodexten.substack.com/p/does-georgism-work-is-land-really"}'`  
 `curl -H "authentication: Bearer ${TOKEN}" -XPOST http://localhost:8080/feeds/discover -d'{uri: "https://astralcodexten.substack.com"}'`  
 `curl -H "authentication: Bearer ${TOKEN}" -XPOST http://localhost:8080/feeds/insert -d'{uri: "https://hnrss.org/frontpage"}'`  
 `curl -H "authentication: Bearer ${TOKEN}" -XPOST http://localhost:8080/feeds/insert -d'{uri: "https://astralcodexten.substack.com/feed"}'`  

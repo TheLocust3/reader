@@ -61,18 +61,4 @@ let routes = [
         | _ ->
           bad_request
   );
-
-  Dream.post "/rings/scrape" (fun request ->
-    let%lwt body = Dream.body request in
-
-    let req = body |> Yojson.Safe.from_string |> scrape_request_of_yojson in
-      match req with
-        | Ok { uri } ->
-          Dream.log "[/feeds/scrape] uri: %s" uri;
-          (Source.Scraper.scrape (Uri.of_string uri)) >>= (fun (source) ->
-            json { source = source } scrape_response_to_yojson
-          )
-        | _ ->
-          bad_request
-  );
 ]

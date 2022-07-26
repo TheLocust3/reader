@@ -2,10 +2,6 @@ type feed_response = {
   feed : Model.Feed.t option;
 } [@@deriving yojson]
 
-type scrape_response = {
-  source : Model.Ring.t option;
-} [@@deriving yojson]
-
 type discover_response = {
   feeds : Model.Source.t list;
 } [@@deriving yojson]
