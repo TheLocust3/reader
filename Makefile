@@ -7,3 +7,6 @@ build-backend:
 
 start-backend: build-backend
 	cd server && dune exec reader
+
+start:
+	make start-backend
