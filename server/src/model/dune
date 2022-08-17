@@ -1,6 +1,7 @@
 (library
   (name model)
   (libraries
+    magic
     cohttp-lwt-unix
     cohttp-async
     yojson

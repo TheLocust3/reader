@@ -1,6 +1,7 @@
 (library
   (name source)
   (libraries
+    magic
     model
     cohttp-lwt-unix
     cohttp-async

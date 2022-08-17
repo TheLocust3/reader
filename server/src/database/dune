@@ -1,6 +1,7 @@
 (library
   (name database)
   (libraries
+    magic
     model
     caqti
     caqti-lwt

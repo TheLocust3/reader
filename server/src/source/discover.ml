@@ -1,6 +1,6 @@
 open Lwt
 open Model.Source
-open Model.Util
+open Magic
 
 module ToSource = struct
   let filter_opt f x = List.nth_opt(List.filter(f)(Option.to_list x))(0)

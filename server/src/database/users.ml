@@ -1,4 +1,4 @@
-open Model.User
+open Model.User.Internal
 
 let make ~id ~email ~password =
   { id = id; email = email; password = Bcrypt.hash_of_string password }

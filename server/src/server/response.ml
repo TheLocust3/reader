@@ -1,9 +1,5 @@
 type feed_response = {
-  feed : Model.Feed.t option;
-} [@@deriving yojson]
-
-type discover_response = {
-  feeds : Model.Source.t list;
+  feed : Model.Feed.Frontend.t option;
 } [@@deriving yojson]
 
 type status_response = {

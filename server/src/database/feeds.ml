@@ -1,13 +1,12 @@
-open Model.Feed
+open Model.Feed.Internal
 
-let make ~id ~source ~title ~description ~link =
-  { id = id; source = Uri.of_string source; title = title; description = description; link = Uri.of_string link; items = [] }
+let make ~source ~title ~description ~link =
+  { source = Uri.of_string source; title = title; description = description; link = Uri.of_string link; }
 
 let migrate_query = [%rapper
   execute {sql|
     CREATE TABLE feeds (
-      id TEXT NOT NULL UNIQUE PRIMARY KEY,
-      source TEXT NOT NULL UNIQUE,
+      source TEXT NOT NULL UNIQUE PRIMARY KEY,
       title TEXT,
       description TEXT,
       link TEXT
@@ -25,9 +24,9 @@ let rollback_query = [%rapper
 
 let create_query = [%rapper
   execute {sql|
-    INSERT INTO feeds (id, source, title, description, link)
-    VALUES (%string{id}, %string{source}, %string{title}, %string{description}, %string{link})
-    ON CONFLICT (id)
+    INSERT INTO feeds (source, title, description, link)
+    VALUES (%string{source}, %string{title}, %string{description}, %string{link})
+    ON CONFLICT (source)
     DO UPDATE SET title=excluded.title, description=excluded.description, link=excluded.link
   |sql}
   syntax_off
@@ -35,7 +34,7 @@ let create_query = [%rapper
 
 let by_source_query = [%rapper
   get_opt {sql|
-    SELECT @string{feeds.id}, @string{feeds.source}, @string{feeds.title}, @string{feeds.description}, @string{feeds.link}
+    SELECT @string{feeds.source}, @string{feeds.title}, @string{feeds.description}, @string{feeds.link}
     FROM feeds
     WHERE source = %string{source}
   |sql}
@@ -53,14 +52,9 @@ let rollback connection =
 
 let by_source source connection =
   let query = by_source_query ~source: (Uri.to_string source) in
-    match%lwt (query connection |> Error.or_error_opt) with
-      | Ok feed -> Items.by_feed feed.id connection |> Lwt.map(Result.map(fun items -> { feed with items = items }))
-      | Error e -> Error e |> Lwt.return
+    query connection |> Error.or_error_opt
 
-(* TODO: JK by_id *)
-
-let create { id; source; title; link; description; items } connection =
-  let query = create_query ~id: id ~source: (Uri.to_string source) ~title: title ~description: description ~link: (Uri.to_string link) in
+let create { source; title; link; description } connection =
+  let query = create_query ~source: (Uri.to_string source) ~title: title ~description: description ~link: (Uri.to_string link) in
   let%lwt _ = query connection |> Error.or_error in
-  let%lwt _ = Util.Lwt.flatmap(fun item -> Items.create item id connection)(items) in
     Lwt.return_ok ()

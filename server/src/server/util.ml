@@ -24,7 +24,7 @@ module Middleware = struct
         (try
           let _ = Str.string_match bearer_token auth 0 in
             Str.matched_group 1 auth
-            |> Model.User.validate jwk
+            |> Model.User.Internal.validate jwk
             |> Result.map(fun id -> Dream.with_local user_id id request)
             |> Result.map(fun req -> inner_handler req)
             |> Result.value ~default: (access_denied ())

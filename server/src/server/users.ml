@@ -13,9 +13,9 @@ let routes = [
           (match%lwt Dream.sql request (Database.Users.by_email email) with
             | Ok user ->
               Dream.log "[/users/login] email: %s - lookup success" email;
-              if Model.User.verify password user
+              if Model.User.Internal.verify password user
                 then
-                  let token = Model.User.sign jwk user in
+                  let token = Model.User.Internal.sign jwk user in
                     json { token = token } login_response_to_yojson
                 else json ~status: `Not_Found { message = "Not found" } status_response_to_yojson
             | Error e ->

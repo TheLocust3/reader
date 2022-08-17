@@ -1,64 +1,60 @@
-open Lwt
+open Magic
+
 open Request
 open Response
 open Util
 
+let create_feed source connection =
+  match%lwt (Source.Rss.from_uri (Uri.of_string source)) with
+    | Some document ->
+      Dream.log "[create_feed] uri: %s - found %s" source document.feed.title;
+
+      (match%lwt Database.Feeds.create document.feed connection with
+        | Ok _ ->
+          Dream.log "[create_feed] uri: %s - add success" source;
+          Lwt.return_ok ()
+        | Error e ->
+          let message = Database.Error.to_string e in
+            Dream.log "[create_feed] uri: %s - add failed with %s" source message;
+            Lwt.return (Error message))
+    | None ->
+      Dream.log "[create_feed] uri: %s - Not found" source;
+      Lwt.return (Error "Not found")
+
+let get_feed source connection =
+  match%lwt Database.Feeds.by_source source connection with
+    | Ok feed ->
+      Lwt.return (Some feed)
+    | Error e ->
+      Dream.log "[get_feed] uri: %s - lookup failed with %s" (Uri.to_string source) (Database.Error.to_string e);
+      let%lwt document = Source.Rss.from_uri source in
+        document |> Option.map (fun (doc : Source.Rss.t) -> doc.feed) |> Lwt.return
+
 let routes = [
-  Dream.post "/feeds/insert" (fun request ->
+  Dream.post "/feeds" (fun request ->
     let%lwt body = Dream.body request in
 
     let req = body |> Yojson.Safe.from_string |> feed_request_of_yojson in
       match req with
         | Ok { uri } ->
-          Dream.log "[/feeds/insert] uri: %s" uri;
-          (match%lwt (Source.Rss.from_uri (Uri.of_string uri)) with
-            | Some feed ->
-              Dream.log "[/feeds/insert] uri: %s - found %s" uri feed.title;
-              (match%lwt Dream.sql request (Database.Feeds.create feed) with
-                | Ok _ ->
-                  Dream.log "[/feeds/insert] uri: %s - insert success" uri;
-                  json { message = "ok" } status_response_to_yojson
-                | Error e ->
-                  let message = Database.Error.to_string e in
-                    Dream.log "[/feeds/insert] uri: %s - insert failed with %s" uri message;
-                    json ~status: `Internal_Server_Error { message = message } status_response_to_yojson)
-            | None ->
-              Dream.log "[/feeds/insert] uri: %s - Not found" uri;
-              json ~status: `Not_Found { message = "Feed not found" } status_response_to_yojson)
+          Dream.log "[/feeds/add] uri: %s" uri;
+          (match%lwt Dream.sql request (create_feed uri) with
+            | Ok _ ->
+              Dream.log "[/feeds/add] uri: %s - add success" uri;
+              json { message = "ok" } status_response_to_yojson
+            | Error e ->
+              Dream.log "[/feeds/add] uri: %s - add failed with %s" uri e;
+              json ~status: `Internal_Server_Error { message = e } status_response_to_yojson)
         | _ ->
           bad_request
   );
 
-  Dream.post "/feeds/read" (fun request ->
-    let%lwt body = Dream.body request in
+  Dream.get "/feeds/:source" (fun request ->
+    let source = request |> Dream.param "source" |> Uri.of_string in
 
-    let req = body |> Yojson.Safe.from_string |> feed_request_of_yojson in
-      match req with
-        | Ok { uri } ->
-          Dream.log "[/feeds/read] uri: %s" uri;
-          let parsed = (Uri.of_string uri) in
-          let%lwt feed = (match%lwt Dream.sql request (Database.Feeds.by_source parsed) with
-              | Ok feed ->
-                Lwt.return (Some feed)
-              | Error e ->
-                Dream.log "[/feeds/read] uri: %s - lookup failed with %s" uri (Database.Error.to_string e);
-                Source.Rss.from_uri parsed) in
-            json { feed = feed } feed_response_to_yojson
-        | _ ->
-          bad_request
-  );
-
-  Dream.post "/feeds/discover" (fun request ->
-    let%lwt body = Dream.body request in
-
-    let req = body |> Yojson.Safe.from_string |> discover_request_of_yojson in
-      match req with
-        | Ok { uri } ->
-          Dream.log "[/feeds/discover] uri: %s" uri;
-          (Source.Discover.discover (Uri.of_string uri)) >>= (fun (feeds) ->
-            json { feeds = feeds } discover_response_to_yojson
-          )
-        | _ ->
-          bad_request
+    let _ = Dream.log "[/feeds/ GET] uri: %s" (Uri.to_string source) in
+    let%lwt feed = Dream.sql request (get_feed source) in
+    let out = feed |> Option.map Model.Feed.Frontend.to_frontend in
+      json { feed =  out } feed_response_to_yojson
   );
 ]
