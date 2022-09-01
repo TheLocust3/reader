@@ -18,10 +18,6 @@ Dependencies:
 `curl -XPOST http://localhost:8080/users/login -d'{email: "jake.kinsella@gmail.com", password: "foobar"}'`  
 
 ## todo
- - recover on error for routes
- - consistent error handling for routes
- - add more specific models
-   - database/source/frontend variants
  - create user endpoint
  - pull items from feeds on interval
    - add "refreshed_at" field to feeds, use to drive pulling

@@ -30,6 +30,15 @@ let get_feed source connection =
       let%lwt document = Source.Rss.from_uri source in
         document |> Option.map (fun (doc : Source.Rss.t) -> doc.feed) |> Lwt.return
 
+let get_feed_items source connection =
+  match%lwt Database.Items.by_feed (Uri.to_string source) connection with
+    | Ok items ->
+      Lwt.return (Some items)
+    | Error e ->
+      Dream.log "[get_feed_items] uri: %s - lookup failed with %s" (Uri.to_string source) (Database.Error.to_string e);
+      let%lwt document = Source.Rss.from_uri source in
+        document |> Option.map (fun (doc : Source.Rss.t) -> doc.items) |> Lwt.return
+
 let routes = [
   Dream.post "/feeds" (fun request ->
     let%lwt body = Dream.body request in
@@ -52,9 +61,24 @@ let routes = [
   Dream.get "/feeds/:source" (fun request ->
     let source = request |> Dream.param "source" |> Uri.of_string in
 
-    let _ = Dream.log "[/feeds/ GET] uri: %s" (Uri.to_string source) in
+    let _ = Dream.log "[/feeds/:uri GET] uri: %s" (Uri.to_string source) in
     let%lwt feed = Dream.sql request (get_feed source) in
-    let out = feed |> Option.map Model.Feed.Frontend.to_frontend in
-      json { feed =  out } feed_response_to_yojson
+      match feed with
+        | Some feed ->
+          json { feed = Model.Feed.Frontend.to_frontend feed } feed_response_to_yojson
+        | None ->
+          json ~status: `Not_Found { message = "Not found" } status_response_to_yojson
+  );
+
+  Dream.get "/feeds/:source/items" (fun request ->
+    let source = request |> Dream.param "source" |> Uri.of_string in
+
+    let _ = Dream.log "[/feeds/:uri/items GET] uri: %s" (Uri.to_string source) in
+    let%lwt items = Dream.sql request (get_feed_items source) in
+      match items with
+        | Some items ->
+          json { items = List.map Model.Item.Frontend.to_frontend items } items_response_to_yojson
+        | None ->
+          json ~status: `Not_Found { message = "Not found" } status_response_to_yojson
   );
 ]

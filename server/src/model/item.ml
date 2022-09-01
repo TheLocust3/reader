@@ -37,4 +37,7 @@ module Frontend = struct
     title : string;
     description : string;
   } [@@deriving yojson]
+
+  let to_frontend ({ id; from_feed; link; title; description } : Internal.t) =
+    { id = id; from_feed = from_feed; link = link; title = title; description = description }
 end
