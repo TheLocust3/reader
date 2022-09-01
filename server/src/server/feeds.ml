@@ -46,13 +46,13 @@ let routes = [
     let req = body |> Yojson.Safe.from_string |> feed_request_of_yojson in
       match req with
         | Ok { uri } ->
-          Dream.log "[/feeds/add] uri: %s" uri;
+          Dream.log "[/feeds POST] uri: %s" uri;
           (match%lwt Dream.sql request (create_feed uri) with
             | Ok _ ->
-              Dream.log "[/feeds/add] uri: %s - add success" uri;
+              Dream.log "[/feeds POST] uri: %s - add success" uri;
               json { message = "ok" } status_response_to_yojson
             | Error e ->
-              Dream.log "[/feeds/add] uri: %s - add failed with %s" uri e;
+              Dream.log "[/feeds POST] uri: %s - add failed with %s" uri e;
               json ~status: `Internal_Server_Error { message = e } status_response_to_yojson)
         | _ ->
           bad_request

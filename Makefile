@@ -10,3 +10,9 @@ start-backend: build-backend
 
 start:
 	make start-backend
+
+rollback: build-backend
+	cd server && dune exec database rollback
+
+migrate: build-backend
+	cd server && dune exec database migrate
