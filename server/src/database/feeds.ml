@@ -1,3 +1,4 @@
+open Model
 open Model.Feed.Internal
 
 let make ~source ~title ~description ~link =
@@ -44,17 +45,17 @@ let by_source_query = [%rapper
 
 let migrate connection =
   let query = migrate_query() in
-    query connection |> Error.or_print
+    query connection |> Error.Database.or_print
 
 let rollback connection =
   let query = rollback_query() in
-    query connection |> Error.or_print
+    query connection |> Error.Database.or_print
 
 let by_source source connection =
   let query = by_source_query ~source: (Uri.to_string source) in
-    query connection |> Error.or_error_opt
+    query connection |> Error.Database.or_error_opt
 
 let create { source; title; link; description } connection =
   let query = create_query ~source: (Uri.to_string source) ~title: title ~description: description ~link: (Uri.to_string link) in
-  let%lwt _ = query connection |> Error.or_error in
+  let%lwt _ = query connection |> Error.Database.or_error in
     Lwt.return_ok ()

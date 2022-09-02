@@ -21,7 +21,6 @@ Dependencies:
 `curl -H "authentication: Bearer ${TOKEN}" -XGET http://localhost:8080/feeds/https%3A%2F%2Fhnrss.org%2Ffrontpage/items`
 
 ## todo
- - type errors
  - create user endpoint
  - pull items from feeds on interval
    - add "refreshed_at" field to feeds, use to drive pulling

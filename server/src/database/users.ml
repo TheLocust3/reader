@@ -1,3 +1,4 @@
+open Model
 open Model.User.Internal
 
 let make ~id ~email ~password =
@@ -41,16 +42,16 @@ let by_email_query = [%rapper
 
 let migrate connection =
   let query = migrate_query() in
-    query connection |> Error.or_print
+    query connection |> Error.Database.or_print
 
 let rollback connection =
   let query = rollback_query() in
-    query connection |> Error.or_print
+    query connection |> Error.Database.or_print
 
 let by_email email connection =
   let query = by_email_query ~email: email in
-    query connection |> Error.or_error_opt
+    query connection |> Error.Database.or_error_opt
 
 let create { id; email; password } connection =
   let query = create_query ~id: id ~email: email ~password: (Bcrypt.string_of_hash password) in
-    query connection |> Error.or_error
+    query connection |> Error.Database.or_error

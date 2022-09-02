@@ -1,3 +1,4 @@
+open Model
 open Model.Item.Internal
 
 let make ~id ~from_feed ~link ~title ~description =
@@ -48,16 +49,16 @@ let by_feed_query = [%rapper
 
 let migrate connection =
   let query = migrate_query() in
-    query connection |> Error.or_print
+    query connection |> Error.Database.or_print
 
 let rollback connection =
   let query = rollback_query() in
-    query connection |> Error.or_print
+    query connection |> Error.Database.or_print
 
 let by_feed feed connection =
   let query = by_feed_query ~from_feed: feed in
-    query connection |> Error.or_error
+    query connection |> Error.Database.or_error
 
 let create { id; from_feed; link; title; description } connection =
   let query = create_query ~id: id ~from_feed: (Uri.to_string from_feed) ~link: (Uri.to_string link) ~title: title ~description: description in
-    query connection |> Error.or_error
+    query connection |> Error.Database.or_error

@@ -1,3 +1,5 @@
+open Model
+
 open Request
 open Response
 open Util
@@ -17,12 +19,12 @@ let routes = [
                 then
                   let token = Model.User.Internal.sign jwk user in
                     json { token = token } login_response_to_yojson
-                else json ~status: `Not_Found { message = "Not found" } status_response_to_yojson
+                else throw_error Model.Error.Frontend.NotFound
             | Error e ->
-              let message = Database.Error.to_string e in
+              let message = Error.Database.to_string e in
                 Dream.log "[/users/login] email: %s - lookup failed with %s" email message;
-                json ~status: `Not_Found { message = "Not found" } status_response_to_yojson)
+              throw_error Model.Error.Frontend.NotFound)
         | _ ->
-          bad_request
+          throw_error Model.Error.Frontend.BadRequest
   );
 ]
