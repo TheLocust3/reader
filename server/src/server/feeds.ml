@@ -31,11 +31,16 @@ let get_feed source connection =
         document |> Option.map (fun (doc : Source.Rss.t) -> doc.feed) |> Lwt.return
 
 let get_feed_items source connection =
-  match%lwt Database.Items.by_feed (Uri.to_string source) connection with
-    | Ok items ->
-      Lwt.return (Some items)
+  match%lwt Database.Feeds.by_source source connection with
+    | Ok _ ->
+      (match%lwt Database.Items.by_feed (Uri.to_string source) connection with
+        | Ok items ->
+          Lwt.return (Some items)
+        | Error e ->
+          Dream.log "[get_feed_items] uri: %s - items lookup failed with %s" (Uri.to_string source) (Database.Error.to_string e);
+          Lwt.return None)
     | Error e ->
-      Dream.log "[get_feed_items] uri: %s - lookup failed with %s" (Uri.to_string source) (Database.Error.to_string e);
+      Dream.log "[get_feed_items] uri: %s - feed lookup failed with %s" (Uri.to_string source) (Database.Error.to_string e);
       let%lwt document = Source.Rss.from_uri source in
         document |> Option.map (fun (doc : Source.Rss.t) -> doc.items) |> Lwt.return
 
