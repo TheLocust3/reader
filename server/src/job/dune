@@ -1,0 +1,8 @@
+(library
+  (name job)
+  (libraries
+    magic
+    model
+    source
+    database)
+  (preprocess (pps lwt_ppx)))

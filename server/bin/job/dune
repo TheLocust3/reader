@@ -1,0 +1,4 @@
+(executable
+ (public_name job)
+ (name main)
+ (libraries job))

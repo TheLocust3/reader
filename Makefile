@@ -5,6 +5,9 @@ install:
 build-backend:
 	cd server && dune build
 
+start-puller: build-backend
+	cd server && dune exec job puller
+
 start-backend: build-backend
 	cd server && dune exec reader
 
