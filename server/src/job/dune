@@ -4,5 +4,6 @@
     magic
     model
     source
-    database)
+    database
+    dream)
   (preprocess (pps lwt_ppx)))
