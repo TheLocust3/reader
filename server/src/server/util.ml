@@ -16,7 +16,7 @@ let jwk =
   Jose.Jwk.make_oct "secret_key"
 
 let user_id =
-  Dream.new_local ~name: "user_id" ~show_value: (fun x -> x) ()
+  Dream.new_field ~name: "user_id" ~show_value: (fun x -> x) ()
 
 module Middleware = struct
   let bearer_token = Str.regexp "Bearer \\(.*\\)"
@@ -24,16 +24,16 @@ module Middleware = struct
   let access_denied () =
     json ~status: `Forbidden { message = "Access denied" } status_response_to_yojson
 
-  let require_auth inner_handler request =
-    match (Dream.header "authentication" request) with
+  let require_auth (inner_handler : Dream.handler) (request : Dream.request) : Dream.response Lwt.t =
+    match (Dream.header request "authentication") with
       | Some auth ->
         (try
           let _ = Str.string_match bearer_token auth 0 in
-            Str.matched_group 1 auth
-            |> Model.User.Internal.validate jwk
-            |> Result.map(fun id -> Dream.with_local user_id id request)
-            |> Result.map(fun req -> inner_handler req)
-            |> Result.value ~default: (access_denied ())
+            match (Str.matched_group 1 auth |> Model.User.Internal.validate jwk) with
+              | Ok id ->
+                Dream.set_field request user_id id;
+                inner_handler request
+              | Error _ -> access_denied ()
         with _ -> access_denied ())
       | None ->
         access_denied ()

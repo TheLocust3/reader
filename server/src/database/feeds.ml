@@ -10,7 +10,8 @@ let migrate_query = [%rapper
       source TEXT NOT NULL UNIQUE PRIMARY KEY,
       title TEXT,
       description TEXT,
-      link TEXT
+      link TEXT,
+      last_pulled_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
     )
   |sql}
   syntax_off
@@ -43,6 +44,23 @@ let by_source_query = [%rapper
   syntax_off
 ](make)
 
+let pull_query = [%rapper
+  get_opt {sql|
+    UPDATE feeds
+    SET last_pulled_at = datetime('now')
+    WHERE source IN (
+      SELECT source
+      FROM feeds
+      WHERE last_pulled_at < datetime('now', '-10 minutes')
+      ORDER BY last_pulled_at DESC
+      LIMIT 1
+    )
+    RETURNING @string{feeds.source}, @string{feeds.title}, @string{feeds.description}, @string{feeds.link}
+  |sql}
+  function_out
+  syntax_off
+](make)
+
 let migrate connection =
   let query = migrate_query() in
     query connection |> Error.Database.or_print
@@ -59,3 +77,7 @@ let create { source; title; link; description } connection =
   let query = create_query ~source: (Uri.to_string source) ~title: title ~description: description ~link: (Uri.to_string link) in
   let%lwt _ = query connection |> Error.Database.or_error in
     Lwt.return_ok ()
+
+let pull connection =
+  let query = pull_query() in
+    query connection |> Error.Database.or_error_opt

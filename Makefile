@@ -1,4 +1,6 @@
 install:
+	export SQLITE3_OCAML_BREWCHECK=1
+	export C_INCLUDE_PATH=`ocamlc -where`:$C_INCLUDE_PATH
 	cd server && dune install
 	cd ui && yarn install
 
@@ -19,3 +21,6 @@ rollback: build-backend
 
 migrate: build-backend
 	cd server && dune exec database migrate
+
+clean:
+	rm -rf server/_build
