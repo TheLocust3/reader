@@ -11,7 +11,7 @@ let migrate_query = [%rapper
       title TEXT,
       description TEXT,
       link TEXT,
-      last_pulled_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
+      last_pulled_at DATETIME DEFAULT (datetime(0)) NOT NULL
     )
   |sql}
   syntax_off
@@ -80,4 +80,4 @@ let create { source; title; link; description } connection =
 
 let pull connection =
   let query = pull_query() in
-    query connection |> Error.Database.or_error_opt
+    query connection |> Error.Database.or_error

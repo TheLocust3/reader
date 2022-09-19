@@ -1,7 +1,10 @@
 let pull connection =
   match%lwt (Database.Feeds.pull connection) with
-    | Ok feed ->
+    | Ok (Some feed) ->
       let _ = Dream.log "Puller.pull - found %s" (Uri.to_string feed.source) in
+        Lwt.return ()
+    | Ok None ->
+      let _ = Dream.log "Puller.pull - nothing to pull" in
         Lwt.return ()
     | Error e ->
       let _  = Dream.log "Puller.pull - lookup failed with %s" (Model.Error.Database.to_string e) in
