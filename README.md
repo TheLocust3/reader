@@ -6,7 +6,7 @@ Dependencies:
  - [yarn](https://yarnpkg.com)
   
   
-`make install`
+`make install`  
 `make start`
 
 ## example requests
