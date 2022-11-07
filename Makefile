@@ -1,8 +1,7 @@
 install:
-	export SQLITE3_OCAML_BREWCHECK=1
 	export C_INCLUDE_PATH=`ocamlc -where`:$C_INCLUDE_PATH
-	export PKG_CONFIG_PATH=/usr/local/opt/zlib/lib/pkgconfig:/usr/local/opt/openssl/lib/pkgconfig
-	opam install server/
+	export PKG_CONFIG_PATH=/usr/local/opt/zlib/lib/pkgconfig:/usr/local/opt/openssl/lib/pkgconfig:/usr/local/opt/sqlite3/lib/pkgconfig
+	export SQLITE3_OCAML_BREWCHECK=1 && opam install server/ --verbose
 
 build-backend:
 	cd server && dune build
