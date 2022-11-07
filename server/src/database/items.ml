@@ -29,7 +29,7 @@ let rollback_query = [%rapper
 let create_query = [%rapper
   execute {sql|
     INSERT INTO items (id, title, link, description, from_feed)
-    VALUES (%string{id}, %string{from_feed}, %string{link}, %string{title}, %string{description})
+    VALUES (%string{id}, %string{title}, %string{link}, %string{description}, %string{from_feed})
     ON CONFLICT (id)
     DO UPDATE SET title=excluded.title, link=excluded.link, description=excluded.description
   |sql}
