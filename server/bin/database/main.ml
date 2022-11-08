@@ -4,11 +4,15 @@ let migrate () =
   let _ = Lwt_main.run (Database.Feeds.migrate connection) in
   let _ = Lwt_main.run (Database.Items.migrate connection) in
   let _ = Lwt_main.run (Database.Users.migrate connection) in
+  let _ = Lwt_main.run (Database.FeedLists.migrate connection) in
+  let _ = Lwt_main.run (Database.FeedListEntries.migrate connection) in
   let _ = Lwt_main.run (Database.Users.create test_user connection) in
     Printf.printf("Migration complete\n")
 
 let rollback () =
   let connection = Lwt_main.run (Database.Connect.connect()) in
+  let _ = Lwt_main.run (Database.FeedListEntries.rollback connection) in
+  let _ = Lwt_main.run (Database.FeedLists.rollback connection) in
   let _ = Lwt_main.run (Database.Users.rollback connection) in
   let _ = Lwt_main.run (Database.Items.rollback connection) in
   let _ = Lwt_main.run (Database.Feeds.rollback connection) in
