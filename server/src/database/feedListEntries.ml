@@ -40,6 +40,26 @@ let delete_query = [%rapper
   syntax_off
 ]
 
+let feeds_by_list_id_query = [%rapper
+  get_many {sql|
+    SELECT @string{feeds.source}, @string{feeds.title}, @string{feeds.description}, @string{feeds.link}
+    FROM feed_lists, feeds
+    WHERE feed_lists.list_id = %string{list_id} AND feed_lists.feed_id = feeds.id
+  |sql}
+  function_out
+  syntax_off
+](Feeds.make)
+
+let items_by_list_id_query = [%rapper
+  get_many {sql|
+    SELECT @string{items.id}, @string{items.from_feed}, @string{items.link}, @string{items.title}, @string{items.description}
+    FROM feed_lists, items
+    WHERE feed_lists.list_id = %string{list_id} AND feed_lists.feed_id = items.from_feed
+  |sql}
+  function_out
+  syntax_off
+](Items.make)
+
 let migrate connection =
   let query = migrate_query() in
     query connection |> Error.Database.or_print
@@ -54,4 +74,12 @@ let create { list_id; feed_id } connection =
 
 let delete { list_id; feed_id } connection =
   let query = delete_query ~list_id: list_id ~feed_id: feed_id in
+    query connection |> Error.Database.or_error
+
+let feeds_by_list_id list_id connection =
+  let query = feeds_by_list_id_query ~list_id: list_id in
+    query connection |> Error.Database.or_error
+
+let items_by_list_id list_id connection =
+  let query = items_by_list_id_query ~list_id: list_id in
     query connection |> Error.Database.or_error
