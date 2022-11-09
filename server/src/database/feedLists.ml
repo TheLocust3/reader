@@ -34,7 +34,7 @@ let create_query = [%rapper
 let delete_query = [%rapper
   execute {sql|
     DELETE FROM feed_lists
-    WHERE id = %string{id}
+    WHERE user_id = %string{user_id} AND id = %string{id}
   |sql}
   syntax_off
 ]
@@ -53,7 +53,7 @@ let by_id_query = [%rapper
   get_opt {sql|
     SELECT @string{feed_lists.id}, @string{feed_lists.user_id}, @string{feed_lists.name}
     FROM feed_lists
-    WHERE id = %string{id}
+    WHERE user_id = %string{user_id} AND id = %string{id}
   |sql}
   function_out
   syntax_off
@@ -71,14 +71,14 @@ let by_user_id user_id connection =
   let query = by_user_id_query ~user_id: user_id in
     query connection |> Error.Database.or_error
 
-let by_id id connection =
-  let query = by_id_query ~id: id in
+let by_id user_id id connection =
+  let query = by_id_query ~user_id: user_id ~id: id in
     query connection |> Error.Database.or_error_opt
 
 let create { id; user_id; name } connection =
   let query = create_query ~id: id ~user_id: user_id ~name: name in
     query connection |> Error.Database.or_error
 
-let delete id connection =
-  let query = delete_query ~id: id in
+let delete user_id id connection =
+  let query = delete_query ~user_id: user_id ~id: id in
     query connection |> Error.Database.or_error

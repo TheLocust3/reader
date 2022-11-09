@@ -21,8 +21,6 @@ Dependencies:
 `curl -H "authentication: Bearer ${TOKEN}" -XGET http://localhost:8080/feeds/https%3A%2F%2Fhnrss.org%2Ffrontpage/items`
 
 ## todo
- - add lists to aggregate feeds
-   - pull items by list
-   - attached to user
  - add read_items table
    - only show unread items unless asking for all
+ - prevent overwriting feeds

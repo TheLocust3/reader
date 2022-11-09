@@ -15,10 +15,10 @@ let throw_error e = match e with
 let jwk =
   Jose.Jwk.make_oct "secret_key"
 
-let user_id =
-  Dream.new_field ~name: "user_id" ~show_value: (fun x -> x) ()
-
 module Middleware = struct
+  let user_id =
+    Dream.new_field ~name: "user_id" ~show_value: (fun x -> x) ()
+
   let bearer_token = Str.regexp "Bearer \\(.*\\)"
 
   let access_denied () =
