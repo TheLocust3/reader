@@ -1,5 +1,5 @@
 open Lwt
-open Magic
+open Magic.Let
 
 type t = {
   feed : Model.Feed.Internal.t;
@@ -24,7 +24,7 @@ end
 
 let to_strict (partial : Partial.t) : t option =
   let* feed = Model.Feed.Internal.to_strict partial.feed in
-  let items = partial.items |> List.map (Model.Item.Internal.to_strict feed.source) |> List.flatten_option in
+  let items = partial.items |> List.map (Model.Item.Internal.to_strict feed.source) |> Magic.List.flatten_option in
     Some { feed = feed; items = items }
 
 module ToItem = struct

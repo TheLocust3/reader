@@ -5,7 +5,7 @@ open Response
 open Util
 
 let routes = [
-  Dream.scope "/users" [] [
+  Dream.scope "/users" [Util.Middleware.cors] [
     Dream.post "/login" (fun request ->
       let%lwt body = Dream.body request in
 

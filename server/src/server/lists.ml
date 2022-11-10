@@ -1,5 +1,3 @@
-open Magic
-
 open Request
 open Response
 open Util
@@ -53,7 +51,7 @@ let get_list_items user_id id connection =
       Lwt.return None
 
 let routes = [
-  Dream.scope "/lists" [Util.Middleware.require_auth] [
+  Dream.scope "/lists" [Util.Middleware.cors; Util.Middleware.require_auth] [
     Dream.post "" (fun request ->
       let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
       let%lwt body = Dream.body request in

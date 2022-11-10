@@ -6,7 +6,16 @@ interface LoginResponse {
 
 const User = {
   async login(email: string, password: string): Promise<void> {
-    const response = await fetch(`${apiHost}/users/login`);
+    const response = await fetch(
+      `${apiHost}/users/login`,
+      {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      }
+    );
 
     if (response.ok) {
       const json: LoginResponse = await response.json();

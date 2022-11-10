@@ -1,5 +1,3 @@
-open Magic
-
 open Request
 open Response
 open Util
@@ -45,7 +43,7 @@ let get_feed_items source connection =
         document |> Option.map (fun (doc : Source.Rss.t) -> doc.items) |> Lwt.return
 
 let routes = [
-  Dream.scope "/feeds" [Util.Middleware.require_auth] [
+  Dream.scope "/feeds" [Util.Middleware.cors; Util.Middleware.require_auth] [
     Dream.post "" (fun request ->
       let%lwt body = Dream.body request in
 
