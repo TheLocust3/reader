@@ -20,7 +20,10 @@ Dependencies:
 `curl -H "authentication: Bearer ${TOKEN}" -XGET http://localhost:8080/feeds/https%3A%2F%2Fhnrss.org%2Ffrontpage/items`
 
 ## todo
+ - add feed to list
+ - default "all feeds" list
  - connect UI
+ - auto-logout
  - add read_items table
    - only show unread items unless asking for all
  - prevent overwriting feeds

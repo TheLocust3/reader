@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 import { colors } from '../../constants';
-import { Board } from '../../models/board';
+import { FeedList } from '../../models/feed-list';
 import { Feed } from '../../models/feed';
 
 const Container = styled.div`
@@ -83,26 +83,24 @@ const Item = styled(Link)`
 `;
 
 interface Props {
-  boards: Board[];
+  lists: FeedList[];
   feeds: Feed[];
 }
 
-function Sidebar({ boards, feeds }: Props) {
-  const readLater = boards.filter((board) => board.name === "Read Later")[0]
+function Sidebar({ lists, feeds }: Props) {
   return (
     <Container>
       <ClickableHeader to={`/`}>All</ClickableHeader>
-      <ClickableHeader to={`/boards/${readLater.id}`}>Read Later</ClickableHeader>
 
       <Spacer />
       <Divider />
       <Spacer />
 
-      <Header>Boards</Header>
+      <Header>Lists</Header>
       <Spacer />
       <div>
-        {boards.map((board) => {
-          return <Item key={board.id} to={`/boards/${board.id}`}>{board.name}</Item>;
+        {lists.map((list) => {
+          return <Item key={list.id} to={`/lists/${list.id}`}>{list.name}</Item>;
         })}
       </div>
 
@@ -115,7 +113,7 @@ function Sidebar({ boards, feeds }: Props) {
       <Spacer />
       <div>
         {feeds.map((feed) => {
-          return <Item key={feed.id} to={`/feeds/${feed.id}`}>{feed.title}</Item>;
+          return <Item key={feed.source} to={`/feeds/${feed.source}`}>{feed.title}</Item>;
         })}
       </div>
     </Container>

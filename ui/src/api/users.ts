@@ -1,10 +1,10 @@
 import { apiHost } from '../constants';
 
 interface LoginResponse {
-  token: string
+  token: string;
 }
 
-const User = {
+const Users = {
   async login(email: string, password: string): Promise<void> {
     const response = await fetch(
       `${apiHost}/users/login`,
@@ -39,4 +39,4 @@ const User = {
   }
 }
 
-export default User;
+export default Users;

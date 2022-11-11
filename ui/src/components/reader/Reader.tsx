@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 
@@ -6,6 +6,8 @@ import Sidebar from './Sidebar';
 import View from './View';
 import Add from './Add';
 
+import { FeedList } from '../../models/feed-list';
+import Lists from '../../api/lists';
 import { colors } from '../../constants';
 
 const Root = styled.div`
@@ -36,12 +38,20 @@ const AddPane = styled.div`
 function Reader() {
   const params = useParams();
   const feedId = params.feedId;
-  const boardId = params.boardId;
+  const listId = params.listId;
+
+  const [didMount, setDidMount] = useState<Boolean>(false);
+  const [lists, setLists] = useState<FeedList[]>([]);
+
+  if (!didMount) {
+    setDidMount(true);
+    Lists.all().then((lists) => setLists(lists));
+  }
 
   return (
     <Root>
       <SidebarPane>
-        <Sidebar boards={[{ id: "1", name: "Read Later" }]} feeds={[]} />
+        <Sidebar lists={lists} feeds={[]} />
       </SidebarPane>
 
       <MainPane>

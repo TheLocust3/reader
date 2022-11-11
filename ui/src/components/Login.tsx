@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 
-import User from '../api/user';
+import Users from '../api/users';
 import { colors } from '../constants';
 
 const Container = styled.div`
@@ -98,7 +98,7 @@ function Login() {
   const [error, setError] = useState('');
   const onSubmit = (event: any) => {
     event.preventDefault();
-    User.login(email, password)
+    Users.login(email, password)
       .then(() => navigate('/'))
       .catch(() => setError('Invalid email/password'));
   }
