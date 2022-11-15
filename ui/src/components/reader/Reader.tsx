@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 
@@ -6,8 +6,9 @@ import Sidebar from './Sidebar';
 import View from './View';
 import Add from './Add';
 
-import { FeedList } from '../../models/feed-list';
-import Lists from '../../api/lists';
+import { Feed } from '../../models/feed';
+import { Board } from '../../models/board';
+import Boards from '../../api/boards';
 import { colors } from '../../constants';
 
 const Root = styled.div`
@@ -38,20 +39,23 @@ const AddPane = styled.div`
 function Reader() {
   const params = useParams();
   const feedId = params.feedId;
-  const listId = params.listId;
+  const boardId = params.boardI;
 
   const [didMount, setDidMount] = useState<Boolean>(false);
-  const [lists, setLists] = useState<FeedList[]>([]);
+  const [boards, setBoards] = useState<Board[]>([]);
+  const [feeds, setFeeds] = useState<Feed[]>([]);
 
   if (!didMount) {
     setDidMount(true);
-    Lists.all().then((lists) => setLists(lists));
+    
+    Boards.all().then((lists) => setBoards(lists));
+    setFeeds([]); // TODO: JK
   }
 
   return (
     <Root>
       <SidebarPane>
-        <Sidebar lists={lists} feeds={[]} />
+        <Sidebar boards={boards} feeds={feeds} />
       </SidebarPane>
 
       <MainPane>

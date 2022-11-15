@@ -29,7 +29,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Reader />} />
           <Route path="/feeds/:feedId" element={<Reader />} />
-          <Route path="/lists/:listId" element={<Reader />} />
+          <Route path="/boards/:boardId" element={<Reader />} />
           <Route path="/login" element={<Login />} />
         </Routes>
       </Router>

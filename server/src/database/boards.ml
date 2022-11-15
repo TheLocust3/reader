@@ -1,12 +1,12 @@
 open Model
-open Model.FeedList.Internal
+open Model.Board.Internal
 
 let make ~id ~user_id ~name =
   { id = id; user_id = user_id; name = name }
 
 let migrate_query = [%rapper
   execute {sql|
-    CREATE TABLE feed_lists (
+    CREATE TABLE boards (
       id TEXT NOT NULL UNIQUE PRIMARY KEY,
       user_id TEXT NOT NULL,
       name TEXT NOT NULL,
@@ -18,14 +18,14 @@ let migrate_query = [%rapper
 
 let rollback_query = [%rapper
   execute {sql|
-    DROP TABLE feed_lists
+    DROP TABLE boards
   |sql}
   syntax_off
 ]
 
 let create_query = [%rapper
   execute {sql|
-    INSERT INTO feed_lists (id, user_id, name)
+    INSERT INTO boards (id, user_id, name)
     VALUES (%string{id}, %string{user_id}, %string{name})
   |sql}
   syntax_off
@@ -33,7 +33,7 @@ let create_query = [%rapper
 
 let delete_query = [%rapper
   execute {sql|
-    DELETE FROM feed_lists
+    DELETE FROM boards
     WHERE user_id = %string{user_id} AND id = %string{id}
   |sql}
   syntax_off
@@ -41,8 +41,8 @@ let delete_query = [%rapper
 
 let by_user_id_query = [%rapper
   get_many {sql|
-    SELECT @string{feed_lists.id}, @string{feed_lists.user_id}, @string{feed_lists.name}
-    FROM feed_lists
+    SELECT @string{boards.id}, @string{boards.user_id}, @string{boards.name}
+    FROM boards
     WHERE user_id = %string{user_id}
   |sql}
   function_out
@@ -51,8 +51,8 @@ let by_user_id_query = [%rapper
 
 let by_id_query = [%rapper
   get_opt {sql|
-    SELECT @string{feed_lists.id}, @string{feed_lists.user_id}, @string{feed_lists.name}
-    FROM feed_lists
+    SELECT @string{boards.id}, @string{boards.user_id}, @string{boards.name}
+    FROM boards
     WHERE user_id = %string{user_id} AND id = %string{id}
   |sql}
   function_out

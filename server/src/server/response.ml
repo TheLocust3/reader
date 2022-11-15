@@ -6,13 +6,12 @@ type items_response = {
   items : Model.Item.Frontend.t list;
 } [@@deriving yojson]
 
-type all_feed_lists_response = {
-  feed_lists : Model.FeedList.Frontend.t list;
+type all_boards_response = {
+  boards : Model.Board.Frontend.t list;
 } [@@deriving yojson]
 
-type feed_list_response = {
-  feed_list : Model.FeedList.Frontend.t;
-  feeds : Model.Feed.Frontend.t list;
+type board_response = {
+  board : Model.Board.Frontend.t;
 } [@@deriving yojson]
 
 type status_response = {

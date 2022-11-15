@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 import { colors } from '../../constants';
-import { FeedList } from '../../models/feed-list';
+import { Board } from '../../models/board';
 import { Feed } from '../../models/feed';
 
 const Container = styled.div`
@@ -83,26 +83,29 @@ const Item = styled(Link)`
 `;
 
 interface Props {
-  lists: FeedList[];
+  boards: Board[];
   feeds: Feed[];
 }
 
-function Sidebar({ lists, feeds }: Props) {
+function Sidebar({ boards, feeds }: Props) {
+  const readLater = boards.filter((board) => board.name === "Read Later")[0];
+
   return (
     <Container>
       <ClickableHeader to={`/`}>All</ClickableHeader>
+      {readLater !== undefined ? <ClickableHeader to={`/boards/${readLater.id}`}>Read Later</ClickableHeader> : <span />}
 
       <Spacer />
       <Divider />
       <Spacer />
 
-      <Header>Lists</Header>
-      <Spacer />
-      <div>
-        {lists.map((list) => {
-          return <Item key={list.id} to={`/lists/${list.id}`}>{list.name}</Item>;
-        })}
-      </div>
+      <Header>Boards</Header>
+       <Spacer />
+       <div>
+         {boards.map((board) => {
+           return <Item key={board.id} to={`/boards/${board.id}`}>{board.name}</Item>;
+         })}
+       </div>
 
       <Spacer />
       <Spacer />

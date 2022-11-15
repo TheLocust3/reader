@@ -1,6 +1,6 @@
 module Internal = struct
   type t = {
-    list_id : string;
-    feed_id : string;
+    board_id : string;
+    item_id : string;
   }
 end

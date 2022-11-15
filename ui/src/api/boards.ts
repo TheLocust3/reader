@@ -1,21 +1,19 @@
 import { apiHost } from '../constants';
-import { FeedList } from '../models/feed-list';
-import { Feed } from '../models/feed';
+import { Board } from '../models/board';
 import Users from './users';
 
-interface AllFeedListsResponse {
-  feed_lists: FeedList[];
+interface AllBoardsResponse {
+  boards: Board[];
 }
 
-interface FeedListResponse {
-  feed_list: FeedList;
-  feeds: Feed[];
+interface BoardResponse {
+  board: Board;
 }
 
-const Lists = {
-  async all(): Promise<FeedList[]> {
+const Boards = {
+  async all(): Promise<Board[]> {
     const response = await fetch(
-      `${apiHost}/lists/`,
+      `${apiHost}/boards/`,
       {
         method: "GET",
         headers: {
@@ -26,16 +24,16 @@ const Lists = {
     );
 
     if (response.ok) {
-      const json: AllFeedListsResponse = await response.json();
-      return json.feed_lists;
+      const json: AllBoardsResponse = await response.json();
+      return json.boards
     } else {
-      throw new Error(`Lists.all - failed to fetch`);
+      throw new Error(`Boards.all - failed to fetch`);
     }
   },
 
-  async get(id: string): Promise<{ feedList: FeedList, feeds: Feed[] }> {
+  async get(id: string): Promise<Board> {
     const response = await fetch(
-      `${apiHost}/lists/${id}`,
+      `${apiHost}/boards/${id}`,
       {
         method: "GET",
         headers: {
@@ -46,16 +44,16 @@ const Lists = {
     );
 
     if (response.ok) {
-      const json: FeedListResponse = await response.json();
-      return { feedList: json.feed_list, feeds: json.feeds };
+      const json: BoardResponse = await response.json();
+      return json.board;
     } else {
-      throw new Error(`Lists.get(${id}) - failed to fetch`);
+      throw new Error(`Boards.get(${id}) - failed to fetch`);
     }
   },
 
   async create(name: string): Promise<void> {
     const response = await fetch(
-      `${apiHost}/lists/`,
+      `${apiHost}/boards/`,
       {
         method: "POST",
         headers: {
@@ -67,13 +65,13 @@ const Lists = {
     );
 
     if (!response.ok) {
-      throw new Error(`Lists.create(${name}) - failed to fetch`);
+      throw new Error(`Boards.create(${name}) - failed to fetch`);
     }
   },
 
   async remove(id: string): Promise<void> {
     const response = await fetch(
-      `${apiHost}/lists/${id}`,
+      `${apiHost}/boards/${id}`,
       {
         method: "DELETE",
         headers: {
@@ -84,9 +82,9 @@ const Lists = {
     );
 
     if (!response.ok) {
-      throw new Error(`Lists.delete(${id}) - failed to fetch`);
+      throw new Error(`Boards.delete(${id}) - failed to fetch`);
     }
   }
 }
 
-export default Lists;
+export default Boards;
