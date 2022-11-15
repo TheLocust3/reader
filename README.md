@@ -20,6 +20,7 @@ Dependencies:
 `curl -H "authentication: Bearer ${TOKEN}" -XGET http://localhost:8080/feeds/https%3A%2F%2Fhnrss.org%2Ffrontpage/items`
 
 ## todo
+ - user specific feeds
  - add item to board
  - connect UI
  - auto-logout

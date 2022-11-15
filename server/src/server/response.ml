@@ -1,3 +1,7 @@
+type all_feeds_response = {
+  feeds : Model.Feed.Frontend.t list;
+} [@@deriving yojson]
+
 type feed_response = {
   feed : Model.Feed.Frontend.t;
 } [@@deriving yojson]
