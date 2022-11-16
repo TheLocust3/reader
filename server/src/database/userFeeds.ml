@@ -44,7 +44,7 @@ let feeds_by_user_id_query = [%rapper
   get_many {sql|
     SELECT @string{feeds.source}, @string{feeds.title}, @string{feeds.description}, @string{feeds.link}
     FROM user_feeds, feeds
-    WHERE user_feeds.user_id = %string{user_id} AND user_feeds.feed_id = feeds.id
+    WHERE user_feeds.user_id = %string{user_id} AND user_feeds.feed_id = feeds.source
   |sql}
   function_out
   syntax_off
@@ -54,7 +54,7 @@ let items_by_user_id_query = [%rapper
   get_many {sql|
     SELECT @string{items.id}, @string{items.from_feed}, @string{items.link}, @string{items.title}, @string{items.description}
     FROM user_feeds, items
-    WHERE user_feeds.user_id = %string{user_id} AND user_feeds.feed_id = from_feed
+    WHERE user_feeds.user_id = %string{user_id} AND user_feeds.feed_id = items.from_feed
     ORDER BY items.created_at DESC
   |sql}
   function_out

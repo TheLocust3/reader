@@ -9,6 +9,7 @@ import Add from './Add';
 import { Feed } from '../../models/feed';
 import { Board } from '../../models/board';
 import Boards from '../../api/boards';
+import UserFeeds from '../../api/user-feeds';
 import { colors } from '../../constants';
 
 const Root = styled.div`
@@ -49,7 +50,7 @@ function Reader() {
     setDidMount(true);
     
     Boards.all().then((lists) => setBoards(lists));
-    setFeeds([]); // TODO: JK
+    UserFeeds.all().then((feeds) => setFeeds(feeds));
   }
 
   return (
