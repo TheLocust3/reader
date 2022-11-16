@@ -1,5 +1,6 @@
 import { apiHost } from '../constants';
 import { Board } from '../models/board';
+import { Item } from '../models/item';
 import Users from './users';
 
 interface AllBoardsResponse {
@@ -8,6 +9,10 @@ interface AllBoardsResponse {
 
 interface BoardResponse {
   board: Board;
+}
+
+interface ItemsResponse {
+  items: Item[];
 }
 
 const Boards = {
@@ -46,6 +51,26 @@ const Boards = {
     if (response.ok) {
       const json: BoardResponse = await response.json();
       return json.board;
+    } else {
+      throw new Error(`Boards.get(${id}) - failed to fetch`);
+    }
+  },
+
+  async items(id: string): Promise<Item[]> {
+    const response = await fetch(
+      `${apiHost}/boards/${id}/items`,
+      {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          'authentication': `Bearer ${Users.token()}`
+        }
+      }
+    );
+
+    if (response.ok) {
+      const json: ItemsResponse = await response.json();
+      return json.items;
     } else {
       throw new Error(`Boards.get(${id}) - failed to fetch`);
     }

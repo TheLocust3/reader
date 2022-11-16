@@ -7,14 +7,18 @@ interface AllFeedsResponse {
   feeds: Feed[];
 }
 
+interface FeedResponse {
+  feed: Feed;
+}
+
 interface ItemsResponse {
   items: Item[];
 }
 
-const UserFeeds = {
+const Feeds = {
   async all(): Promise<Feed[]> {
     const response = await fetch(
-      `${apiHost}/user_feeds/`,
+      `${apiHost}/feeds/`,
       {
         method: "GET",
         headers: {
@@ -28,13 +32,33 @@ const UserFeeds = {
       const json: AllFeedsResponse = await response.json();
       return json.feeds
     } else {
-      throw new Error(`UserFeeds.all - failed to fetch`);
+      throw new Error(`Feeds.all - failed to fetch`);
     }
   },
 
-  async items(): Promise<Item[]> {
+  async get(source: string): Promise<Feed> {
     const response = await fetch(
-      `${apiHost}/user_feeds/items`,
+      `${apiHost}/feeds/${source}`,
+      {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          'authentication': `Bearer ${Users.token()}`
+        }
+      }
+    );
+
+    if (response.ok) {
+      const json: FeedResponse = await response.json();
+      return json.feed;
+    } else {
+      throw new Error(`Feeds.get(${source}) - failed to fetch`);
+    }
+  },
+
+  async items(source: string): Promise<Item[]> {
+    const response = await fetch(
+      `${apiHost}/feeds/${source}/items`,
       {
         method: "GET",
         headers: {
@@ -46,15 +70,15 @@ const UserFeeds = {
 
     if (response.ok) {
       const json: ItemsResponse = await response.json();
-      return json.items
+      return json.items;
     } else {
-      throw new Error(`UserFeeds.items - failed to fetch`);
+      throw new Error(`Feeds.get(${source}) - failed to fetch`);
     }
   },
 
-  async add(source: string): Promise<void> {
+  async create(source: string): Promise<void> {
     const response = await fetch(
-      `${apiHost}/user_feeds/`,
+      `${apiHost}/feeds/`,
       {
         method: "POST",
         headers: {
@@ -66,13 +90,13 @@ const UserFeeds = {
     );
 
     if (!response.ok) {
-      throw new Error(`UserFeeds.create(${source}) - failed to fetch`);
+      throw new Error(`Feeds.create(${source}) - failed to fetch`);
     }
   },
 
-  async remove(id: string): Promise<void> {
+  async remove(source: string): Promise<void> {
     const response = await fetch(
-      `${apiHost}/user_feeds/${id}`,
+      `${apiHost}/feeds/${source}`,
       {
         method: "DELETE",
         headers: {
@@ -83,9 +107,9 @@ const UserFeeds = {
     );
 
     if (!response.ok) {
-      throw new Error(`UserFeeds.delete(${id}) - failed to fetch`);
+      throw new Error(`Feeds.delete(${source}) - failed to fetch`);
     }
   }
 }
 
-export default UserFeeds;
+export default Feeds;
