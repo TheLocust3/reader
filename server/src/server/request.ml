@@ -2,8 +2,12 @@ type feed_request = {
   uri : string;
 } [@@deriving yojson]
 
-type list_create_request = {
+type board_create_request = {
   name : string;
+} [@@deriving yojson]
+
+type user_feed_add_request = {
+  uri : string;
 } [@@deriving yojson]
 
 type login_request = {

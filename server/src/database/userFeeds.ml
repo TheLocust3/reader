@@ -50,6 +50,17 @@ let feeds_by_user_id_query = [%rapper
   syntax_off
 ](Feeds.make)
 
+let items_by_user_id_query = [%rapper
+  get_many {sql|
+    SELECT @string{items.id}, @string{items.from_feed}, @string{items.link}, @string{items.title}, @string{items.description}
+    FROM user_feeds, items
+    WHERE user_feeds.user_id = %string{user_id} AND user_feeds.feed_id = from_feed
+    ORDER BY items.created_at DESC
+  |sql}
+  function_out
+  syntax_off
+](Items.make)
+
 let migrate connection =
   let query = migrate_query() in
     query connection |> Error.Database.or_print
@@ -62,10 +73,14 @@ let create { user_id; feed_id } connection =
   let query = create_query ~user_id: user_id ~feed_id: feed_id in
     query connection |> Error.Database.or_error
 
-let delete { user_id; feed_id } connection =
+let delete user_id feed_id connection =
   let query = delete_query ~user_id: user_id ~feed_id: feed_id in
     query connection |> Error.Database.or_error
 
 let feeds_by_user_id user_id connection =
   let query = feeds_by_user_id_query ~user_id: user_id in
+    query connection |> Error.Database.or_error
+
+let items_by_user_id user_id connection =
+  let query = items_by_user_id_query ~user_id: user_id in
     query connection |> Error.Database.or_error

@@ -53,7 +53,7 @@ let routes = [
       let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
       let%lwt body = Dream.body request in
 
-      let req = body |> Yojson.Safe.from_string |> list_create_request_of_yojson in
+      let req = body |> Yojson.Safe.from_string |> board_create_request_of_yojson in
         match req with
           | Ok { name } ->
             Dream.log "[/boards POST] name: %s" name;
