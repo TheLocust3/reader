@@ -85,9 +85,10 @@ const Item = styled(Link)`
 interface Props {
   boards: Board[];
   feeds: Feed[];
+  onAddFeedClick: () => void;
 }
 
-function Sidebar({ boards, feeds }: Props) {
+function Sidebar({ boards, feeds, onAddFeedClick }: Props) {
   const readLater = boards.filter((board) => board.name === "Read Later")[0];
 
   return (
@@ -118,6 +119,7 @@ function Sidebar({ boards, feeds }: Props) {
         {feeds.map((feed) => {
           return <Item key={feed.source} to={`/feeds/${feed.source}`}>{feed.title}</Item>;
         })}
+        <Item to='#' onClick={onAddFeedClick}>+ Add feed</Item>
       </div>
     </Container>
   );

@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 import Sidebar from './Sidebar';
 import View from './View';
-import Add from './Add';
+import AddFeed from './AddFeed';
 
 import { Feed } from '../../models/feed';
 import { Item } from '../../models/item';
@@ -33,10 +33,17 @@ const MainPane = styled.div`
   width: 100%;
 `;
 
-const AddPane = styled.div`
+const FloatingPrompt = styled.div`
   position: absolute;
-  bottom: 15px;
-  right: 15px;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+
+  z-index: 11;
 `;
 
 type State = { feedId: string | undefined, boardId: string | undefined } | undefined;
@@ -53,6 +60,19 @@ function Reader() {
   const [feeds, setFeeds] = useState<Feed[]>([]);
   const [items, setItems] = useState<Item[]>([]);
   const [title, setTitle] = useState<string>("");
+
+  const [showAddFeed, setShowAddFeed] = useState<Boolean>(false);
+
+  useEffect(() => {
+    const listener = ({ key }: any) => {
+      if (key === "Escape") {
+        setShowAddFeed(false);
+      }
+    };
+
+    document.addEventListener("keydown", listener);
+    return () => document.removeEventListener("keydown", listener)
+  }, []);
 
   if (JSON.stringify(current) !== JSON.stringify(last)) { // structural equality
     setLast(current);
@@ -75,16 +95,16 @@ function Reader() {
   return (
     <Root>
       <SidebarPane>
-        <Sidebar boards={boards} feeds={feeds} />
+        <Sidebar boards={boards} feeds={feeds} onAddFeedClick={() => setShowAddFeed(true) } />
       </SidebarPane>
 
       <MainPane>
         <View title={title} items={items} />
       </MainPane>
 
-      <AddPane>
-        <Add />
-      </AddPane>
+      <FloatingPrompt style={{ visibility: showAddFeed ? "visible" : "hidden" }}>
+        <AddFeed onSubmit={() => setShowAddFeed(false) } />
+      </FloatingPrompt>
     </Root>
   );
 }

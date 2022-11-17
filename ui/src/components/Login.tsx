@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 
+import Card from './common/Card'
+import Submit from './common/Submit'
+
 import Users from '../api/users';
 import { colors } from '../constants';
 
@@ -14,19 +17,6 @@ const Container = styled.div`
   justify-content: center;
   vertical-align: middle;
 `
-
-const LoginContainer = styled.div`
-  width: 400px;
-  height: 300px;
-
-  padding-top: 20px;
-  padding-bottom: 20px;
-  padding-left: 30px;
-  padding-right: 30px;
-
-  border: 1px solid ${colors.black};
-  border-radius: 10px;
-`;
 
 const Title = styled.div`
   padding-top: 5px;
@@ -67,30 +57,6 @@ const Textbox = styled.input`
   font-weight: 100;
 `;
 
-const Submit = styled.button`
-  width: 100%;
-  height: 40px;
-
-  cursor: pointer;
-
-  border: 1px solid ${colors.lightBlack};
-  border-radius: 10px;
-
-  background-color: white;
-
-  font-size: 18px;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 100;
-
-  &:hover {
-    background-color: ${colors.whiteHover};
-  }
-
-  &:active {
-    background-color: ${colors.whiteActive};
-  }
-`;
-
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
@@ -105,7 +71,7 @@ function Login() {
 
   return (
     <Container>
-      <LoginContainer>
+      <Card>
         <Title>Sign In</Title>
 
         <form onSubmit={onSubmit}>
@@ -121,7 +87,7 @@ function Login() {
           <Submit>Submit</Submit>
           <input type="submit" style={{ display: "none" }} />
         </form>
-      </LoginContainer>
+      </Card>
     </Container>
   );
 }

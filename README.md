@@ -20,11 +20,14 @@ Dependencies:
 `curl -H "authentication: Bearer ${TOKEN}" -XGET http://localhost:8080/feeds/https%3A%2F%2Fhnrss.org%2Ffrontpage/items`
 
 ## todo
- - add item to board
+ - add/remove user feeds through UI
+ - add/remove boards through UI
  - auto-logout
- - create user endpoint + UI
-   - default read later board
+ - add item to board
  - add read_items table
    - only show unread items unless asking for all
+ - deploy
+ - create user endpoint + UI
+   - default read later board
  - prevent overwriting existing feeds
  - prune old feed items
