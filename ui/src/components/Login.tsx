@@ -4,9 +4,9 @@ import styled from '@emotion/styled';
 
 import Card from './common/Card'
 import Submit from './common/Submit'
+import Textbox from './common/Textbox'
 
 import Users from '../api/users';
-import { colors } from '../constants';
 
 const Container = styled.div`
   width: 100%;
@@ -37,24 +37,6 @@ const Label = styled.div`
 
 const Spacer = styled.div`
   height: 15px;
-`;
-
-const Textbox = styled.input`
-  display: block;
-  box-sizing: border-box;
-
-  width: 100%;
-  height: 35px;
-
-  padding-left: 10px;
-  padding-right: 10px;
-
-  border: 1px solid ${colors.lightBlack};
-  border-radius: 5px;
-
-  font-size: 15px;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 100;
 `;
 
 function Login() {

@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import Sidebar from './Sidebar';
 import View from './View';
 import AddFeed from './AddFeed';
+import AddBoard from './AddBoard';
 
 import { Feed } from '../../models/feed';
 import { Item } from '../../models/item';
@@ -62,11 +63,13 @@ function Reader() {
   const [title, setTitle] = useState<string>("");
 
   const [showAddFeed, setShowAddFeed] = useState<Boolean>(false);
+  const [showAddBoard, setShowAddBoard] = useState<Boolean>(false);
 
   useEffect(() => {
     const listener = ({ key }: any) => {
       if (key === "Escape") {
         setShowAddFeed(false);
+        setShowAddBoard(false);
       }
     };
 
@@ -95,7 +98,12 @@ function Reader() {
   return (
     <Root>
       <SidebarPane>
-        <Sidebar boards={boards} feeds={feeds} onAddFeedClick={() => setShowAddFeed(true) } />
+        <Sidebar
+          boards={boards}
+          feeds={feeds}
+          onAddFeedClick={() => setShowAddFeed(true) }
+          onAddBoardClick={() => setShowAddBoard(true) }
+        />
       </SidebarPane>
 
       <MainPane>
@@ -105,6 +113,12 @@ function Reader() {
       <FloatingPrompt style={{ visibility: showAddFeed ? "visible" : "hidden" }} onClick={() => setShowAddFeed(false) }>
         <div onClick={(event) => event.stopPropagation() }>
           <AddFeed onSubmit={() => setShowAddFeed(false) } />
+        </div>
+      </FloatingPrompt>
+
+      <FloatingPrompt style={{ visibility: showAddBoard ? "visible" : "hidden" }} onClick={() => setShowAddBoard(false) }>
+        <div onClick={(event) => event.stopPropagation() }>
+          <AddBoard onSubmit={() => setShowAddBoard(false) } />
         </div>
       </FloatingPrompt>
     </Root>

@@ -86,9 +86,10 @@ interface Props {
   boards: Board[];
   feeds: Feed[];
   onAddFeedClick: () => void;
+  onAddBoardClick: () => void;
 }
 
-function Sidebar({ boards, feeds, onAddFeedClick }: Props) {
+function Sidebar({ boards, feeds, onAddFeedClick, onAddBoardClick }: Props) {
   const readLater = boards.filter((board) => board.name === "Read Later")[0];
 
   return (
@@ -106,6 +107,8 @@ function Sidebar({ boards, feeds, onAddFeedClick }: Props) {
          {boards.map((board) => {
            return <Item key={board.id} to={`/boards/${board.id}`}>{board.name}</Item>;
          })}
+         <br />
+         <Item to='#' onClick={onAddBoardClick}>+ Add board</Item>
        </div>
 
       <Spacer />
@@ -119,6 +122,7 @@ function Sidebar({ boards, feeds, onAddFeedClick }: Props) {
         {feeds.map((feed) => {
           return <Item key={feed.source} to={`/feeds/${feed.source}`}>{feed.title}</Item>;
         })}
+        <br />
         <Item to='#' onClick={onAddFeedClick}>+ Add feed</Item>
       </div>
     </Container>

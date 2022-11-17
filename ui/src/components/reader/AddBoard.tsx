@@ -31,7 +31,7 @@ interface Props {
 }
 
 function AddFeed({ onSubmit }: Props) {
-  const [source, setSource] = useState('');
+  const [name, setName] = useState('');
   const [error, setError] = useState('');
   const _onSubmit = (event: any) => {
     event.preventDefault();
@@ -41,11 +41,11 @@ function AddFeed({ onSubmit }: Props) {
 
   return (
     <Card style={{ width: "300px", height: "200px" }}>
-      <Title>Add Feed</Title>
+      <Title>Add Board</Title>
 
       <form onSubmit={_onSubmit}>
-        <Label>URL:</Label>
-        <Textbox type="text" onChange={(event) => setSource(event.target.value)} required />
+        <Label>Name:</Label>
+        <Textbox type="text" onChange={(event) => setName(event.target.value)} required />
         <Spacer />
         
         <ErrorLabel>{error}</ErrorLabel>
