@@ -102,8 +102,10 @@ function Reader() {
         <View title={title} items={items} />
       </MainPane>
 
-      <FloatingPrompt style={{ visibility: showAddFeed ? "visible" : "hidden" }}>
-        <AddFeed onSubmit={() => setShowAddFeed(false) } />
+      <FloatingPrompt style={{ visibility: showAddFeed ? "visible" : "hidden" }} onClick={() => setShowAddFeed(false) }>
+        <div onClick={(event) => event.stopPropagation() }>
+          <AddFeed onSubmit={() => setShowAddFeed(false) } />
+        </div>
       </FloatingPrompt>
     </Root>
   );
