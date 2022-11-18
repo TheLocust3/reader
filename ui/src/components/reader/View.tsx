@@ -11,6 +11,8 @@ const Toolbar = styled.div`
   display: flex;
   align-items: center;
 
+  background-color: white;
+
   width: 100%;
   height: 50px;
 

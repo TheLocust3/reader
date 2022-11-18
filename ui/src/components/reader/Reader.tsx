@@ -27,6 +27,12 @@ const SidebarPane = styled.div`
   z-index: 10;
 
   background-color: white;
+`;
+
+const SidebarPaneInner = styled.div`
+  min-width: 250px;
+  min-height: 100%;
+  position: fixed;
   border-right: 1px solid ${colors.black};
 `;
 
@@ -98,12 +104,14 @@ function Reader() {
   return (
     <Root>
       <SidebarPane>
-        <Sidebar
-          boards={boards}
-          feeds={feeds}
-          onAddFeedClick={() => setShowAddFeed(true) }
-          onAddBoardClick={() => setShowAddBoard(true) }
-        />
+        <SidebarPaneInner>
+          <Sidebar
+            boards={boards}
+            feeds={feeds}
+            onAddFeedClick={() => setShowAddFeed(true) }
+            onAddBoardClick={() => setShowAddBoard(true) }
+          />
+        </SidebarPaneInner>
       </SidebarPane>
 
       <MainPane>

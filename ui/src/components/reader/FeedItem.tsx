@@ -4,13 +4,15 @@ import styled from '@emotion/styled';
 import { colors } from '../../constants';
 import { Item } from '../../models/item';
 
-const Container = styled.div`
+const Container = styled.a`
+  display: block;
   max-height: 100px;
 
   padding-top: 10px;
   padding-left: 10px;
   padding-right: 10px;
 
+  text-decoration: none;
   background-color: white;
 
   cursor: pointer;
@@ -25,6 +27,8 @@ const Container = styled.div`
 `;
 
 const ContainerInner = styled.div`
+  max-height: 70px;
+  overflow: hidden;
 
   padding-left: 20px;
   padding-right: 20px;
@@ -53,10 +57,10 @@ interface Props {
 
 function FeedItem({ item }: Props) {
   return (
-    <Container>
+    <Container href={item.link} target="_blank">
       <ContainerInner>
         <Title>{item.title}</Title>
-        <Description>{item.description}</Description>
+        <Description dangerouslySetInnerHTML={{__html: item.description}} />
       </ContainerInner>
     </Container>
   );

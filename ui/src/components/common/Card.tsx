@@ -14,6 +14,8 @@ const Card = styled.div`
 
   border: 1px solid ${colors.black};
   border-radius: 10px;
+
+  box-shadow: 0px 0px 3px ${colors.lightBlack};
 `;
 
 export default Card;
