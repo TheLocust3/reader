@@ -78,7 +78,7 @@ const Boards = {
 
   async create(name: string): Promise<void> {
     const response = await fetch(
-      `${apiHost}/boards/`,
+      `${apiHost}/boards`,
       {
         method: "POST",
         headers: {

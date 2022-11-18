@@ -14,7 +14,7 @@ interface ItemsResponse {
 const Feeds = {
   async get(source: string): Promise<Feed> {
     const response = await fetch(
-      `${apiHost}/feeds/${source}`,
+      `${apiHost}/feeds/${encodeURIComponent(source)}`,
       {
         method: "GET",
         headers: {

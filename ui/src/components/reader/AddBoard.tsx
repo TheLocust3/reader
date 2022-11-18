@@ -5,6 +5,8 @@ import Card from '../common/Card';
 import Submit from '../common/Submit';
 import Textbox from '../common/Textbox';
 
+import Boards from '../../api/boards';
+
 const Title = styled.div`
   padding-top: 5px;
   padding-bottom: 30px;
@@ -33,10 +35,15 @@ interface Props {
 function AddFeed({ onSubmit }: Props) {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
-  const _onSubmit = (event: any) => {
+  const _onSubmit = async (event: any) => {
     event.preventDefault();
-    console.log("TESTESTEST");
-    onSubmit();
+
+    try {
+      await Boards.create(name);
+      onSubmit();
+    } catch {
+      setError("Failed to create board");
+    }
   }
 
   return (
