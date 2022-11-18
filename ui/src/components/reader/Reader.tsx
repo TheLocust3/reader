@@ -27,6 +27,7 @@ const SidebarPane = styled.div`
   z-index: 10;
 
   background-color: white;
+  box-shadow: 0px 0px 3px ${colors.lightBlack};
 `;
 
 const SidebarPaneInner = styled.div`
