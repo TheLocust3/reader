@@ -120,7 +120,7 @@ function Sidebar({ boards, feeds, onAddFeedClick, onAddBoardClick }: Props) {
       <Spacer />
       <div>
         {feeds.map((feed) => {
-          return <Item key={feed.source} to={`/feeds/${feed.source}`}>{feed.title}</Item>;
+          return <Item key={feed.source} to={`/feeds/${encodeURIComponent(feed.source)}`}>{feed.title}</Item>;
         })}
         <br />
         <Item to='#' onClick={onAddFeedClick}>+ Add feed</Item>

@@ -10,7 +10,7 @@ let migrate_query = [%rapper
       user_id TEXT NOT NULL,
       feed_id TEXT NOT NULL,
       FOREIGN KEY(user_id) REFERENCES users(id),
-      FOREIGN KEY(feed_id) REFERENCES feeds(id),
+      FOREIGN KEY(feed_id) REFERENCES feeds(source),
       PRIMARY KEY(user_id, feed_id)
     )
   |sql}

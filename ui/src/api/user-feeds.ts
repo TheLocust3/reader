@@ -54,7 +54,7 @@ const UserFeeds = {
 
   async add(source: string): Promise<void> {
     const response = await fetch(
-      `${apiHost}/user_feeds/`,
+      `${apiHost}/user_feeds`,
       {
         method: "POST",
         headers: {

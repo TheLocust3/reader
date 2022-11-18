@@ -112,13 +112,13 @@ function Reader() {
 
       <FloatingPrompt style={{ visibility: showAddFeed ? "visible" : "hidden" }} onClick={() => setShowAddFeed(false) }>
         <div onClick={(event) => event.stopPropagation() }>
-          <AddFeed onSubmit={() => setShowAddFeed(false) } />
+          <AddFeed onSubmit={() => { setShowAddFeed(false); setLast(undefined) } } />
         </div>
       </FloatingPrompt>
 
       <FloatingPrompt style={{ visibility: showAddBoard ? "visible" : "hidden" }} onClick={() => setShowAddBoard(false) }>
         <div onClick={(event) => event.stopPropagation() }>
-          <AddBoard onSubmit={() => setShowAddBoard(false) } />
+          <AddBoard onSubmit={() => { setShowAddBoard(false); setLast(undefined) } } />
         </div>
       </FloatingPrompt>
     </Root>

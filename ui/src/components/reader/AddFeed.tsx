@@ -5,6 +5,9 @@ import Card from '../common/Card';
 import Submit from '../common/Submit';
 import Textbox from '../common/Textbox';
 
+import Feeds from '../../api/feeds';
+import UserFeeds from '../../api/user-feeds';
+
 const Title = styled.div`
   padding-top: 5px;
   padding-bottom: 30px;
@@ -33,10 +36,18 @@ interface Props {
 function AddFeed({ onSubmit }: Props) {
   const [source, setSource] = useState('');
   const [error, setError] = useState('');
-  const _onSubmit = (event: any) => {
+  
+  const _onSubmit = async (event: any) => {
     event.preventDefault();
-    console.log("TESTESTEST");
-    onSubmit();
+
+    try {
+      await Feeds.create(source);
+      await UserFeeds.add(source);
+      onSubmit();
+    } catch (e) {
+      console.log(e)
+      setError("Failed to create feed");
+    }
   }
 
   return (

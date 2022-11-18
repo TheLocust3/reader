@@ -30,4 +30,5 @@ Dependencies:
  - create user endpoint + UI
    - default read later board
  - prevent overwriting existing feeds
+   - need to normal feed source urls (so that different forms of URL are equal to eachother)
  - prune old feed items

@@ -3,10 +3,6 @@ import { Feed } from '../models/feed';
 import { Item } from '../models/item';
 import Users from './users';
 
-interface AllFeedsResponse {
-  feeds: Feed[];
-}
-
 interface FeedResponse {
   feed: Feed;
 }
@@ -16,26 +12,6 @@ interface ItemsResponse {
 }
 
 const Feeds = {
-  async all(): Promise<Feed[]> {
-    const response = await fetch(
-      `${apiHost}/feeds/`,
-      {
-        method: "GET",
-        headers: {
-          'Content-Type': 'application/json',
-          'authentication': `Bearer ${Users.token()}`
-        }
-      }
-    );
-
-    if (response.ok) {
-      const json: AllFeedsResponse = await response.json();
-      return json.feeds
-    } else {
-      throw new Error(`Feeds.all - failed to fetch`);
-    }
-  },
-
   async get(source: string): Promise<Feed> {
     const response = await fetch(
       `${apiHost}/feeds/${source}`,
@@ -58,7 +34,7 @@ const Feeds = {
 
   async items(source: string): Promise<Item[]> {
     const response = await fetch(
-      `${apiHost}/feeds/${source}/items`,
+      `${apiHost}/feeds/${encodeURIComponent(source)}/items`,
       {
         method: "GET",
         headers: {
@@ -78,7 +54,7 @@ const Feeds = {
 
   async create(source: string): Promise<void> {
     const response = await fetch(
-      `${apiHost}/feeds/`,
+      `${apiHost}/feeds`,
       {
         method: "POST",
         headers: {
@@ -96,7 +72,7 @@ const Feeds = {
 
   async remove(source: string): Promise<void> {
     const response = await fetch(
-      `${apiHost}/feeds/${source}`,
+      `${apiHost}/feeds/${encodeURIComponent(source)}`,
       {
         method: "DELETE",
         headers: {
