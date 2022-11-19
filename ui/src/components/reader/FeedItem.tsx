@@ -6,7 +6,7 @@ import { Item } from '../../models/item';
 
 const Container = styled.a`
   display: block;
-  max-height: 100px;
+  max-height: 110px;
 
   padding-top: 10px;
   padding-left: 10px;
@@ -32,7 +32,7 @@ const ContainerInner = styled.div`
 
   padding-left: 20px;
   padding-right: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 30px;
 
   border-bottom: 1px solid ${colors.black};
 `;

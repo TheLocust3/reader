@@ -25,9 +25,6 @@ const Root = styled.div`
 const SidebarPane = styled.div`
   min-width: 250px;
   z-index: 10;
-
-  background-color: white;
-  box-shadow: 0px 0px 3px ${colors.lightBlack};
 `;
 
 const SidebarPaneInner = styled.div`
@@ -35,6 +32,9 @@ const SidebarPaneInner = styled.div`
   min-height: 100%;
   position: fixed;
   border-right: 1px solid ${colors.black};
+
+  background-color: white;
+  box-shadow: 0px 0px 3px ${colors.lightBlack};
 `;
 
 const MainPane = styled.div`
@@ -87,6 +87,9 @@ function Reader() {
   if (JSON.stringify(current) !== JSON.stringify(last)) { // structural equality
     setLast(current);
     
+    window.scrollTo(0, 0);
+    setItems([]);
+
     Boards.all().then((lists) => setBoards(lists));
     UserFeeds.all().then((feeds) => setFeeds(feeds));
 

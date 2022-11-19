@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
+import Icon from '../Icon';
 import FeedItem from './FeedItem';
 
 import { colors } from '../../constants';
@@ -16,12 +17,26 @@ const Toolbar = styled.div`
   width: 100%;
   height: 50px;
 
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
 
   border-bottom: 1px solid ${colors.black};
 
   box-shadow: 0px 0px 3px ${colors.lightBlack};
+
+  justify-content: space-between
+`;
+
+const More = styled.div`
+  padding-top: 5px;
+  padding-right: 275px;
+
+  cursor: pointer;
+  color: ${colors.black};
+
+  &:hover {
+    color: black;
+  }
 `;
 
 const Title = styled.div`
@@ -43,6 +58,8 @@ function View({ title, items }: Props) {
     <div>
       <Toolbar>
         <Title>{title}</Title>
+
+        <More><Icon icon="more_vert" size="1.65em" /></More>
       </Toolbar>
       <Spacer />
 
