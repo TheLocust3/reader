@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 
@@ -130,8 +130,17 @@ function View({ feedId, boardId, title, items }: Props) {
     }
   }
 
+  useEffect(() => {
+    const listener = () => {
+      setShowMenu(false);
+    };
+
+    document.addEventListener("click", listener);
+    return () => document.removeEventListener("click", listener)
+  }, []);
+
   return (
-    <div onClick={() => setShowMenu(false)}>
+    <div>
       <Toolbar>
         <Title>{title}</Title>
 

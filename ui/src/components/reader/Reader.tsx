@@ -84,6 +84,16 @@ function Reader() {
     return () => document.removeEventListener("keydown", listener)
   }, []);
 
+  useEffect(() => {
+    const listener = () => {
+      setShowAddFeed(false);
+      setShowAddBoard(false);
+    };
+
+    document.addEventListener("click", listener);
+    return () => document.removeEventListener("click", listener)
+  }, []);
+
   if (JSON.stringify(current) !== JSON.stringify(last)) { // structural equality
     setLast(current);
     
@@ -122,13 +132,13 @@ function Reader() {
         <View feedId={feedId} boardId={boardId} title={title} items={items} />
       </MainPane>
 
-      <FloatingPrompt style={{ visibility: showAddFeed ? "visible" : "hidden" }} onClick={() => setShowAddFeed(false) }>
+      <FloatingPrompt style={{ visibility: showAddFeed ? "visible" : "hidden" }}>
         <div onClick={(event) => event.stopPropagation() }>
           <AddFeed onSubmit={() => { setShowAddFeed(false); setLast(undefined) } } />
         </div>
       </FloatingPrompt>
 
-      <FloatingPrompt style={{ visibility: showAddBoard ? "visible" : "hidden" }} onClick={() => setShowAddBoard(false) }>
+      <FloatingPrompt style={{ visibility: showAddBoard ? "visible" : "hidden" }}>
         <div onClick={(event) => event.stopPropagation() }>
           <AddBoard onSubmit={() => { setShowAddBoard(false); setLast(undefined) } } />
         </div>

@@ -32,4 +32,3 @@ Dependencies:
  - cascading delete
  - prevent overwriting existing feeds
    - need to normalize feed source urls (so that different forms of URL are equal to eachother)
- - close toolbar menu by clicking anywhere

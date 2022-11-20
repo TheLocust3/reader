@@ -105,7 +105,7 @@ function Sidebar({ boards, feeds, onAddFeedClick, onAddBoardClick }: Props) {
            return <Item key={board.id} to={`/boards/${board.id}`}>{board.name}</Item>;
          })}
          <br />
-         <Item to='#' onClick={onAddBoardClick}>+ Add board</Item>
+         <Item to='#' onClick={(event) => { event.stopPropagation(); onAddBoardClick() }}>+ Add board</Item>
        </div>
 
       <Spacer />
@@ -120,7 +120,7 @@ function Sidebar({ boards, feeds, onAddFeedClick, onAddBoardClick }: Props) {
           return <Item key={feed.source} to={`/feeds/${encodeURIComponent(feed.source)}`}>{feed.title}</Item>;
         })}
         <br />
-        <Item to='#' onClick={onAddFeedClick}>+ Add feed</Item>
+        <Item to='#' onClick={(event) => { event.stopPropagation(); onAddFeedClick() }}>+ Add feed</Item>
       </div>
     </Container>
   );
