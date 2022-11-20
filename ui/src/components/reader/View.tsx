@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 
-import Icon from '../Icon';
+import Icon from '../common/Icon';
+import Menu from '../common/Menu';
 import FeedItem from './FeedItem';
 
 import { Item } from '../../models/item';
+import { Board } from '../../models/board';
 import Boards from '../../api/boards';
 import UserFeeds from '../../api/user-feeds';
 import { colors } from '../../constants';
@@ -44,46 +46,6 @@ const MoreButton = styled.div`
   }
 `;
 
-const FloatingMenu = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-
-  z-index: 11;
-`;
-
-const Menu = styled.div`
-  position: absolute;
-  right: 10px;
-  width: 125px;
-
-  background-color: white;
-
-  border: 1px solid ${colors.black};
-  border-radius: 5px;
-`;
-
-const MenuItem = styled.div`
-  width: 100%;
-  padding-top: 12px;
-  padding-bottom: 12px;
-
-  display: flex;
-  justify-content: center;
-
-  border-radius: 5px;
-
-  cursor: pointer;
-
-  &:hover {
-    background-color: ${colors.whiteHover};
-  }
-
-  &:active {
-    background-color: ${colors.whiteActive};
-  }
-`;
-
 const Title = styled.div`
   font-size: 20px;
   color: ${colors.black};
@@ -98,9 +60,10 @@ interface Props {
   boardId: string | undefined;
   title: string;
   items: Item[];
+  boards: Board[];
 }
 
-function View({ feedId, boardId, title, items }: Props) {
+function View({ feedId, boardId, title, items, boards }: Props) {
   const navigate = useNavigate();
 
   const [showMenu, setShowMenu] = useState<Boolean>(false);
@@ -147,11 +110,7 @@ function View({ feedId, boardId, title, items }: Props) {
         <More style={{ visibility: showMore ? "visible" : "hidden" }}>
           <MoreButton onClick={(event) => { event.stopPropagation(); setShowMenu(!showMenu) }}><Icon icon="more_vert" size="1.65em" /></MoreButton>
 
-          <FloatingMenu>
-            <Menu style={{ visibility: showMenu ? "visible" : "hidden" }}>
-              <MenuItem onClick={(event) => { event.stopPropagation(); onDeleteItemClick(); }}>{deleteItem}</MenuItem>
-            </Menu>
-          </FloatingMenu>
+          <Menu show={showMenu} items={[{ text: deleteItem, onClick: onDeleteItemClick }]} />
         </More>
       </Toolbar>
       <Spacer />
@@ -159,7 +118,7 @@ function View({ feedId, boardId, title, items }: Props) {
       {items.map((item) => {
         return (
           <div>
-            <FeedItem key={item.id} item={item} />
+            <FeedItem key={item.id} item={item} boards={boards} />
           </div>
         );
       })}
