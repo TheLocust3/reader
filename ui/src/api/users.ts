@@ -1,4 +1,4 @@
-import { apiHost } from '../constants';
+import { request } from './util';
 
 interface LoginResponse {
   token: string;
@@ -6,8 +6,8 @@ interface LoginResponse {
 
 const Users = {
   async login(email: string, password: string): Promise<void> {
-    const response = await fetch(
-      `${apiHost}/users/login`,
+    const response = await request(
+      "/users/login",
       {
         method: "POST",
         headers: {

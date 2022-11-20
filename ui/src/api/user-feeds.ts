@@ -1,4 +1,4 @@
-import { apiHost } from '../constants';
+import { request } from './util';
 import { Feed } from '../models/feed';
 import { Item } from '../models/item';
 import Users from './users';
@@ -13,8 +13,8 @@ interface ItemsResponse {
 
 const UserFeeds = {
   async all(): Promise<Feed[]> {
-    const response = await fetch(
-      `${apiHost}/user_feeds/`,
+    const response = await request(
+      "/user_feeds/",
       {
         method: "GET",
         headers: {
@@ -33,8 +33,8 @@ const UserFeeds = {
   },
 
   async items(): Promise<Item[]> {
-    const response = await fetch(
-      `${apiHost}/user_feeds/items`,
+    const response = await request(
+      "/user_feeds/items",
       {
         method: "GET",
         headers: {
@@ -53,8 +53,8 @@ const UserFeeds = {
   },
 
   async add(source: string): Promise<void> {
-    const response = await fetch(
-      `${apiHost}/user_feeds`,
+    const response = await request(
+      "/user_feeds",
       {
         method: "POST",
         headers: {
@@ -71,8 +71,8 @@ const UserFeeds = {
   },
 
   async remove(id: string): Promise<void> {
-    const response = await fetch(
-      `${apiHost}/user_feeds/${encodeURIComponent(id)}`,
+    const response = await request(
+      `/user_feeds/${encodeURIComponent(id)}`,
       {
         method: "DELETE",
         headers: {

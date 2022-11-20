@@ -21,16 +21,15 @@ Dependencies:
 
 ## todo
  - add item to board
- - auto-logout
  - add read_items table
    - only show unread items unless asking for all
- - prevent overwriting existing feeds
-   - need to normal feed source urls (so that different forms of URL are equal to eachother)
- - cascading delete
- - deploy
- - create user endpoint + UI
-   - default read later board
  - prune old feed items
+ - deploy
+ - internal create user endpoint
+   - default read later board
 
 ### tweaks
+ - cascading delete
+ - prevent overwriting existing feeds
+   - need to normalize feed source urls (so that different forms of URL are equal to eachother)
  - close toolbar menu by clicking anywhere

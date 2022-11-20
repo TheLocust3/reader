@@ -1,4 +1,4 @@
-import { apiHost } from '../constants';
+import { request } from './util';
 import { Feed } from '../models/feed';
 import { Item } from '../models/item';
 import Users from './users';
@@ -13,8 +13,8 @@ interface ItemsResponse {
 
 const Feeds = {
   async get(source: string): Promise<Feed> {
-    const response = await fetch(
-      `${apiHost}/feeds/${encodeURIComponent(source)}`,
+    const response = await request(
+      `/feeds/${encodeURIComponent(source)}`,
       {
         method: "GET",
         headers: {
@@ -33,8 +33,8 @@ const Feeds = {
   },
 
   async items(source: string): Promise<Item[]> {
-    const response = await fetch(
-      `${apiHost}/feeds/${encodeURIComponent(source)}/items`,
+    const response = await request(
+      `/feeds/${encodeURIComponent(source)}/items`,
       {
         method: "GET",
         headers: {
@@ -53,8 +53,8 @@ const Feeds = {
   },
 
   async create(source: string): Promise<void> {
-    const response = await fetch(
-      `${apiHost}/feeds`,
+    const response = await request(
+      "/feeds",
       {
         method: "POST",
         headers: {
@@ -71,8 +71,8 @@ const Feeds = {
   },
 
   async remove(source: string): Promise<void> {
-    const response = await fetch(
-      `${apiHost}/feeds/${encodeURIComponent(source)}`,
+    const response = await request(
+      `/feeds/${encodeURIComponent(source)}`,
       {
         method: "DELETE",
         headers: {

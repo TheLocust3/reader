@@ -1,4 +1,4 @@
-import { apiHost } from '../constants';
+import { request } from './util';
 import { Board } from '../models/board';
 import { Item } from '../models/item';
 import Users from './users';
@@ -17,8 +17,8 @@ interface ItemsResponse {
 
 const Boards = {
   async all(): Promise<Board[]> {
-    const response = await fetch(
-      `${apiHost}/boards/`,
+    const response = await request(
+      "/boards/",
       {
         method: "GET",
         headers: {
@@ -37,8 +37,8 @@ const Boards = {
   },
 
   async get(id: string): Promise<Board> {
-    const response = await fetch(
-      `${apiHost}/boards/${id}`,
+    const response = await request(
+      `/boards/${id}`,
       {
         method: "GET",
         headers: {
@@ -57,8 +57,8 @@ const Boards = {
   },
 
   async items(id: string): Promise<Item[]> {
-    const response = await fetch(
-      `${apiHost}/boards/${id}/items`,
+    const response = await request(
+      `/boards/${id}/items`,
       {
         method: "GET",
         headers: {
@@ -77,8 +77,8 @@ const Boards = {
   },
 
   async create(name: string): Promise<void> {
-    const response = await fetch(
-      `${apiHost}/boards`,
+    const response = await request(
+      `/boards`,
       {
         method: "POST",
         headers: {
@@ -95,8 +95,8 @@ const Boards = {
   },
 
   async remove(id: string): Promise<void> {
-    const response = await fetch(
-      `${apiHost}/boards/${id}`,
+    const response = await request(
+      `/boards/${id}`,
       {
         method: "DELETE",
         headers: {
