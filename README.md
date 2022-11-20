@@ -9,8 +9,8 @@ Dependencies:
 `make install`  
 
 ## local development
-`cd server && make start`
-`cd ui && make start`
+`cd server && make start`  
+`cd ui && make start`  
 
 ## todo
  - add item to board
