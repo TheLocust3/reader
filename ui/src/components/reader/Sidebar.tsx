@@ -90,12 +90,9 @@ interface Props {
 }
 
 function Sidebar({ boards, feeds, onAddFeedClick, onAddBoardClick }: Props) {
-  const readLater = boards.filter((board) => board.name === "Read Later")[0];
-
   return (
     <Container>
       <ClickableHeader to={`/`}>All</ClickableHeader>
-      {readLater !== undefined ? <ClickableHeader to={`/boards/${readLater.id}`}>Read Later</ClickableHeader> : <span />}
 
       <Spacer />
       <Divider />
