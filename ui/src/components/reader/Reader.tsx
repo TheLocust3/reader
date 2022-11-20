@@ -119,7 +119,7 @@ function Reader() {
       </SidebarPane>
 
       <MainPane>
-        <View title={title} items={items} />
+        <View feedId={feedId} boardId={boardId} title={title} items={items} />
       </MainPane>
 
       <FloatingPrompt style={{ visibility: showAddFeed ? "visible" : "hidden" }} onClick={() => setShowAddFeed(false) }>

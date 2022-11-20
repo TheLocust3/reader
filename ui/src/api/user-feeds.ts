@@ -72,7 +72,7 @@ const UserFeeds = {
 
   async remove(id: string): Promise<void> {
     const response = await fetch(
-      `${apiHost}/user_feeds/${id}`,
+      `${apiHost}/user_feeds/${encodeURIComponent(id)}`,
       {
         method: "DELETE",
         headers: {
