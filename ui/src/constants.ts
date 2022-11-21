@@ -9,4 +9,7 @@ export const colors = {
 
   whiteHover: '#f9f9f9',
   whiteActive: '#f1f1f1',
+
+  lightGray: '#eeeeee',
+  lightGrayHover: '#e9e9e9',
 };

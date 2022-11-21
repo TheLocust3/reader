@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { css } from '@emotion/css'
 import styled from '@emotion/styled';
 
 import Icon from '../common/Icon';
@@ -24,6 +25,14 @@ const Container = styled.a`
 
   &:hover {
     background-color: ${colors.whiteHover};
+  }
+`;
+
+const readContainer = css`
+  background-color: ${colors.lightGray} !important;
+
+  &:hover {
+    background-color: ${colors.lightGrayHover} !important;
   }
 `;
 
@@ -83,8 +92,12 @@ interface Props {
 }
 
 function FeedItem({ boardId, item, boards, refresh }: Props) {
+  const ref = useRef<HTMLAnchorElement>(null);
+
   const [showMenu, setShowMenu] = useState<Boolean>(false);
   const showRemove = boardId !== undefined;
+
+  const [past, setPast] = useState<Boolean>(false);
 
   useEffect(() => {
     const listener = () => {
@@ -92,11 +105,31 @@ function FeedItem({ boardId, item, boards, refresh }: Props) {
     };
 
     document.addEventListener("click", listener);
-    return () => document.removeEventListener("click", listener)
+    return () => document.removeEventListener("click", listener);
   }, []);
 
+  useEffect(() => {
+    const listener = () => {
+      if (past) {
+        return;
+      }
+
+      const rect = ref.current?.getBoundingClientRect();
+      if (rect !== undefined) {
+        if (rect.bottom <= 50) { // TODO: JK toolbar height
+          setPast(true);
+          console.log(item.title)
+          // TODO: JK run API call
+        }
+      }
+    };
+
+    document.addEventListener("scroll", listener);
+    return () => document.removeEventListener("click", listener);
+  }, [past, item]);
+
   return (
-    <Container href={item.link} target="_blank">
+    <Container href={item.link} target="_blank" ref={ref} className={past ? readContainer : ''}>
       <ContainerInner>
         <TitleContainer>
           <Title>{item.title}</Title>
