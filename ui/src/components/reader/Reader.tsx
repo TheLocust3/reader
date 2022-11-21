@@ -98,7 +98,6 @@ function Reader() {
     setLast(current);
     
     window.scrollTo(0, 0);
-    setItems([]);
 
     Boards.all().then((lists) => setBoards(lists));
     UserFeeds.all().then((feeds) => setFeeds(feeds));
@@ -129,7 +128,7 @@ function Reader() {
       </SidebarPane>
 
       <MainPane>
-        <View feedId={feedId} boardId={boardId} title={title} items={items} boards={boards} />
+        <View feedId={feedId} boardId={boardId} title={title} items={items} boards={boards} refresh={() => setLast(undefined)} />
       </MainPane>
 
       <FloatingPrompt style={{ visibility: showAddFeed ? "visible" : "hidden" }}>

@@ -12,12 +12,17 @@ Dependencies:
 `cd server && make start`  
 `cd ui && make start`  
 
+## example feeds
+ - https://hnrss.org/frontpage
+
 ## todo
- - add item to board
  - add read_items table
    - show only unread items in "all"
    - show everything otherwise
  - prune old feed items
+ - tighten up UI
+   - accent colors
+   - less padding, less roundness
  - deploy
  - internal create user endpoint
    - default read later board

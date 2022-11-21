@@ -109,6 +109,41 @@ const Boards = {
     if (!response.ok) {
       throw new Error(`Boards.delete(${id}) - failed to fetch`);
     }
+  },
+
+  async addItem(boardId: string, itemId: string): Promise<void> {
+    const response = await request(
+      `/boards/${boardId}/items`,
+      {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'authentication': `Bearer ${Users.token()}`
+        },
+        body: JSON.stringify({ item_id: itemId })
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Boards.addItem(${boardId}, ${itemId}) - failed to fetch`);
+    }
+  },
+
+  async removeItem(boardId: string, itemId: string): Promise<void> {
+    const response = await request(
+      `/boards/${boardId}/items/${encodeURIComponent(itemId)}`,
+      {
+        method: "DELETE",
+        headers: {
+          'Content-Type': 'application/json',
+          'authentication': `Bearer ${Users.token()}`
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Boards.removeItem(${boardId}, ${itemId}) - failed to fetch`);
+    }
   }
 }
 

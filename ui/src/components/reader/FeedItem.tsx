@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import Icon from '../common/Icon';
 import Menu from '../common/Menu';
 
+import Boards from '../../api/boards';
 import { Item } from '../../models/item';
 import { Board } from '../../models/board';
 import { colors } from '../../constants';
@@ -52,7 +53,8 @@ const Options = styled.div`
   color: ${colors.black};
 `;
 
-const OptionsItem = styled.div`
+const OptionsItem = styled.span`
+  padding-left: 7px;
   font-size: 1.5em;
 
   &:hover {
@@ -74,12 +76,15 @@ const Description = styled.div`
 `
 
 interface Props {
+  boardId: string | undefined;
   item: Item
   boards: Board[];
+  refresh: () => void;
 }
 
-function FeedItem({ item, boards }: Props) {
+function FeedItem({ boardId, item, boards, refresh }: Props) {
   const [showMenu, setShowMenu] = useState<Boolean>(false);
+  const showRemove = boardId !== undefined;
 
   useEffect(() => {
     const listener = () => {
@@ -97,9 +102,26 @@ function FeedItem({ item, boards }: Props) {
           <Title>{item.title}</Title>
 
           <Options>
-            <OptionsItem onClick={(event) => { event.stopPropagation(); event.preventDefault(); setShowMenu(true); }}>+</OptionsItem>
+            <OptionsItem onClick={(event) => { event.stopPropagation(); event.preventDefault(); setShowMenu(true); }}><Icon icon="add" /></OptionsItem>
+            <OptionsItem style={{ display: showRemove ? "inline" : "none" }} onClick={(event) => {
+              event.stopPropagation();
+              event.preventDefault();
+              if (boardId !== undefined) {
+                Boards.removeItem(boardId, item.id);
+                refresh();
+              }
+             }}><Icon icon="close" /></OptionsItem>
 
-            <Menu show={showMenu} items={boards.map((board) => ({ text: board.name, onClick: () => { setShowMenu(false); } }))} />
+            <Menu
+              show={showMenu}
+              items={boards.map((board) => {
+                return {
+                  text: board.name,
+                  onClick: async () => { setShowMenu(false); Boards.addItem(board.id, item.id) }
+                };
+              })}
+              right={showRemove ? 40 : 15}
+            />
           </Options>
         </TitleContainer>
 

@@ -61,9 +61,10 @@ interface Props {
   title: string;
   items: Item[];
   boards: Board[];
+  refresh: () => void;
 }
 
-function View({ feedId, boardId, title, items, boards }: Props) {
+function View({ feedId, boardId, title, items, boards, refresh }: Props) {
   const navigate = useNavigate();
 
   const [showMenu, setShowMenu] = useState<Boolean>(false);
@@ -117,8 +118,8 @@ function View({ feedId, boardId, title, items, boards }: Props) {
 
       {items.map((item) => {
         return (
-          <div>
-            <FeedItem key={item.id} item={item} boards={boards} />
+          <div key={item.id}>
+            <FeedItem boardId={boardId} item={item} boards={boards} refresh={refresh} />
           </div>
         );
       })}

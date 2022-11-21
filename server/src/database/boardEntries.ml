@@ -9,7 +9,7 @@ let migrate_query = [%rapper
     CREATE TABLE board_entries (
       board_id TEXT NOT NULL,
       item_id TEXT NOT NULL,
-      FOREIGN KEY(board_id) REFERENCES lists(id),
+      FOREIGN KEY(board_id) REFERENCES boards(id),
       FOREIGN KEY(item_id) REFERENCES items(id),
       PRIMARY KEY(board_id, item_id)
     )
@@ -43,8 +43,8 @@ let delete_query = [%rapper
 let items_by_board_id_query = [%rapper
   get_many {sql|
     SELECT @string{items.id}, @string{items.from_feed}, @string{items.link}, @string{items.title}, @string{items.description}
-    FROM feed_lists, items
-    WHERE feed_lists.board_id = %string{board_id} AND feed_lists.item_id = items.id
+    FROM board_entries, items
+    WHERE board_entries.board_id = %string{board_id} AND board_entries.item_id = items.id
   |sql}
   function_out
   syntax_off

@@ -47,6 +47,32 @@ let get_board_items user_id id connection =
       Dream.log "[get_board_items] id: %s - lookup failed with %s" id (Model.Error.Database.to_string e);
       Lwt.return None
 
+let add_item user_id board_id item_id connection =
+  match%lwt Database.Boards.by_id user_id board_id connection with
+    | Ok _ ->
+      (match%lwt Database.BoardEntries.create { board_id; item_id } connection with
+        | Ok _ ->
+          Lwt.return_ok ()
+        | Error e ->
+          Dream.log "[add_item] board: %s  item: %s - add item failed with %s" board_id item_id (Model.Error.Database.to_string e);
+          Lwt.return (Error (Model.Error.Database.to_frontend e)))
+    | Error e ->
+      Dream.log "[add_item] board: %s  item: %s - lookup failed with %s" board_id item_id (Model.Error.Database.to_string e);
+      Lwt.return (Error (Model.Error.Database.to_frontend e))
+
+let remove_item user_id board_id item_id connection =
+  match%lwt Database.Boards.by_id user_id board_id connection with
+    | Ok _ ->
+      (match%lwt Database.BoardEntries.delete { board_id; item_id } connection with
+        | Ok _ ->
+          Lwt.return_ok ()
+        | Error e ->
+          Dream.log "[remove_item] board: %s  item: %s - add item failed with %s" board_id item_id (Model.Error.Database.to_string e);
+          Lwt.return (Error (Model.Error.Database.to_frontend e)))
+    | Error e ->
+      Dream.log "[remove_item] board: %s  item: %s - lookup failed with %s" board_id item_id (Model.Error.Database.to_string e);
+      Lwt.return (Error (Model.Error.Database.to_frontend e))
+
 let routes = [
   Dream.scope "/boards" [Util.Middleware.cors; Util.Middleware.require_auth] [
     Dream.post "" (fun request ->
@@ -112,6 +138,41 @@ let routes = [
           json { items = List.map Model.Item.Frontend.to_frontend items } items_response_to_yojson
         | None ->
           throw_error Model.Error.Frontend.NotFound
+    );
+
+    Dream.post "/:id/items" (fun request ->
+      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
+      let board_id = Dream.param request "id" in
+      let%lwt body = Dream.body request in
+
+      let req = body |> Yojson.Safe.from_string |> board_add_item_request_of_yojson in
+        match req with
+          | Ok { item_id } ->
+            Dream.log "[/boards/:id/items POST] board: %s item: %s" board_id item_id;
+            (match%lwt Dream.sql request (add_item user_id board_id item_id) with
+              | Ok _ ->
+                Dream.log "[/boards/:id/items POST] board: %s item: %s - add success" board_id item_id;
+                json { message = "ok" } status_response_to_yojson
+              | Error e ->
+                Dream.log "[/boards/:id/items POST] board: %s item: %s - add failed with %s" board_id item_id (Model.Error.Frontend.to_string e);
+                throw_error e)
+          | _ ->
+            throw_error Model.Error.Frontend.BadRequest
+    );
+
+    Dream.delete "/:board_id/items/:item_id" (fun request ->
+      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
+      let board_id = Dream.param request "board_id" in
+      let item_id = Dream.param request "item_id" in
+
+      let _ = Dream.log "[/boards/:board_id/items/:items_id DELETE] board: %s item: %s" board_id item_id in
+      match%lwt Dream.sql request (remove_item user_id board_id item_id) with
+        | Ok _ ->
+          Dream.log "[/boards/:board_id/items/:items_id DELETE] board: %s item: %s - delete success" board_id item_id;
+          json { message = "ok" } status_response_to_yojson
+        | Error e ->
+          Dream.log "[/boards/:board_id/items/:items_id DELETE] board: %s item: %s - delete failed with %s" board_id item_id (Model.Error.Frontend.to_string e);
+          throw_error e
     );
   ]
 ]

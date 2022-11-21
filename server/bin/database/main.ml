@@ -11,7 +11,6 @@ let migrate () =
   let _ = Lwt_main.run (Database.UserFeeds.migrate connection) in
 
   let _ = Lwt_main.run (Database.Users.create test_user connection) in
-  let _ = Lwt_main.run (Database.Boards.create read_later connection) in
     Printf.printf("Migration complete\n")
 
 let rollback () =
