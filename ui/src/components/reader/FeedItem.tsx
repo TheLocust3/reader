@@ -106,7 +106,7 @@ function FeedItem({ boardId, item, boards, refresh }: Props) {
   const [showMenu, setShowMenu] = useState<Boolean>(false);
   const showRemove = boardId !== undefined;
 
-  const [past, setPast] = useState<Boolean>(false);
+  const [past, setPast] = useState<Boolean>(item.read);
 
   useEffect(() => {
     const listener = () => {

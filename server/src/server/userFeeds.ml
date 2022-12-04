@@ -30,7 +30,7 @@ let remove_user_feed user_id source connection =
         Lwt.return (Error (Model.Error.Database.to_frontend e))
 
 let get_items user_id connection =
-  match%lwt Database.UserFeeds.items_by_user_id user_id connection with
+  match%lwt Database.UserItems.all_items_by_user_id user_id connection with
     | Ok items ->
       Lwt.return items
     | Error e ->
@@ -71,7 +71,7 @@ let routes = [
 
       let _ = Dream.log "[/user_feeds/ GET]" in
       let%lwt items = Dream.sql request (get_items user_id) in
-        json { items = List.map Model.Item.Frontend.to_frontend items } items_response_to_yojson
+        json { items = List.map Model.UserItem.Frontend.to_frontend items } items_response_to_yojson
     );
 
     Dream.delete "/:source" (fun request ->

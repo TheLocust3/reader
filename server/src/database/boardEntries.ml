@@ -45,6 +45,7 @@ let items_by_board_id_query = [%rapper
     SELECT @string{items.id}, @string{items.from_feed}, @string{items.link}, @string{items.title}, @string{items.description}
     FROM board_entries, items
     WHERE board_entries.board_id = %string{board_id} AND board_entries.item_id = items.id
+    ORDER BY items.created_at DESC
   |sql}
   function_out
   syntax_off

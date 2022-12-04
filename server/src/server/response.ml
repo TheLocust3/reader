@@ -7,7 +7,7 @@ type feed_response = {
 } [@@deriving yojson]
 
 type items_response = {
-  items : Model.Item.Frontend.t list;
+  items : Model.UserItem.Frontend.t list;
 } [@@deriving yojson]
 
 type all_boards_response = {

@@ -4,4 +4,10 @@ export interface Item {
   title: string;
   description: string;
   link: string;
+  read: Boolean
+}
+
+export interface ItemEntity {
+  item: Item;
+  metadata: { read: Boolean };
 }

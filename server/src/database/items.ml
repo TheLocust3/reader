@@ -55,10 +55,6 @@ let rollback connection =
   let query = rollback_query() in
     query connection |> Error.Database.or_print
 
-let by_feed feed connection =
-  let query = by_feed_query ~from_feed: feed in
-    query connection |> Error.Database.or_error
-
 let create { id; from_feed; link; title; description } connection =
   let query = create_query ~id: id ~from_feed: (Uri.to_string from_feed) ~link: (Uri.to_string link) ~title: title ~description: description in
     query connection |> Error.Database.or_error

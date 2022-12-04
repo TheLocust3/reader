@@ -1,6 +1,6 @@
 import { request } from './util';
 import { Board } from '../models/board';
-import { Item } from '../models/item';
+import { Item, ItemEntity } from '../models/item';
 import Users from './users';
 
 interface AllBoardsResponse {
@@ -12,7 +12,7 @@ interface BoardResponse {
 }
 
 interface ItemsResponse {
-  items: Item[];
+  items: ItemEntity[];
 }
 
 const Boards = {
@@ -70,7 +70,7 @@ const Boards = {
 
     if (response.ok) {
       const json: ItemsResponse = await response.json();
-      return json.items;
+      return json.items.map(({ item, metadata}) => ({ ...item, ...metadata }));
     } else {
       throw new Error(`Boards.get(${id}) - failed to fetch`);
     }

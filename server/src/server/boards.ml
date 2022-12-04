@@ -40,7 +40,7 @@ let delete_board user_id id connection =
 let get_board_items user_id id connection =
   match%lwt Database.Boards.by_id user_id id connection with
     | Ok board ->
-      let%lwt _items = Database.BoardEntries.items_by_board_id id connection in
+      let%lwt _items = Database.UserItems.board_items_by_user_id user_id id connection in
       let items = _items |> Result.to_list |> List.flatten in
         Lwt.return (Some (board, items))
     | Error e ->
@@ -135,7 +135,7 @@ let routes = [
       let _ = Dream.log "[/boards/:id/items GET] id: %s" id in
       match%lwt Dream.sql request (get_board_items user_id id) with
         | Some (_, items) ->
-          json { items = List.map Model.Item.Frontend.to_frontend items } items_response_to_yojson
+          json { items = List.map Model.UserItem.Frontend.to_frontend items } items_response_to_yojson
         | None ->
           throw_error Model.Error.Frontend.NotFound
     );

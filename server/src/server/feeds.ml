@@ -28,10 +28,10 @@ let get_feed source connection =
       let%lwt document = Source.Rss.from_uri source in
         document |> Option.map (fun (doc : Source.Rss.t) -> doc.feed) |> Lwt.return
 
-let get_feed_items source connection =
+let get_feed_items (user_id) (source) (connection) : Model.UserItem.Internal.t list option Lwt.t =
   match%lwt Database.Feeds.by_source source connection with
     | Ok _ ->
-      (match%lwt Database.Items.by_feed (Uri.to_string source) connection with
+      (match%lwt Database.UserItems.feed_items_by_user_id user_id (Uri.to_string source) connection with
         | Ok items ->
           Lwt.return (Some items)
         | Error e ->
@@ -39,8 +39,7 @@ let get_feed_items source connection =
           Lwt.return None)
     | Error e ->
       Dream.log "[get_feed_items] uri: %s - feed lookup failed with %s" (Uri.to_string source) (Model.Error.Database.to_string e);
-      let%lwt document = Source.Rss.from_uri source in
-        document |> Option.map (fun (doc : Source.Rss.t) -> doc.items) |> Lwt.return
+      Lwt.return None
 
 let routes = [
   Dream.scope "/feeds" [Util.Middleware.cors; Util.Middleware.require_auth] [
@@ -75,13 +74,14 @@ let routes = [
     );
 
     Dream.get "/:source/items" (fun request ->
+      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
       let source = Dream.param request "source" |> Uri.of_string in
 
       let _ = Dream.log "[/feeds/:uri/items GET] uri: %s" (Uri.to_string source) in
-      let%lwt items = Dream.sql request (get_feed_items source) in
+      let%lwt items = Dream.sql request (get_feed_items user_id source) in
         match items with
           | Some items ->
-            json { items = List.map Model.Item.Frontend.to_frontend items } items_response_to_yojson
+            json { items = List.map Model.UserItem.Frontend.to_frontend items } items_response_to_yojson
           | None ->
             throw_error Model.Error.Frontend.NotFound
     );
