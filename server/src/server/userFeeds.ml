@@ -30,7 +30,7 @@ let remove_user_feed user_id source connection =
         Lwt.return (Error (Model.Error.Database.to_frontend e))
 
 let get_items user_id connection =
-  match%lwt Database.UserItems.all_items_by_user_id user_id connection with
+  match%lwt Database.UserItems.all_items_by_user_id user_id (Database.UserItems.Options.make ~limit: (-1) ~unread_only: true) connection with
     | Ok items ->
       Lwt.return items
     | Error e ->

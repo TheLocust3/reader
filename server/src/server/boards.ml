@@ -40,7 +40,7 @@ let delete_board user_id id connection =
 let get_board_items user_id id connection =
   match%lwt Database.Boards.by_id user_id id connection with
     | Ok board ->
-      let%lwt _items = Database.UserItems.board_items_by_user_id user_id id connection in
+      let%lwt _items = Database.UserItems.board_items_by_user_id user_id id Database.UserItems.Options.empty connection in
       let items = _items |> Result.to_list |> List.flatten in
         Lwt.return (Some (board, items))
     | Error e ->
