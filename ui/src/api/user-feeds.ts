@@ -52,6 +52,26 @@ const UserFeeds = {
     }
   },
 
+  async recently_read_items(): Promise<Item[]> {
+    const response = await request(
+      "/user_feeds/items/read",
+      {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          'authentication': `Bearer ${Users.token()}`
+        }
+      }
+    );
+
+    if (response.ok) {
+      const json: ItemsResponse = await response.json();
+      return json.items.map(({ item, metadata}) => ({ ...item, ...metadata }));
+    } else {
+      throw new Error(`UserFeeds.items - failed to fetch`);
+    }
+  },
+
   async add(source: string): Promise<void> {
     const response = await request(
       "/user_feeds",

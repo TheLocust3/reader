@@ -31,7 +31,7 @@ let get_feed source connection =
 let get_feed_items (user_id) (source) (connection) : Model.UserItem.Internal.t list option Lwt.t =
   match%lwt Database.Feeds.by_source source connection with
     | Ok _ ->
-      (match%lwt Database.UserItems.feed_items_by_user_id user_id (Uri.to_string source) (Database.UserItems.Options.make ~limit: 64 ~unread_only: false) connection with
+      (match%lwt Database.UserItems.feed_items_by_user_id user_id (Uri.to_string source) (Database.UserItems.Options.make ~limit: 64 ~read: None) connection with
         | Ok items ->
           Lwt.return (Some items)
         | Error e ->

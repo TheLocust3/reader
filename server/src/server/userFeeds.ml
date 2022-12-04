@@ -30,12 +30,21 @@ let remove_user_feed user_id source connection =
         Lwt.return (Error (Model.Error.Database.to_frontend e))
 
 let get_items user_id connection =
-  match%lwt Database.UserItems.all_items_by_user_id user_id (Database.UserItems.Options.make ~limit: (-1) ~unread_only: true) connection with
+  match%lwt Database.UserItems.all_items_by_user_id user_id (Database.UserItems.Options.make ~limit: (-1) ~read: (Some false)) connection with
     | Ok items ->
       Lwt.return items
     | Error e ->
       Dream.log "[get_items] user_id: %s - lookup failed with %s" user_id (Model.Error.Database.to_string e);
       Lwt.return []
+
+let get_recently_read_items user_id connection =
+  match%lwt Database.UserItems.all_items_by_user_id user_id (Database.UserItems.Options.make ~limit: 64 ~read: (Some true)) connection with
+    | Ok items ->
+      Lwt.return items
+    | Error e ->
+      Dream.log "[get_recently_read_items] user_id: %s - lookup failed with %s" user_id (Model.Error.Database.to_string e);
+      Lwt.return []
+
 
 let routes = [
   Dream.scope "/user_feeds" [Util.Middleware.cors; Util.Middleware.require_auth] [
@@ -71,6 +80,14 @@ let routes = [
 
       let _ = Dream.log "[/user_feeds/ GET]" in
       let%lwt items = Dream.sql request (get_items user_id) in
+        json { items = List.map Model.UserItem.Frontend.to_frontend items } items_response_to_yojson
+    );
+
+    Dream.get "/items/read" (fun request ->
+      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
+
+      let _ = Dream.log "[/user_feeds/ GET]" in
+      let%lwt items = Dream.sql request (get_recently_read_items user_id) in
         json { items = List.map Model.UserItem.Frontend.to_frontend items } items_response_to_yojson
     );
 

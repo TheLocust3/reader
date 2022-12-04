@@ -28,6 +28,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Reader />} />
+          <Route path="/recently_read" element={<Reader recently_read={true} />} />
           <Route path="/feeds/:feedId" element={<Reader />} />
           <Route path="/boards/:boardId" element={<Reader />} />
           <Route path="/login" element={<Login />} />

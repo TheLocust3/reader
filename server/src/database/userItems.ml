@@ -21,11 +21,11 @@ end
 module Options = struct
   type t = {
     limit : int;
-    unread_only : bool;
+    read : bool option;
   }
 
-  let empty = { limit = -1; unread_only = false }
-  let make ~limit ~unread_only = { limit = limit; unread_only = unread_only }
+  let empty = { limit = -1; read = None }
+  let make ~limit ~read = { limit = limit; read = read }
 end
 
 let migrate_query = [%rapper
@@ -74,6 +74,7 @@ let all_items_by_user_id_query = [%rapper
     LEFT JOIN user_items ON user_items.user_id = %string{user_id} AND items.id = user_items.item_id
     WHERE
       IIF(%bool{unread_only}, user_items.read = FALSE OR user_items.read IS NULL, TRUE) AND
+      IIF(%bool{read_only}, user_items.read = TRUE, TRUE) AND
       user_feeds.user_id = %string{user_id} AND
       user_feeds.feed_id = items.from_feed
     ORDER BY items.created_at DESC
@@ -90,6 +91,7 @@ let board_items_by_user_id_query = [%rapper
     LEFT JOIN user_items ON user_items.user_id = %string{user_id} AND items.id = user_items.item_id
     WHERE
       IIF(%bool{unread_only}, user_items.read = FALSE OR user_items.read IS NULL, TRUE) AND
+      IIF(%bool{read_only}, user_items.read = TRUE, TRUE) AND
       board_entries.board_id = %string{board_id} AND
       board_entries.item_id = items.id
     ORDER BY items.created_at DESC
@@ -106,6 +108,7 @@ let feed_items_by_user_id_query = [%rapper
     LEFT JOIN user_items ON user_items.user_id = %string{user_id} AND items.id = user_items.item_id
     WHERE
       IIF(%bool{unread_only}, user_items.read = FALSE OR user_items.read IS NULL, TRUE) AND
+      IIF(%bool{read_only}, user_items.read = TRUE, TRUE) AND
       items.from_feed = %string{from_feed}
     ORDER BY items.created_at DESC
     LIMIT %int{limit}
@@ -131,14 +134,14 @@ let delete user_id item_id connection =
     query connection |> Error.Database.or_error
 
 open Options
-let all_items_by_user_id user_id { limit; unread_only } connection =
-  let query = all_items_by_user_id_query ~user_id: user_id ~limit: limit ~unread_only: unread_only in
+let all_items_by_user_id user_id { limit; read } connection =
+  let query = all_items_by_user_id_query ~user_id: user_id ~limit: limit ~unread_only: (not (Option.value read ~default: true)) ~read_only: (Option.value read ~default: false) in
     query connection |> Error.Database.or_error |> Lwt.map (Result.map (List.map Internal.make))
 
-let board_items_by_user_id user_id board_id { limit; unread_only } connection =
-  let query = board_items_by_user_id_query ~user_id: user_id ~board_id: board_id ~limit: limit ~unread_only: unread_only in
+let board_items_by_user_id user_id board_id { limit; read } connection =
+  let query = board_items_by_user_id_query ~user_id: user_id ~board_id: board_id ~limit: limit ~unread_only: (not (Option.value read ~default: true)) ~read_only: (Option.value read ~default: false) in
     query connection |> Error.Database.or_error |> Lwt.map (Result.map (List.map Internal.make))
 
-let feed_items_by_user_id user_id feed_id { limit; unread_only } connection =
-  let query = feed_items_by_user_id_query ~user_id: user_id ~from_feed: feed_id ~limit: limit ~unread_only: unread_only in
+let feed_items_by_user_id user_id feed_id { limit; read } connection =
+  let query = feed_items_by_user_id_query ~user_id: user_id ~from_feed: feed_id ~limit: limit ~unread_only: (not (Option.value read ~default: true)) ~read_only: (Option.value read ~default: false) in
     query connection |> Error.Database.or_error |> Lwt.map (Result.map (List.map Internal.make))

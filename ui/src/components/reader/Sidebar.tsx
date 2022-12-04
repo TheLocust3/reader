@@ -103,6 +103,7 @@ function Sidebar({ boards, feeds, onAddFeedClick, onAddBoardClick }: Props) {
          {boards.map((board) => {
            return <Item key={board.id} href={`/boards/${board.id}`}>{board.name}</Item>;
          })}
+         <Item href={`/recently_read/`}>Recently Read</Item>
          <br />
          <Item href='#' onClick={(event) => { event.stopPropagation(); onAddBoardClick() }}>+ Add board</Item>
        </div>

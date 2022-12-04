@@ -54,9 +54,13 @@ const FloatingPrompt = styled.div`
   z-index: 11;
 `;
 
+interface Props {
+  recently_read?: boolean;
+}
+
 type State = { feedId: string | undefined, boardId: string | undefined } | undefined;
 
-function Reader() {
+function Reader({ recently_read = false } : Props) {
   const params = useParams();
   const feedId = params.feedId;
   const boardId = params.boardId;
@@ -111,6 +115,9 @@ function Reader() {
     } else if (feedId !== undefined) {
       Feeds.get(feedId).then((feed) => setTitle(feed.title));
       Feeds.items(feedId).then((items) => setItems(items));
+    } else if (recently_read) {
+      setTitle("Recently Read");
+      UserFeeds.recently_read_items().then((items) => setItems(items));
     } else {
       setTitle("All Feeds");
       UserFeeds.items().then((items) => setItems(items));
