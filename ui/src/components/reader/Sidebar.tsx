@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 import { colors } from '../../constants';
@@ -30,7 +29,7 @@ const Header = styled.div`
   font-size: 18px;
 `;
 
-const ClickableHeader = styled(Link)`
+const ClickableHeader = styled.a`
   display: block;
 
   padding-left: 20px;
@@ -57,7 +56,7 @@ const ClickableHeader = styled(Link)`
   }
 `;
 
-const Item = styled(Link)`
+const Item = styled.a`
   display: block;
 
   padding-left: 30px;
@@ -92,7 +91,7 @@ interface Props {
 function Sidebar({ boards, feeds, onAddFeedClick, onAddBoardClick }: Props) {
   return (
     <Container>
-      <ClickableHeader to={`/`}>All</ClickableHeader>
+      <ClickableHeader href={`/`}>All</ClickableHeader>
 
       <Spacer />
       <Divider />
@@ -102,10 +101,10 @@ function Sidebar({ boards, feeds, onAddFeedClick, onAddBoardClick }: Props) {
        <Spacer />
        <div>
          {boards.map((board) => {
-           return <Item key={board.id} to={`/boards/${board.id}`}>{board.name}</Item>;
+           return <Item key={board.id} href={`/boards/${board.id}`}>{board.name}</Item>;
          })}
          <br />
-         <Item to='#' onClick={(event) => { event.stopPropagation(); onAddBoardClick() }}>+ Add board</Item>
+         <Item href='#' onClick={(event) => { event.stopPropagation(); onAddBoardClick() }}>+ Add board</Item>
        </div>
 
       <Spacer />
@@ -117,10 +116,10 @@ function Sidebar({ boards, feeds, onAddFeedClick, onAddBoardClick }: Props) {
       <Spacer />
       <div>
         {feeds.map((feed) => {
-          return <Item key={feed.source} to={`/feeds/${encodeURIComponent(feed.source)}`}>{feed.title}</Item>;
+          return <Item key={feed.source} href={`/feeds/${encodeURIComponent(feed.source)}`}>{feed.title}</Item>;
         })}
         <br />
-        <Item to='#' onClick={(event) => { event.stopPropagation(); onAddFeedClick() }}>+ Add feed</Item>
+        <Item href='#' onClick={(event) => { event.stopPropagation(); onAddFeedClick() }}>+ Add feed</Item>
       </div>
     </Container>
   );
