@@ -16,9 +16,6 @@ Dependencies:
  - https://hnrss.org/frontpage
 
 ## todo
- - add read_items table
-   - show only unread items in "all"
-   - show everything otherwise
  - prune old feed items
  - deploy
  - internal create user endpoint

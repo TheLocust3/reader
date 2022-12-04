@@ -6,6 +6,7 @@ import Icon from '../common/Icon';
 import Menu from '../common/Menu';
 
 import Boards from '../../api/boards';
+import UserItems from '../../api/user-items';
 import { Item } from '../../models/item';
 import { Board } from '../../models/board';
 import { colors } from '../../constants';
@@ -118,17 +119,19 @@ function FeedItem({ boardId, item, boards, refresh }: Props) {
   }, []);
 
   useEffect(() => {
+    var _past = past; // be able to set past immediately
+
     const listener = () => {
-      if (past) {
+      if (past || _past) {
         return;
       }
 
       const rect = ref.current?.getBoundingClientRect();
       if (rect !== undefined) {
         if (rect.bottom <= 50) { // TODO: JK toolbar height
+          _past = true;
           setPast(true);
-          console.log(item.title)
-          // TODO: JK run API call
+          UserItems.setRead(item.id)
         }
       }
     };
@@ -138,7 +141,7 @@ function FeedItem({ boardId, item, boards, refresh }: Props) {
   }, [past, item]);
 
   return (
-    <Container href={item.link} target="_blank" ref={ref} className={past ? readContainer : ''}>
+    <Container onClick={() => { setPast(true); UserItems.setRead(item.id) }} href={item.link} target="_blank" ref={ref} className={past ? readContainer : ''}>
       <ContainerInner>
         <TitleContainer>
           <Title>{item.title}</Title>

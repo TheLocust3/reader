@@ -39,10 +39,12 @@ let rollback_query = [%rapper
   syntax_off
 ]
 
-let create_query = [%rapper
+let set_read_query = [%rapper
   execute {sql|
     INSERT INTO user_items (user_id, item_id, read)
     VALUES (%string{user_id}, %string{item_id}, %bool{read})
+    ON CONFLICT (user_id, item_id)
+    DO UPDATE SET read=excluded.read
   |sql}
   syntax_off
 ]
@@ -104,8 +106,8 @@ let rollback connection =
   let query = rollback_query() in
     query connection |> Error.Database.or_print
 
-let create { user_id; item_id; read } connection =
-  let query = create_query ~user_id: user_id ~item_id: item_id ~read: read in
+let set_read user_id item_id connection =
+  let query = set_read_query ~user_id: user_id ~item_id: item_id ~read: true in
     query connection |> Error.Database.or_error
 
 let delete user_id item_id connection =
