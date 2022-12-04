@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 import Icon from '../common/Icon';
-import Menu from '../common/Menu';
 import FeedItem from './FeedItem';
 
 import { Item } from '../../models/item';
@@ -27,22 +26,22 @@ const Toolbar = styled.div`
 
   border-bottom: 1px solid ${colors.black};
 
-  box-shadow: 0px 0px 3px ${colors.lightBlack};
+  box-shadow: 0px 0px 1px ${colors.lightBlack};
 
   justify-content: space-between
 `;
 
 const More = styled.div`
   padding-top: 5px;
-  padding-right: 275px;
+  padding-right: 290px;
 `;
 
-const MoreButton = styled.div`
+const DeleteButton = styled.div`
   cursor: pointer;
   color: ${colors.black};
 
   &:hover {
-    color: black;
+    color: ${colors.red};
   }
 `;
 
@@ -67,19 +66,10 @@ interface Props {
 function View({ feedId, boardId, title, items, boards, refresh }: Props) {
   const navigate = useNavigate();
 
-  const [showMenu, setShowMenu] = useState<Boolean>(false);
-
   let showMore = feedId !== undefined || boardId !== undefined;
-  let deleteItem = "";
-  if (feedId !== undefined) {
-    deleteItem = "Delete Feed";
-  } else if (boardId !== undefined) {
-    deleteItem = "Delete Board";
-  }
 
   const onDeleteItemClick = () => {
     const reset = () => {
-      setShowMenu(false);
       navigate('/');
     }
 
@@ -94,24 +84,13 @@ function View({ feedId, boardId, title, items, boards, refresh }: Props) {
     }
   }
 
-  useEffect(() => {
-    const listener = () => {
-      setShowMenu(false);
-    };
-
-    document.addEventListener("click", listener);
-    return () => document.removeEventListener("click", listener)
-  }, []);
-
   return (
     <div>
       <Toolbar>
         <Title>{title}</Title>
 
         <More style={{ visibility: showMore ? "visible" : "hidden" }}>
-          <MoreButton onClick={(event) => { event.stopPropagation(); setShowMenu(!showMenu) }}><Icon icon="more_vert" size="1.65em" /></MoreButton>
-
-          <Menu show={showMenu} items={[{ text: deleteItem, onClick: onDeleteItemClick }]} />
+          <DeleteButton onClick={() => onDeleteItemClick()}><Icon icon="delete" size="1.25em" /></DeleteButton>
         </More>
       </Toolbar>
       <Spacer />

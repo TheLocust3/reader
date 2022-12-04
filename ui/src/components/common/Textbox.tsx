@@ -13,7 +13,7 @@ const Textbox = styled.input`
   padding-right: 10px;
 
   border: 1px solid ${colors.lightBlack};
-  border-radius: 5px;
+  border-radius: 3px;
 
   font-size: 15px;
   font-family: 'Roboto', sans-serif;

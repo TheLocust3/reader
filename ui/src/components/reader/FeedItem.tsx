@@ -29,10 +29,10 @@ const Container = styled.a`
 `;
 
 const readContainer = css`
-  background-color: ${colors.lightGray} !important;
+  background-color: ${colors.whiteActive} !important;
 
   &:hover {
-    background-color: ${colors.lightGrayHover} !important;
+    background-color: ${colors.lightGray} !important;
   }
 `;
 
@@ -54,6 +54,8 @@ const TitleContainer = styled.div`
 `;
 
 const Title = styled.div`
+  max-width: 700px;
+
   font-size: 18px;
   color: ${colors.black};
 `
@@ -63,16 +65,23 @@ const Options = styled.div`
 `;
 
 const OptionsItem = styled.span`
-  padding-left: 7px;
-  font-size: 1.5em;
+  padding-left: 12px;
+  font-size: 1.4em;
 
   &:hover {
     color: black;
   }
 `;
 
+const removeIcon = css`
+  &:hover {
+    color: ${colors.red} !important;
+  }
+`;
+
 const Description = styled.div`
   display: block;
+  max-width: 700px;
   max-height: 65px;
   overflow: hidden;
 
@@ -136,7 +145,7 @@ function FeedItem({ boardId, item, boards, refresh }: Props) {
 
           <Options>
             <OptionsItem onClick={(event) => { event.stopPropagation(); event.preventDefault(); setShowMenu(true); }}><Icon icon="add" /></OptionsItem>
-            <OptionsItem style={{ display: showRemove ? "inline" : "none" }} onClick={(event) => {
+            <OptionsItem className={removeIcon} style={{ display: showRemove ? "inline" : "none" }} onClick={(event) => {
               event.stopPropagation();
               event.preventDefault();
               if (boardId !== undefined) {
@@ -153,7 +162,7 @@ function FeedItem({ boardId, item, boards, refresh }: Props) {
                   onClick: async () => { setShowMenu(false); Boards.addItem(board.id, item.id) }
                 };
               })}
-              right={showRemove ? 40 : 15}
+              right={showRemove ? 40 : 10}
             />
           </Options>
         </TitleContainer>

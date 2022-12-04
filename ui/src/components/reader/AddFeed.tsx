@@ -10,7 +10,7 @@ import UserFeeds from '../../api/user-feeds';
 
 const Title = styled.div`
   padding-top: 5px;
-  padding-bottom: 30px;
+  padding-bottom: 25px;
 
   font-size: 22px;
 `;

@@ -13,6 +13,8 @@ const FloatingMenu = styled.div`
 
 const MenuContainer = styled.div`
   position: absolute;
+  top: -9px;
+
   width: 125px;
 
   background-color: white;
@@ -24,11 +26,11 @@ const MenuContainer = styled.div`
 const MenuItem = styled.div`
   padding-top: 10px;
   padding-bottom: 10px;
-  padding-left: 15px;
+  padding-left: 10px;
 
   display: flex;
 
-  border-radius: 5px;
+  border-radius: 3px;
 
   cursor: pointer;
 
@@ -47,7 +49,7 @@ interface Props {
   right?: number;
 }
 
-function Menu({ show, items, right = 5 }: Props) {
+function Menu({ show, items, right = 10 }: Props) {
   return (
     <FloatingMenu>
       <MenuContainer style={{ visibility: show ? "visible" : "hidden", right: `${right}px` }}>

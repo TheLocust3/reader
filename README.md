@@ -20,9 +20,6 @@ Dependencies:
    - show only unread items in "all"
    - show everything otherwise
  - prune old feed items
- - tighten up UI
-   - accent colors
-   - less padding, less roundness
  - deploy
  - internal create user endpoint
    - default read later board

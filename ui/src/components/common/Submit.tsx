@@ -9,7 +9,7 @@ const Submit = styled.button`
   cursor: pointer;
 
   border: 1px solid ${colors.lightBlack};
-  border-radius: 10px;
+  border-radius: 5px;
 
   background-color: white;
 

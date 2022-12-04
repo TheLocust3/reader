@@ -13,9 +13,9 @@ const Card = styled.div`
   padding-right: 30px;
 
   border: 1px solid ${colors.black};
-  border-radius: 10px;
+  border-radius: 5px;
 
-  box-shadow: 0px 0px 3px ${colors.lightBlack};
+  box-shadow: 0px 0px 1px ${colors.lightBlack};
 `;
 
 export default Card;

@@ -34,7 +34,7 @@ const SidebarPaneInner = styled.div`
   border-right: 1px solid ${colors.black};
 
   background-color: white;
-  box-shadow: 0px 0px 3px ${colors.lightBlack};
+  box-shadow: 0px 0px 1px ${colors.lightBlack};
 `;
 
 const MainPane = styled.div`
@@ -72,11 +72,15 @@ function Reader() {
   const [showAddFeed, setShowAddFeed] = useState<Boolean>(false);
   const [showAddBoard, setShowAddBoard] = useState<Boolean>(false);
 
+  const hide = () => {
+    setShowAddFeed(false);
+    setShowAddBoard(false);
+  }
+
   useEffect(() => {
     const listener = ({ key }: any) => {
       if (key === "Escape") {
-        setShowAddFeed(false);
-        setShowAddBoard(false);
+        hide();
       }
     };
 
@@ -86,8 +90,7 @@ function Reader() {
 
   useEffect(() => {
     const listener = () => {
-      setShowAddFeed(false);
-      setShowAddBoard(false);
+      hide();
     };
 
     document.addEventListener("click", listener);
@@ -128,7 +131,14 @@ function Reader() {
       </SidebarPane>
 
       <MainPane>
-        <View feedId={feedId} boardId={boardId} title={title} items={items} boards={boards} refresh={() => setLast(undefined)} />
+        <View
+          feedId={feedId}
+          boardId={boardId}
+          title={title}
+          items={items}
+          boards={boards}
+          refresh={() => setLast(undefined)}
+        />
       </MainPane>
 
       <FloatingPrompt style={{ visibility: showAddFeed ? "visible" : "hidden" }}>

@@ -11,5 +11,6 @@ export const colors = {
   whiteActive: '#f1f1f1',
 
   lightGray: '#eeeeee',
-  lightGrayHover: '#e9e9e9',
+
+  red: '#ef5350'
 };
