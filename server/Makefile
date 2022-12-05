@@ -9,6 +9,12 @@ build:
 puller: build
 	dune exec job puller
 
+feed-pruner: build
+	dune exec job feed-pruner
+
+item-pruner: build
+	dune exec job item-pruner
+
 start: build
 	dune exec reader
 

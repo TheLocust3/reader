@@ -13,7 +13,7 @@ Dependencies:
 `cd ui && make start`  
 
 ## example feeds
- - https://hnrss.org/frontpage
+ - https://hnrss.org/frontpage?description=0
 
 ## todo
  - prune old feed items
