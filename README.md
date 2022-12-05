@@ -18,10 +18,7 @@ Dependencies:
 ## todo
  - prune old feed items
  - deploy
- - internal create user endpoint
-   - default read later board
 
 ### tweaks
- - cascading delete
  - prevent overwriting existing feeds
    - need to normalize feed source urls (so that different forms of URL are equal to eachother)

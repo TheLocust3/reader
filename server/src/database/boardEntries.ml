@@ -9,8 +9,8 @@ let migrate_query = [%rapper
     CREATE TABLE board_entries (
       board_id TEXT NOT NULL,
       item_id TEXT NOT NULL,
-      FOREIGN KEY(board_id) REFERENCES boards(id),
-      FOREIGN KEY(item_id) REFERENCES items(id),
+      FOREIGN KEY(board_id) REFERENCES boards(id) ON DELETE CASCADE,
+      FOREIGN KEY(item_id) REFERENCES items(id) ON DELETE CASCADE,
       PRIMARY KEY(board_id, item_id)
     )
   |sql}

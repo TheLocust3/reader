@@ -9,8 +9,8 @@ let migrate_query = [%rapper
     CREATE TABLE user_feeds (
       user_id TEXT NOT NULL,
       feed_id TEXT NOT NULL,
-      FOREIGN KEY(user_id) REFERENCES users(id),
-      FOREIGN KEY(feed_id) REFERENCES feeds(source),
+      FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+      FOREIGN KEY(feed_id) REFERENCES feeds(source) ON DELETE CASCADE,
       PRIMARY KEY(user_id, feed_id)
     )
   |sql}
