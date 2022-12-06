@@ -61,7 +61,7 @@ let items_by_user_id_query = [%rapper
   syntax_off
 ](Items.make)
 
-let unreferenced_feed_query = [%rapper
+let garbage_collect_query = [%rapper
   get_opt {sql|
     SELECT @string{feeds.source}, @string{feeds.title}, @string{feeds.description}, @string{feeds.link}
     FROM feeds
@@ -97,6 +97,6 @@ let items_by_user_id user_id connection =
   let query = items_by_user_id_query ~user_id: user_id in
     query connection |> Error.Database.or_error
 
-let unreferenced_feed connection =
-  let query = unreferenced_feed_query() in
+let garbage_collect connection =
+  let query = garbage_collect_query() in
     query connection |> Error.Database.or_error

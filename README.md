@@ -17,7 +17,6 @@ Dependencies:
  - https://astralcodexten.substack.com/feed
 
 ## todo
- - prune old feed items
  - deploy
 
 ### tweaks

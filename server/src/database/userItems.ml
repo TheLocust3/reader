@@ -117,6 +117,19 @@ let feed_items_by_user_id_query = [%rapper
   syntax_off
 ](Items.make, Internal.Metadata.make)
 
+let garbage_collect_query = [%rapper
+  get_opt {sql|
+    SELECT @string{items.id}, @string{items.from_feed}, @string{items.link}, @string{items.title}, @string{items.description}
+    FROM items
+    LEFT JOIN user_items ON user_items.item_id = items.id
+    WHERE user_items.item_id IS NULL AND items.created_at < datetime('now', '-7 days')
+    ORDER BY items.created_at DESC
+    LIMIT 1
+  |sql}
+  function_out
+  syntax_off
+](Items.make)
+
 let migrate connection =
   let query = migrate_query() in
     query connection |> Error.Database.or_print
@@ -145,3 +158,7 @@ let board_items_by_user_id user_id board_id { limit; read } connection =
 let feed_items_by_user_id user_id feed_id { limit; read } connection =
   let query = feed_items_by_user_id_query ~user_id: user_id ~from_feed: feed_id ~limit: limit ~unread_only: (not (Option.value read ~default: true)) ~read_only: (Option.value read ~default: false) in
     query connection |> Error.Database.or_error |> Lwt.map (Result.map (List.map Internal.make))
+
+let garbage_collect connection =
+  let query = garbage_collect_query() in
+    query connection |> Error.Database.or_error

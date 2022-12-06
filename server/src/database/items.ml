@@ -36,6 +36,14 @@ let create_query = [%rapper
   syntax_off
 ]
 
+let delete_query = [%rapper
+  execute {sql|
+    DELETE FROM items
+    WHERE id = %string{id}
+  |sql}
+  syntax_off
+]
+
 let by_feed_query = [%rapper
   get_many {sql|
     SELECT @string{items.id}, @string{items.from_feed}, @string{items.link}, @string{items.title}, @string{items.description}
@@ -58,3 +66,8 @@ let rollback connection =
 let create { id; from_feed; link; title; description } connection =
   let query = create_query ~id: id ~from_feed: (Uri.to_string from_feed) ~link: (Uri.to_string link) ~title: title ~description: description in
     query connection |> Error.Database.or_error
+
+let delete id connection =
+  let query = delete_query ~id: id in
+  let%lwt _ = query connection |> Error.Database.or_error in
+    Lwt.return_ok ()

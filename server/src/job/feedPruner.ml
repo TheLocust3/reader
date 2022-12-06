@@ -1,5 +1,5 @@
 let prune connection =
-  match%lwt (Database.UserFeeds.unreferenced_feed connection) with
+  match%lwt (Database.UserFeeds.garbage_collect connection) with
     | Ok (Some feed) ->
       let _ = Dream.log "FeedPruner.prune - found %s" (Uri.to_string feed.source) in
       let%lwt _ = Database.Feeds.delete feed.source connection in
