@@ -14,6 +14,7 @@ Dependencies:
 
 ## example feeds
  - https://hnrss.org/frontpage?description=0
+ - https://astralcodexten.substack.com/feed
 
 ## todo
  - prune old feed items

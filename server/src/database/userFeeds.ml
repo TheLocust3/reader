@@ -61,6 +61,18 @@ let items_by_user_id_query = [%rapper
   syntax_off
 ](Items.make)
 
+let unreferenced_feed_query = [%rapper
+  get_opt {sql|
+    SELECT @string{feeds.source}, @string{feeds.title}, @string{feeds.description}, @string{feeds.link}
+    FROM feeds
+    LEFT JOIN user_feeds ON user_feeds.feed_id = feeds.source
+    WHERE user_feeds.feed_id IS NULL
+    LIMIT 1
+  |sql}
+  function_out
+  syntax_off
+](Feeds.make)
+
 let migrate connection =
   let query = migrate_query() in
     query connection |> Error.Database.or_print
@@ -83,4 +95,8 @@ let feeds_by_user_id user_id connection =
 
 let items_by_user_id user_id connection =
   let query = items_by_user_id_query ~user_id: user_id in
+    query connection |> Error.Database.or_error
+
+let unreferenced_feed connection =
+  let query = unreferenced_feed_query() in
     query connection |> Error.Database.or_error

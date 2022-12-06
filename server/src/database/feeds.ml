@@ -34,6 +34,14 @@ let create_query = [%rapper
   syntax_off
 ]
 
+let delete_query = [%rapper
+  execute {sql|
+    DELETE FROM feeds
+    WHERE source = %string{source}
+  |sql}
+  syntax_off
+]
+
 let by_source_query = [%rapper
   get_opt {sql|
     SELECT @string{feeds.source}, @string{feeds.title}, @string{feeds.description}, @string{feeds.link}
@@ -75,6 +83,11 @@ let by_source source connection =
 
 let create { source; title; link; description } connection =
   let query = create_query ~source: (Uri.to_string source) ~title: title ~description: description ~link: (Uri.to_string link) in
+  let%lwt _ = query connection |> Error.Database.or_error in
+    Lwt.return_ok ()
+
+let delete source connection =
+  let query = delete_query ~source: (Uri.to_string source) in
   let%lwt _ = query connection |> Error.Database.or_error in
     Lwt.return_ok ()
 

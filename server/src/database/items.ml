@@ -13,7 +13,7 @@ let migrate_query = [%rapper
       link TEXT NOT NULL,
       title TEXT,
       description TEXT,
-      FOREIGN KEY(from_feed) REFERENCES feeds(id) ON DELETE CASCADE
+      FOREIGN KEY(from_feed) REFERENCES feeds(source) ON DELETE CASCADE
     )
   |sql}
   syntax_off
