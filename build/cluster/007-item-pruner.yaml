@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: item-pruner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: item-pruner
+  template:
+    metadata:
+      labels:
+        app: item-pruner
+    spec:
+      containers:
+        - name: item-pruner
+          image: $IMAGE
+          envFrom:
+            - configMapRef:
+                name: config
+            - secretRef:
+                name: secrets
+          imagePullPolicy: $IMAGE_POLICY
+          command: ["/bin/sh", "-c", "./jobs/main.exe item-pruner"]
+      initContainers:
+        - name: wait-for-postgres
+          image: postgres:13.4
+          imagePullPolicy: "IfNotPresent"
+          command: ["/bin/sh", "-c", "pg_isready -h postgres -p 5432 && echo $?"]

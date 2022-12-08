@@ -67,6 +67,7 @@ TODO
 
 ## todo
  - deploy
+   - deploy UI in container
  - optimize for iPad
 
 ### tweaks
