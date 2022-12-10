@@ -74,7 +74,7 @@ let remove_item user_id board_id item_id connection =
       Lwt.return (Error (Model.Error.Database.to_frontend e))
 
 let routes = [
-  Dream.scope "/boards" [Util.Middleware.cors; Util.Middleware.require_auth] [
+  Dream.scope "/api/boards" [Util.Middleware.cors; Util.Middleware.require_auth] [
     Dream.post "" (fun request ->
       let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
       let%lwt body = Dream.body request in

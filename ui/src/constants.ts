@@ -2,7 +2,7 @@ const init = () => {
   if (window.location.protocol === "https:") {
     return `https://${window.location.hostname}/api`;
   } else {
-    return `http://${window.location.hostname}:8080`;
+    return `http://${window.location.hostname}:8080/api`;
   }
 }
 

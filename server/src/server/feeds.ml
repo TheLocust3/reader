@@ -42,7 +42,7 @@ let get_feed_items (user_id) (source) (connection) : Model.UserItem.Internal.t l
       Lwt.return None
 
 let routes = [
-  Dream.scope "/feeds" [Util.Middleware.cors; Util.Middleware.require_auth] [
+  Dream.scope "/api/feeds" [Util.Middleware.cors; Util.Middleware.require_auth] [
     Dream.post "" (fun request ->
       let%lwt body = Dream.body request in
 
