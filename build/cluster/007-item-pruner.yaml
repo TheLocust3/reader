@@ -18,10 +18,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: config
-            - secretRef:
-                name: secrets
           imagePullPolicy: $IMAGE_POLICY
-          command: ["/bin/sh", "-c", "./jobs/main.exe item-pruner"]
+          command: ["/bin/sh", "-c", "./job/main.exe item-pruner"]
       initContainers:
         - name: wait-for-postgres
           image: postgres:13.4

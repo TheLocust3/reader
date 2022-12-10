@@ -5,7 +5,6 @@
     model
     caqti
     caqti-lwt
-    caqti-driver-sqlite3
     caqti-driver-postgresql
     ppx_rapper_lwt
     safepass

@@ -15,7 +15,6 @@
 `make install`  
 `cd server && make migrate`  
   
-
 Create `secrets.env` at the root of the repository:
 ```
 PGUSER=jakekinsella
@@ -41,7 +40,6 @@ Navigate to `http://localhost:3000`
  - [minikube](https://minikube.sigs.k8s.io/docs/)
  - [dune](https://dune.build)
  - [yarn](https://yarnpkg.com)
-  
 
 ### initial setup
 
@@ -60,10 +58,6 @@ openssl req -newkey rsa:4096 \
             -out cert.crt \
             -keyout cert.key
 ```
-
-### setup + compile
-`make install`  
-`make build`  
 
 ### build+deploy
 `make local-publish`
