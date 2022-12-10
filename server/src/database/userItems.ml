@@ -69,12 +69,12 @@ let delete_query = [%rapper
 
 let all_items_by_user_id_query = [%rapper
   get_many {sql|
-    SELECT @string{items.id}, @string{items.from_feed}, @string{items.link}, @string{items.title}, @string{items.description}, IFNULL(@bool{user_items.read}, FALSE)
+    SELECT @string{items.id}, @string{items.from_feed}, @string{items.link}, @string{items.title}, @string{items.description}, coalesce(@bool{user_items.read}, FALSE)
     FROM user_feeds, items
     LEFT JOIN user_items ON user_items.user_id = %string{user_id} AND items.id = user_items.item_id
     WHERE
-      IIF(%bool{unread_only}, user_items.read = FALSE OR user_items.read IS NULL, TRUE) AND
-      IIF(%bool{read_only}, user_items.read = TRUE, TRUE) AND
+      (NOT %bool{unread_only} OR (user_items.read = FALSE OR user_items.read IS NULL)) AND
+      (NOT %bool{read_only} OR (user_items.read = TRUE)) AND
       user_feeds.user_id = %string{user_id} AND
       user_feeds.feed_id = items.from_feed
     ORDER BY items.created_at DESC
@@ -86,12 +86,12 @@ let all_items_by_user_id_query = [%rapper
 
 let board_items_by_user_id_query = [%rapper
   get_many {sql|
-    SELECT @string{items.id}, @string{items.from_feed}, @string{items.link}, @string{items.title}, @string{items.description}, IFNULL(@bool{user_items.read}, FALSE)
+    SELECT @string{items.id}, @string{items.from_feed}, @string{items.link}, @string{items.title}, @string{items.description}, coalesce(@bool{user_items.read}, FALSE)
     FROM board_entries, items
     LEFT JOIN user_items ON user_items.user_id = %string{user_id} AND items.id = user_items.item_id
     WHERE
-      IIF(%bool{unread_only}, user_items.read = FALSE OR user_items.read IS NULL, TRUE) AND
-      IIF(%bool{read_only}, user_items.read = TRUE, TRUE) AND
+      (NOT %bool{unread_only} OR (user_items.read = FALSE OR user_items.read IS NULL)) AND
+      (NOT %bool{read_only} OR (user_items.read = TRUE)) AND
       board_entries.board_id = %string{board_id} AND
       board_entries.item_id = items.id
     ORDER BY items.created_at DESC
@@ -103,12 +103,12 @@ let board_items_by_user_id_query = [%rapper
 
 let feed_items_by_user_id_query = [%rapper
   get_many {sql|
-    SELECT @string{items.id}, @string{items.from_feed}, @string{items.link}, @string{items.title}, @string{items.description}, IFNULL(@bool{user_items.read}, FALSE)
+    SELECT @string{items.id}, @string{items.from_feed}, @string{items.link}, @string{items.title}, @string{items.description}, coalesce(@bool{user_items.read}, FALSE)
     FROM items
     LEFT JOIN user_items ON user_items.user_id = %string{user_id} AND items.id = user_items.item_id
     WHERE
-      IIF(%bool{unread_only}, user_items.read = FALSE OR user_items.read IS NULL, TRUE) AND
-      IIF(%bool{read_only}, user_items.read = TRUE, TRUE) AND
+      (NOT %bool{unread_only} OR (user_items.read = FALSE OR user_items.read IS NULL)) AND
+      (NOT %bool{read_only} OR (user_items.read = TRUE)) AND
       items.from_feed = %string{from_feed}
     ORDER BY items.created_at DESC
     LIMIT %int{limit}
@@ -122,7 +122,7 @@ let garbage_collect_query = [%rapper
     SELECT @string{items.id}, @string{items.from_feed}, @string{items.link}, @string{items.title}, @string{items.description}
     FROM items
     LEFT JOIN user_items ON user_items.item_id = items.id
-    WHERE user_items.item_id IS NULL AND items.created_at < datetime('now', '-7 days')
+    WHERE user_items.item_id IS NULL AND items.created_at < now() - '7 days' :: interval
     ORDER BY items.created_at DESC
     LIMIT 1
   |sql}
@@ -148,15 +148,18 @@ let delete user_id item_id connection =
 
 open Options
 let all_items_by_user_id user_id { limit; read } connection =
-  let query = all_items_by_user_id_query ~user_id: user_id ~limit: limit ~unread_only: (not (Option.value read ~default: true)) ~read_only: (Option.value read ~default: false) in
+  let _limit = if limit = -1 then Int.max_int else limit in
+  let query = all_items_by_user_id_query ~user_id: user_id ~limit: _limit ~unread_only: (not (Option.value read ~default: true)) ~read_only: (Option.value read ~default: false) in
     query connection |> Error.Database.or_error |> Lwt.map (Result.map (List.map Internal.make))
 
 let board_items_by_user_id user_id board_id { limit; read } connection =
-  let query = board_items_by_user_id_query ~user_id: user_id ~board_id: board_id ~limit: limit ~unread_only: (not (Option.value read ~default: true)) ~read_only: (Option.value read ~default: false) in
+  let _limit = if limit = -1 then Int.max_int else limit in
+  let query = board_items_by_user_id_query ~user_id: user_id ~board_id: board_id ~limit: _limit ~unread_only: (not (Option.value read ~default: true)) ~read_only: (Option.value read ~default: false) in
     query connection |> Error.Database.or_error |> Lwt.map (Result.map (List.map Internal.make))
 
 let feed_items_by_user_id user_id feed_id { limit; read } connection =
-  let query = feed_items_by_user_id_query ~user_id: user_id ~from_feed: feed_id ~limit: limit ~unread_only: (not (Option.value read ~default: true)) ~read_only: (Option.value read ~default: false) in
+  let _limit = if limit = -1 then Int.max_int else limit in
+  let query = feed_items_by_user_id_query ~user_id: user_id ~from_feed: feed_id ~limit: _limit ~unread_only: (not (Option.value read ~default: true)) ~read_only: (Option.value read ~default: false) in
     query connection |> Error.Database.or_error |> Lwt.map (Result.map (List.map Internal.make))
 
 let garbage_collect connection =

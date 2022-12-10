@@ -9,7 +9,7 @@ let migrate_query = [%rapper
     CREATE TABLE items (
       id TEXT NOT NULL UNIQUE PRIMARY KEY,
       from_feed TEXT NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
       link TEXT NOT NULL,
       title TEXT,
       description TEXT,

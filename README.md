@@ -5,9 +5,25 @@
 ### dependecies
  - [dune](https://dune.build)
  - [yarn](https://yarnpkg.com)
+ - postgres
+ - libpq
 
 ### initial setup
-`make install`
+`initdb data`  
+`pg_ctl -D data -l logfile start`  
+`createdb reader`  
+`make install`  
+`cd server && make migrate`  
+  
+
+Create `secrets.env` at the root of the repository:
+```
+PGUSER=jakekinsella
+PGPASSWORD=
+PGHOST=localhost
+PGPORT=5432
+PGDATABASE=reader
+```
 
 ### run
 `cd server && make start`  

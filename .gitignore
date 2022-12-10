@@ -3,3 +3,7 @@ _build/
 *.sqlite
 *.key
 *.crt
+data/
+logfile
+tmp/
+secrets.env

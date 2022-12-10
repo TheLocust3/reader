@@ -15,4 +15,4 @@ local-deploy:
 	make -f build/local/Makefile deploy
 
 local-teardown:
-	make -f build/local/Makefile deploy
+	make -f build/local/Makefile teardown

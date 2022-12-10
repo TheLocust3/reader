@@ -11,7 +11,7 @@ let migrate_query = [%rapper
       title TEXT,
       description TEXT,
       link TEXT,
-      last_pulled_at DATETIME DEFAULT (datetime(0)) NOT NULL
+      last_pulled_at TIMESTAMP DEFAULT (to_timestamp(0)) NOT NULL
     )
   |sql}
   syntax_off
@@ -55,11 +55,11 @@ let by_source_query = [%rapper
 let pull_query = [%rapper
   get_opt {sql|
     UPDATE feeds
-    SET last_pulled_at = datetime('now')
+    SET last_pulled_at = now()
     WHERE source IN (
       SELECT source
       FROM feeds
-      WHERE last_pulled_at < datetime('now', '-10 minutes')
+      WHERE last_pulled_at < now() - '10 minutes' :: interval
       ORDER BY last_pulled_at DESC
       LIMIT 1
     )

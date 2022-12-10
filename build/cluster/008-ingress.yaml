@@ -6,7 +6,7 @@ spec:
   tls:
   - hosts:
       - $HOST
-    secretName: cert
+    secretName: reader-cert
   defaultBackend:
     service:
       name: server
