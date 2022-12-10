@@ -46,7 +46,7 @@ Navigate to `http://localhost:3000`
 `minikube start`  
 `eval $(minikube docker-env)`  
 `minikube addons enable ingress`  
-`minikube tunnel &`  
+`minikube tunnel`  
   
 Create a certificate called `cert`:
 ```
@@ -77,10 +77,11 @@ TODO
 
 ## todo
  - deploy
-   - deploy UI in container
+   - deploy ingress
  - optimize for iPad
 
 ### tweaks
+ - Don't show empty add to board menu
  - bump jwt expiry
  - prevent overwriting existing feeds
    - need to normalize feed source urls (so that different forms of URL are equal to eachother)

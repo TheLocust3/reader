@@ -1,6 +1,7 @@
 #! /bin/bash
 
 export IMAGE="reader:latest"
+export UI_IMAGE="reader_ui:latest"
 export IMAGE_POLICY="Never"
 export POSTGRES_LB="---
 apiVersion: v1
