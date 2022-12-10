@@ -1,4 +1,12 @@
-export const apiHost = 'http://localhost:8080';
+const init = () => {
+  if (window.location.protocol === "https:") {
+    return `https://${window.location.hostname}/api`;
+  } else {
+    return `http://${window.location.hostname}:8080`;
+  }
+}
+
+export const apiHost = init();
 
 export const colors = {
   black: '#444',
