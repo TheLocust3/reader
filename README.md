@@ -18,7 +18,7 @@ Barebones, totally local development environment.
 `make install`  
 `cd server && make migrate`  
   
-Create `secrets.env` at the root of the repository:
+Create `database.env` at the root of the repository:
 ```
 PGUSER=jakekinsella
 PGPASSWORD=
@@ -62,10 +62,15 @@ openssl req -newkey rsa:4096 \
             -out cert.crt \
             -keyout cert.key
 ```
+  
+Create `secrets.env` in the root of the repo:
+```
+USER_PASSWORD=???
+```
 
 ### Build+Deploy
-`make local-publish`
-`make local-deploy`
+`make local-publish`  
+`make local-deploy`  
 
 ... some amount of waiting ...  
 `kubectl get pods` should show the containers starting up  
@@ -81,6 +86,11 @@ Deploy a single node Kubernetes cluster in AWS.
 
 ### Initial Setup
 
+Create `secrets.env` in the root of the repo:
+```
+USER_PASSWORD=???
+```
+  
 Environment variables:
 ```
 export AWS_ACCESS_KEY_ID=???
@@ -121,9 +131,6 @@ Deploy the cluster:
 ... wait \~10minutes time (until `sudo kubectl get pods` shows all the containers running) ...  
 
 ## TODO
- - optimize for iPad
-
-### Tweaks
  - Don't show empty add to board menu
  - bump jwt expiry
  - prevent overwriting existing feeds

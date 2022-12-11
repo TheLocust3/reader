@@ -9,22 +9,22 @@ build:
 	dune build
 
 puller: build
-	export `cat ../secrets.env` && dune exec job puller
+	export `cat ../database.env` && dune exec job puller
 
 feed-pruner: build
-	export `cat ../secrets.env` && dune exec job feed-pruner
+	export `cat ../database.env` && dune exec job feed-pruner
 
 item-pruner: build
-	export `cat ../secrets.env` && dune exec job item-pruner
+	export `cat ../database.env` && dune exec job item-pruner
 
 start: build
-	export `cat ../secrets.env` && dune exec reader
+	export `cat ../database.env` && dune exec reader
 
 rollback: build
-	export `cat ../secrets.env` && dune exec database rollback
+	export `cat ../database.env` && dune exec database rollback
 
 migrate: build
-	export `cat ../secrets.env` && dune exec database migrate
+	export `cat ../database.env` && dune exec database migrate
 
 clean:
 	rm -rf _build

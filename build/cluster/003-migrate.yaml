@@ -11,6 +11,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: config
+            - secretRef:
+                name: reader-secrets
           imagePullPolicy: $IMAGE_POLICY
           command: ["/bin/sh", "-c", "./database/main.exe migrate"]
       initContainers:

@@ -7,6 +7,7 @@ data/
 logfile
 tmp/
 secrets.env
+database.env
 
 .terraform*
 *.tfstate*

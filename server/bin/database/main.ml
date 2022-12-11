@@ -1,7 +1,7 @@
 let migrate () =
   let connection = Lwt_main.run (Database.Connect.connect()) in
   
-  let test_user = Model.User.Internal.build ~email: "jake.kinsella@gmail.com" ~password: "foobar" in
+  let test_user = Model.User.Internal.build ~email: "jake.kinsella@gmail.com" ~password: (Option.value (Sys.getenv_opt "USER_PASSWORD") ~default: "foobar") in
 
   let _ = Lwt_main.run (Database.Feeds.migrate connection) in
   let _ = Lwt_main.run (Database.Items.migrate connection) in
