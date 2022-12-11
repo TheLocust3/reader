@@ -1,14 +1,17 @@
-# reader
+# Reader
 
-## local development
+A minimal RSS reader written in OCaml, inspired by Feedly but without the bloat.  
 
-### dependecies
+## Local Development
+Barebones, totally local development environment.  
+
+### Dependencies
  - [dune](https://dune.build)
  - [yarn](https://yarnpkg.com)
  - postgres
  - libpq
 
-### initial setup
+### Initial Setup
 `initdb data`  
 `pg_ctl -D data -l logfile start`  
 `createdb reader`  
@@ -24,7 +27,7 @@ PGPORT=5432
 PGDATABASE=reader
 ```
 
-### run
+### Run
 `cd server && make start`  
 `cd server && make puller`  
 `cd server && make feed-pruner`  
@@ -33,15 +36,16 @@ PGDATABASE=reader
   
 Navigate to `http://localhost:3000`  
 
-## local deploy
+## Local Deploy
+Deployed as a Kubernetes cluster.  
 
-### dependecies
+### Dependencies
  - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
  - [minikube](https://minikube.sigs.k8s.io/docs/)
  - [dune](https://dune.build)
  - [yarn](https://yarnpkg.com)
 
-### initial setup
+### Initial Setup
 
 `minikube start`  
 `eval $(minikube docker-env)`  
@@ -59,28 +63,67 @@ openssl req -newkey rsa:4096 \
             -keyout cert.key
 ```
 
-### build+deploy
+### Build+Deploy
 `make local-publish`
 `make local-deploy`
 
 ... some amount of waiting ...  
 `kubectl get pods` should show the containers starting up  
   
-Navigate to `http://localhost:3000`  
+Navigate to `https://localhost`  
 
-## cloud deploy
-TODO  
+## Cloud Deploy
+Deploy a single node Kubernetes cluster in AWS.  
 
-## example feeds
- - https://hnrss.org/frontpage?description=0
- - https://astralcodexten.substack.com/feed
+### Dependencies
+ - [Packer](http://packer.io)
+ - [Terraform](https://www.terraform.io)
 
-## todo
- - deploy
-   - deploy to AWS
+### Initial Setup
+
+Environment variables:
+```
+export AWS_ACCESS_KEY_ID=???
+export AWS_SECRET_ACCESS_KEY=???
+export AWS_ACCOUNT_ID=???
+export AWS_DEFAULT_REGION=us-east-1
+```
+  
+Initialize the build depedencies:  
+`make aws-init`
+
+### AWS Setup
+Build the AMI:  
+`make aws-image`
+
+Set up the ECR repo:  
+`make aws-repo`
+
+### AWS Build
+Manually create+install an EC2 Key Pair in the AWS Console called "budgeting".  
+
+Build the resources:  
+`make aws-build`  
+  
+Note the value of `control_plane_ip`.  
+  
+... wait _awhile_ ...  
+
+### Cluster Deploy
+
+Export the Control Plane IP:  
+`export CONTROL_PLANE_IP=???`  
+
+Deploy the cluster:  
+`make cluster-publish`  
+`make cluster-deploy`  
+
+... wait \~10minutes time (until `sudo kubectl get pods` shows all the containers running) ...  
+
+## TODO
  - optimize for iPad
 
-### tweaks
+### Tweaks
  - Don't show empty add to board menu
  - bump jwt expiry
  - prevent overwriting existing feeds

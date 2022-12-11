@@ -10,3 +10,5 @@ secrets.env
 
 .terraform*
 *.tfstate*
+
+ignore/

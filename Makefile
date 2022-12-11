@@ -20,6 +20,9 @@ local-teardown:
 aws-init:
 	cd build/aws && make init
 
+aws-image:
+	cd build/aws && make image
+
 aws-repo:
 	cd build/aws && make repository
 
@@ -28,3 +31,15 @@ aws-build:
 
 aws-teardown:
 	cd build/aws && make teardown
+
+cluster-publish:
+	make -f build/Makefile publish
+
+cluster-deploy:
+	make -f build/Makefile deploy VERSION=$(VERSION)
+
+cluster-upgrade:
+	make -f build/Makefile upgrade VERSION=$(VERSION)
+
+cluster-teardown:
+	make -f build/Makefile teardown
