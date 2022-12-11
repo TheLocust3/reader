@@ -1,6 +1,6 @@
 # Reader
 
-A minimal RSS reader written in OCaml, inspired by Feedly but without the bloat.  
+A minimal RSS reader written in OCaml. Inspired by Feedly, but without the bloat.  
 
 ## Local Development
 Barebones, totally local development environment.  
@@ -116,7 +116,7 @@ Export the Control Plane IP:
 
 Deploy the cluster:  
 `make cluster-publish`  
-`make cluster-deploy`  
+`make cluster-deploy VERSION=???`  
 
 ... wait \~10minutes time (until `sudo kubectl get pods` shows all the containers running) ...  
 

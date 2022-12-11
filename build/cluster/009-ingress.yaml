@@ -22,11 +22,11 @@ spec:
             service:
               name: ui
               port:
-                number: 80
-          path: /?(.*)
+                number: 3000
+          path: /
           pathType: Prefix
   defaultBackend:
     service:
       name: ui
       port:
-        number: 80
+        number: 3000
