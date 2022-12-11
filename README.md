@@ -77,7 +77,7 @@ TODO
 
 ## todo
  - deploy
-   - deploy ingress
+   - deploy to AWS
  - optimize for iPad
 
 ### tweaks
