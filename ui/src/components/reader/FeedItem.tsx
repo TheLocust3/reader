@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { css } from '@emotion/css'
 import styled from '@emotion/styled';
+import sanitizeHtml from 'sanitize-html';
 
 import Icon from '../common/Icon';
 import Menu from '../common/Menu';
@@ -8,6 +9,7 @@ import Menu from '../common/Menu';
 import Boards from '../../api/boards';
 import UserItems from '../../api/user-items';
 import { Item } from '../../models/item';
+import { Feed } from '../../models/feed';
 import { Board } from '../../models/board';
 import { colors } from '../../constants';
 
@@ -61,6 +63,16 @@ const Title = styled.div`
   color: ${colors.black};
 `
 
+const Subtitle = styled.div`
+  max-width: 700px;
+
+  font-size: 15px;
+  color: ${colors.black2};
+
+  padding-top: 2px;
+  padding-bottom: 5px;
+`
+
 const Options = styled.div`
   color: ${colors.black};
 `;
@@ -97,18 +109,21 @@ const Description = styled.div`
 
 interface Props {
   boardId: string | undefined;
-  item: Item
+  item: Item;
+  feeds: Feed[];
   boards: Board[];
   refresh: () => void;
 }
 
-function FeedItem({ boardId, item, boards, refresh }: Props) {
+function FeedItem({ boardId, item, feeds, boards, refresh }: Props) {
   const ref = useRef<HTMLAnchorElement>(null);
 
   const [showMenu, setShowMenu] = useState<Boolean>(false);
   const showRemove = boardId !== undefined;
 
   const [past, setPast] = useState<Boolean>(item.read);
+
+  const feed = feeds.filter((feed) => feed.source === item.from_feed)[0]
 
   useEffect(() => {
     const listener = () => {
@@ -145,7 +160,7 @@ function FeedItem({ boardId, item, boards, refresh }: Props) {
     <Container onClick={() => { setPast(true); UserItems.setRead(item.id) }} href={item.link} target="_blank" ref={ref} className={past ? readContainer : ''}>
       <ContainerInner>
         <TitleContainer>
-          <Title>{item.title}</Title>
+          <Title>{sanitizeHtml(item.title, { allowedTags: [], disallowedTagsMode: 'discard' })}</Title>
 
           <Options>
             <OptionsItem onClick={(event) => { event.stopPropagation(); event.preventDefault(); setShowMenu(true); }}><Icon icon="add" /></OptionsItem>
@@ -170,8 +185,10 @@ function FeedItem({ boardId, item, boards, refresh }: Props) {
             />
           </Options>
         </TitleContainer>
+        
+        <Subtitle>{feed.title}</Subtitle>
 
-        <Description dangerouslySetInnerHTML={{__html: item.description}} />
+        <Description dangerouslySetInnerHTML={{__html: sanitizeHtml(item.description, { allowedTags: ['br'], disallowedTagsMode: 'discard' })}} />
       </ContainerInner>
     </Container>
   );

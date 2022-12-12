@@ -46,17 +46,21 @@ module ToFeed = struct
   open Model.Feed.Internal.Partial
 
   let from_xml document = function
-    Xml.Node ("rss", _, [Xml.Node ("channel", _, children)]) ->
-     Some (List.fold_left(fun document child -> match child with
-       | Xml.Node ("title", _, [Xml.Content title]) -> Partial.withFeed document { document.feed with title = Some title }
-       | Xml.Node ("link", _, [Xml.Content link]) -> Partial.withFeed document { document.feed with link = Some (Uri.of_string link) }
-       | Xml.Node ("description", _, [Xml.Content description]) -> Partial.withFeed document { document.feed with description = Some description }
-       | Xml.Node ("item", _, _) as node -> Partial.withItems document (Option.get (ToItem.from_xml(node)) :: document.items)
-       | _ -> document
-    )(document)(children))
-  | _ -> None
+    | Xml.Node ("rss", _, children) ->
+      let items = children |> List.concat_map (fun child -> match child with
+        | Xml.Node ("channel", _, items) -> items
+        | _ -> []
+      ) in
+      Some (List.fold_left(fun document child -> match child with
+        | Xml.Node ("title", _, [Xml.Content title]) -> Partial.withFeed document { document.feed with title = Some title }
+        | Xml.Node ("link", _, [Xml.Content link]) -> Partial.withFeed document { document.feed with link = Some (Uri.of_string link) }
+        | Xml.Node ("description", _, [Xml.Content description]) -> Partial.withFeed document { document.feed with description = Some description }
+        | Xml.Node ("item", _, _) as node -> Partial.withItems document (Option.get (ToItem.from_xml(node)) :: document.items)
+        | _ -> document
+      )(document)(items))
+    | _ -> None
 end
 
 let from_uri uri = 
-  Xml.xml_from_uri uri >|= fun (body) -> (* TODO: JK could add some real error handling here *)
+  (Xml.xml_from_uri uri) >|= fun (body) -> (* TODO: JK could add some real error handling here *)
     body |> Option.map(uri |> Partial.build |> ToFeed.from_xml) |> Option.join |> Option.map(to_strict) |> Option.join

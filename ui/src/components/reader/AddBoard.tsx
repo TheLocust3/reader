@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 
 import Card from '../common/Card';
@@ -30,11 +30,20 @@ const Spacer = styled.div`
 
 interface Props {
   onSubmit: () => void;
+  show: Boolean;
 }
 
-function AddFeed({ onSubmit }: Props) {
+function AddFeed({ onSubmit, show }: Props) {
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (!show) {
+      setName('');
+      setError('');
+    }
+  }, [show]);
+
   const _onSubmit = async (event: any) => {
     event.preventDefault();
 
@@ -52,7 +61,7 @@ function AddFeed({ onSubmit }: Props) {
 
       <form onSubmit={_onSubmit}>
         <Label>Name:</Label>
-        <Textbox type="text" onChange={(event) => setName(event.target.value)} required />
+        <Textbox type="text" onChange={(event) => setName(event.target.value)} value={name} required />
         <Spacer />
         
         <ErrorLabel>{error}</ErrorLabel>

@@ -5,5 +5,7 @@
     model
     cohttp-lwt-unix
     cohttp-async
-    markup)
+    cohttp
+    markup
+    dream)
   (preprocess (pps lwt_ppx)))

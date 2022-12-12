@@ -7,6 +7,7 @@ import { Feed } from '../../models/feed';
 
 const Container = styled.div`
   padding-top: 14px;
+  padding-bottom: 50px;
 `;
 
 const Divider = styled.hr`

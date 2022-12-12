@@ -6,6 +6,7 @@ import Icon from '../common/Icon';
 import FeedItem from './FeedItem';
 
 import { Item } from '../../models/item';
+import { Feed } from '../../models/feed';
 import { Board } from '../../models/board';
 import Boards from '../../api/boards';
 import UserFeeds from '../../api/user-feeds';
@@ -59,11 +60,12 @@ interface Props {
   boardId: string | undefined;
   title: string;
   items: Item[];
+  feeds: Feed[];
   boards: Board[];
   refresh: () => void;
 }
 
-function View({ feedId, boardId, title, items, boards, refresh }: Props) {
+function View({ feedId, boardId, title, items, feeds, boards, refresh }: Props) {
   const navigate = useNavigate();
 
   let showMore = feedId !== undefined || boardId !== undefined;
@@ -98,7 +100,7 @@ function View({ feedId, boardId, title, items, boards, refresh }: Props) {
       {items.map((item) => {
         return (
           <div key={item.id}>
-            <FeedItem boardId={boardId} item={item} boards={boards} refresh={refresh} />
+            <FeedItem boardId={boardId} item={item} feeds={feeds} boards={boards} refresh={refresh} />
           </div>
         );
       })}

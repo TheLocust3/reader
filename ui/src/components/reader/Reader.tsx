@@ -29,8 +29,11 @@ const SidebarPane = styled.div`
 
 const SidebarPaneInner = styled.div`
   min-width: 250px;
+  max-width: 250px;
   min-height: 100%;
+  max-height: 100%;
   position: fixed;
+  overflow-y: scroll;
   border-right: 1px solid ${colors.black};
 
   background-color: white;
@@ -143,6 +146,7 @@ function Reader({ recently_read = false } : Props) {
           boardId={boardId}
           title={title}
           items={items}
+          feeds={feeds}
           boards={boards}
           refresh={() => setLast(undefined)}
         />
@@ -150,13 +154,13 @@ function Reader({ recently_read = false } : Props) {
 
       <FloatingPrompt style={{ visibility: showAddFeed ? "visible" : "hidden" }}>
         <div onClick={(event) => event.stopPropagation() }>
-          <AddFeed onSubmit={() => { setShowAddFeed(false); setLast(undefined) } } />
+          <AddFeed onSubmit={() => { hide(); setLast(undefined) } } show={showAddFeed} />
         </div>
       </FloatingPrompt>
 
       <FloatingPrompt style={{ visibility: showAddBoard ? "visible" : "hidden" }}>
         <div onClick={(event) => event.stopPropagation() }>
-          <AddBoard onSubmit={() => { setShowAddBoard(false); setLast(undefined) } } />
+          <AddBoard onSubmit={() => { hide(); setLast(undefined) } } show={showAddBoard} />
         </div>
       </FloatingPrompt>
     </Root>

@@ -30,7 +30,7 @@ let remove_user_feed user_id source connection =
         Lwt.return (Error (Model.Error.Database.to_frontend e))
 
 let get_items user_id connection =
-  match%lwt Database.UserItems.all_items_by_user_id user_id (Database.UserItems.Options.make ~limit: (-1) ~read: (Some false)) connection with
+  match%lwt Database.UserItems.all_items_by_user_id user_id (Database.UserItems.Options.make ~limit: 128 ~read: (Some false)) connection with
     | Ok items ->
       Lwt.return items
     | Error e ->
@@ -38,7 +38,7 @@ let get_items user_id connection =
       Lwt.return []
 
 let get_recently_read_items user_id connection =
-  match%lwt Database.UserItems.all_items_by_user_id user_id (Database.UserItems.Options.make ~limit: 64 ~read: (Some true)) connection with
+  match%lwt Database.UserItems.all_items_by_user_id user_id (Database.UserItems.Options.make ~limit: 128 ~read: (Some true)) connection with
     | Ok items ->
       Lwt.return items
     | Error e ->

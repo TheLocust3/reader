@@ -38,8 +38,5 @@ cluster-publish:
 cluster-deploy:
 	make -f build/Makefile deploy VERSION=$(VERSION)
 
-cluster-upgrade:
-	make -f build/Makefile upgrade VERSION=$(VERSION)
-
 cluster-teardown:
 	make -f build/Makefile teardown
