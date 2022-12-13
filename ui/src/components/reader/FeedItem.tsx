@@ -44,7 +44,9 @@ const ContainerInner = styled.div`
 
   padding-left: 20px;
   padding-right: 20px;
-  padding-bottom: 30px;
+  padding-bottom: 35px;
+
+  overflow-y: hidden;
 
   border-bottom: 1px solid ${colors.black};
 `;
@@ -95,9 +97,8 @@ const removeIcon = css`
 const Description = styled.div`
   display: block;
   max-width: 700px;
-  min-height: 65px;
-  max-height: 65px;
-  overflow: hidden;
+  min-height: 60px;
+  max-height: 60px;
 
   padding-top: 5px;
   padding-left: 5px;

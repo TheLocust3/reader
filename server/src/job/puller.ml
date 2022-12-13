@@ -18,5 +18,5 @@ let rec run connection =
   let _ = Dream.log "Puller.run - start" in
   let%lwt _ = pull connection in
   let _ = Dream.log "Puller.run - complete" in
-  let%lwt _ = Lwt_unix.sleep 5. in
+  let%lwt _ = Lwt_unix.sleep 3. in
     run connection

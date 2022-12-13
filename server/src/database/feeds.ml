@@ -60,7 +60,7 @@ let pull_query = [%rapper
       SELECT source
       FROM feeds
       WHERE last_pulled_at < now() - '10 minutes' :: interval
-      ORDER BY last_pulled_at DESC
+      ORDER BY last_pulled_at ASC
       LIMIT 1
     )
     RETURNING @string{feeds.source}, @string{feeds.title}, @string{feeds.description}, @string{feeds.link}
