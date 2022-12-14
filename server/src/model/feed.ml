@@ -1,5 +1,3 @@
-open Magic.Let
-
 module Internal = struct
   type t = {
     source : Uri.t;
@@ -21,8 +19,8 @@ module Internal = struct
 
   let to_strict (partial : Partial.t) : t option =
     let source = partial.source in
-    let* title = partial.title in
-    let* link = partial.link in
+    let link = Option.value partial.link ~default: source in
+    let title = Option.value partial.title ~default: (Uri.to_string link) in
     let description = Option.value partial.description ~default: "" in
       Some { source = source; title = title; link = link; description = description; }
 end
