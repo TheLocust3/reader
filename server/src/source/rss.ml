@@ -97,7 +97,7 @@ end
 
 let from_uri uri = 
   (Xml.xml_from_uri uri) >|= fun (body) -> (* TODO: JK could add some real error handling here *)
-    body |> Option.map (fun body -> 
+    body |> Option.map (fun body ->
       let feed = Partial.build uri in
         (Rss.ToFeed.from_xml feed body) |> Magic.Option.or_else (fun _ -> Atom.ToFeed.from_xml feed body)
     ) |> Option.join |> Option.map(to_strict) |> Option.join
