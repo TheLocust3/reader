@@ -44,6 +44,7 @@ let by_user_id_query = [%rapper
     SELECT @string{boards.id}, @string{boards.user_id}, @string{boards.name}
     FROM boards
     WHERE user_id = %string{user_id}
+    ORDER BY boards.name
   |sql}
   function_out
   syntax_off

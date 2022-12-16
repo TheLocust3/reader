@@ -55,6 +55,10 @@ const Spacer = styled.div`
   height: 50px;
 `
 
+const MoreSpace = styled.div`
+  height: 100vh;
+`
+
 interface Props {
   feedId: string | undefined;
   boardId: string | undefined;
@@ -104,6 +108,7 @@ function View({ feedId, boardId, title, items, feeds, boards, refresh }: Props) 
           </div>
         );
       })}
+      <MoreSpace />
     </div>
   );
 }

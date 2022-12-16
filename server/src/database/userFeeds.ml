@@ -45,6 +45,7 @@ let feeds_by_user_id_query = [%rapper
     SELECT @string{feeds.source}, @string{feeds.title}, @string{feeds.description}, @string{feeds.link}
     FROM user_feeds, feeds
     WHERE user_feeds.user_id = %string{user_id} AND user_feeds.feed_id = feeds.source
+    ORDER BY feeds.title ASC
   |sql}
   function_out
   syntax_off

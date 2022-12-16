@@ -131,9 +131,7 @@ Deploy the cluster:
 ... wait \~10minutes time (until `sudo kubectl get pods` shows all the containers running) ...  
 
 ## TODO
- - only sleep in jobs if there was nothing to do
  - pull published at timestamp from feeds + properly sort them in the feed
- - sort boards by creation date, sort feeds by title
  - Don't show empty add to board menu
  - bump jwt expiry
  - prevent overwriting existing feeds
