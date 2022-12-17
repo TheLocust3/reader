@@ -1,12 +1,9 @@
 let prune connection =
   match%lwt (Database.UserItems.garbage_collect connection) with
-    | Ok (Some item) ->
-      let _ = Dream.log "ItemPruner.prune - found %s" item.id in
-      let%lwt _ = Database.Items.delete item.id connection in
-      let _ = Dream.log "ItemPruner.prune - deleted %s" item.id in
-        Lwt.return ()
-    | Ok None ->
-      let _ = Dream.log "ItemPruner.prune - nothing to prune" in
+    | Ok items ->
+      let _ = Dream.log "ItemPruner.prune - found %d" (List.length items) in
+      let%lwt _ = Magic.Lwt.flatmap (fun (item : Model.Item.Internal.t) -> Database.Items.delete item.id connection) items in
+      let _ = Dream.log "ItemPruner.prune - deleted" in
         Lwt.return ()
     | Error e ->
       let _  = Dream.log "ItemPruner.prune - lookup failed with %s" (Model.Error.Database.to_string e) in
@@ -16,5 +13,5 @@ let rec run connection =
   let _ = Dream.log "ItemPruner.run - start" in
   let%lwt _ = prune connection in
   let _ = Dream.log "ItemPruner.run - complete" in
-  let%lwt _ = Lwt_unix.sleep 5. in
+  let%lwt _ = Lwt_unix.sleep 3. in
     run connection

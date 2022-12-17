@@ -118,13 +118,14 @@ let feed_items_by_user_id_query = [%rapper
 ](Items.make, Internal.Metadata.make)
 
 let garbage_collect_query = [%rapper
-  get_opt {sql|
+  get_many {sql|
     SELECT @string{items.id}, @string{items.from_feed}, @string{items.link}, @string{items.title}, @string{items.description}
     FROM items
-    LEFT JOIN user_items ON user_items.item_id = items.id
-    WHERE user_items.item_id IS NULL AND items.created_at < now() - '7 days' :: interval
+    LEFT JOIN board_entries ON board_entries.item_id = items.id
+    JOIN (SELECT items.from_feed as from_feed, COUNT(*) as count FROM items GROUP BY items.from_feed) by_feed ON by_feed.from_feed = items.from_feed
+    WHERE board_entries.item_id IS NULL AND by_feed.count > 100
     ORDER BY items.created_at DESC
-    LIMIT 1
+    LIMIT 20;
   |sql}
   function_out
   syntax_off

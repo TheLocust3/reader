@@ -15,3 +15,6 @@ let flatten_option l = List.fold_left
       | None -> acc)
   ([])
   (l)
+
+let take n l =
+  List.fold_left (fun acc elem -> if (List.length acc) < n then List.append acc [elem] else acc) [] l
