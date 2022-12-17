@@ -39,7 +39,6 @@ function AddFeed({ onSubmit, show }: Props) {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    console.log(show)
     if (!show) {
       setSource('');
       setError('');

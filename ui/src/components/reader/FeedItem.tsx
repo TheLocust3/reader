@@ -187,7 +187,7 @@ function FeedItem({ boardId, item, feeds, boards, refresh }: Props) {
           </Options>
         </TitleContainer>
         
-        <Subtitle>{feed.title}</Subtitle>
+        <Subtitle>{feed === undefined ? "" : feed.title}</Subtitle>
 
         <Description dangerouslySetInnerHTML={{__html: sanitizeHtml(item.description, { allowedTags: ['br'], disallowedTagsMode: 'discard' })}} />
       </ContainerInner>
