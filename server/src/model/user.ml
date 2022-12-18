@@ -8,6 +8,7 @@ module Internal = struct
   }
 
   let build ~email ~password =
+    let _ = Random.bool () in (* move the Random state forward before uuid gen *)
     let id = email |> Uuidm.v5 Uuidm.ns_url |> Uuidm.to_string in
     let hashed = password |> Bcrypt.hash in
       { id = id; email = email; password = hashed }

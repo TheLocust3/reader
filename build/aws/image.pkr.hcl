@@ -55,7 +55,7 @@ build {
 
       "curl -sfL https://get.k3s.io > install.sh",
 
-      "(sudo crontab -l 2>/dev/null; echo \"0 \\* \\* \\* \\*  ./home/ubuntu/ecr_refresh.sh\") | sudo crontab -"
+      "echo \"0 \\* \\* \\* \\*  sh ./home/ubuntu/ecr_refresh.sh\" | sudo crontab -"
     ]
   }
 }
