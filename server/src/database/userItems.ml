@@ -123,7 +123,7 @@ let garbage_collect_query = [%rapper
     FROM items
     LEFT JOIN board_entries ON board_entries.item_id = items.id
     JOIN (SELECT items.from_feed as from_feed, COUNT(*) as count FROM items GROUP BY items.from_feed) by_feed ON by_feed.from_feed = items.from_feed
-    WHERE board_entries.item_id IS NULL AND by_feed.count > 100
+    WHERE board_entries.item_id IS NULL AND by_feed.count > 1024
     ORDER BY items.created_at DESC
     LIMIT 20;
   |sql}
