@@ -17,6 +17,8 @@ const Submit = styled.button`
   font-family: 'Roboto', sans-serif;
   font-weight: 100;
 
+  color: ${colors.black};
+
   &:hover {
     background-color: ${colors.whiteHover};
   }

@@ -127,6 +127,17 @@ function FeedItem({ boardId, item, feeds, boards, refresh }: Props) {
   const feed = feeds.filter((feed) => feed.source === item.from_feed)[0]
 
   useEffect(() => {
+    const listener = ({ key }: any) => {
+      if (key === "Escape") {
+        setShowMenu(false);
+      }
+    };
+
+    document.addEventListener("keydown", listener);
+    return () => document.removeEventListener("keydown", listener)
+  }, []);
+
+  useEffect(() => {
     const listener = () => {
       setShowMenu(false);
     };
@@ -164,9 +175,8 @@ function FeedItem({ boardId, item, feeds, boards, refresh }: Props) {
           <Title>{sanitizeHtml(item.title, { allowedTags: [], disallowedTagsMode: 'discard' })}</Title>
 
           <Options>
-            <OptionsItem onClick={(event) => { event.stopPropagation(); event.preventDefault(); setShowMenu(true); }}><Icon icon="add" /></OptionsItem>
+            <OptionsItem onClick={(event) => { event.stopPropagation(); event.preventDefault(); setShowMenu(!showMenu); }}><Icon icon="add" /></OptionsItem>
             <OptionsItem className={removeIcon} style={{ display: showRemove ? "inline" : "none" }} onClick={(event) => {
-              event.stopPropagation();
               event.preventDefault();
               if (boardId !== undefined) {
                 Boards.removeItem(boardId, item.id);

@@ -33,6 +33,7 @@ const SidebarPaneInner = styled.div`
   min-height: 100%;
   max-height: 100%;
   position: fixed;
+  overflow-x: hidden;
   overflow-y: scroll;
   border-right: 1px solid ${colors.black};
 
