@@ -53,9 +53,7 @@ build {
       "sudo snap install --classic certbot",
       "sudo ln -s /snap/bin/certbot /usr/bin/certbot",
 
-      "curl -sfL https://get.k3s.io > install.sh",
-
-      "echo \"0 \\* \\* \\* \\*  sh ./home/ubuntu/ecr_refresh.sh\" | sudo crontab -"
+      "curl -sfL https://get.k3s.io > install.sh"
     ]
   }
 }

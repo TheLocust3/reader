@@ -46,8 +46,6 @@ const ContainerInner = styled.div`
   padding-right: 20px;
   padding-bottom: 35px;
 
-  overflow-y: hidden;
-
   border-bottom: 1px solid ${colors.black};
 `;
 
@@ -106,6 +104,8 @@ const Description = styled.div`
 
   font-size: 14px;
   color: ${colors.black2};
+
+  overflow-y: hidden;
 `
 
 interface Props {

@@ -3,6 +3,7 @@ install:
 	export PKG_CONFIG_PATH=/usr/local/opt/zlib/lib/pkgconfig:/usr/local/opt/openssl/lib/pkgconfig
 	export LDFLAGS="-L/usr/local/opt/libpq/lib"
 	export CPPFLAGS="-I/usr/local/opt/libpq/include"
+	opam pin add -yn reader .
 	opam install --deps-only reader
 
 build:

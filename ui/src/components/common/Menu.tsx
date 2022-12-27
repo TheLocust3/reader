@@ -15,7 +15,7 @@ const MenuContainer = styled.div`
   position: absolute;
   top: -9px;
 
-  width: 125px;
+  width: 150px;
 
   background-color: white;
 
@@ -27,6 +27,7 @@ const MenuItem = styled.div`
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 10px;
+  padding-right: 10px;
 
   display: flex;
 

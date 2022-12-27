@@ -6,10 +6,15 @@ A minimal RSS reader written in OCaml. Inspired by Feedly, but without the bloat
 Barebones, totally local development environment.  
 
 ### Dependencies
+ - opam
+   - `brew install opam`
  - [dune](https://dune.build)
  - [yarn](https://yarnpkg.com)
  - postgres
  - libpq
+   - `brew install libpq`
+ - openssl
+   - `brew install openssl`
 
 ### Initial Setup
 `initdb data`  
@@ -131,8 +136,6 @@ Deploy the cluster:
 ... wait \~10minutes time (until `sudo kubectl get pods` shows all the containers running) ...  
 
 ## TODO
- - Fix ecr_refresh cronjob
- - Make FeedItem menu floating + only have one
  - Make buttons/font bigger on iPad
  - Don't show empty add to board menu
  - bump jwt expiry
