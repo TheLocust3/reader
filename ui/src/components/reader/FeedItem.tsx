@@ -95,8 +95,8 @@ const removeIcon = css`
 const Description = styled.div`
   display: block;
   max-width: 700px;
-  min-height: 60px;
-  max-height: 60px;
+  min-height: 50px;
+  max-height: 50px;
 
   padding-top: 5px;
   padding-left: 5px;
