@@ -13,7 +13,6 @@ const FloatingMenu = styled.div`
 
 const MenuContainer = styled.div`
   position: absolute;
-  top: -9px;
 
   width: 150px;
 
@@ -47,13 +46,14 @@ const MenuItem = styled.div`
 interface Props {
   show: Boolean;
   items: { text: string, onClick: () => void }[];
+  top?: number;
   right?: number;
 }
 
-function Menu({ show, items, right = 10 }: Props) {
+function Menu({ show, items, top = -9, right = 10 }: Props) {
   return (
     <FloatingMenu>
-      <MenuContainer style={{ visibility: show ? "visible" : "hidden", right: `${right}px` }}>
+      <MenuContainer style={{ visibility: show ? "visible" : "hidden", top: `${top}px`, right: `${right}px` }}>
         {items.map(({text, onClick}) => {
           return <MenuItem onClick={(event) => { event.stopPropagation(); event.preventDefault(); onClick(); }}>{text}</MenuItem>
         })}

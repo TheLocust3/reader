@@ -22,6 +22,7 @@ const Container = styled.a`
   padding-right: 10px;
 
   text-decoration: none;
+  color: ${colors.black};
   background-color: white;
 
   cursor: pointer;
@@ -41,6 +42,7 @@ const readContainer = css`
 
 const ContainerInner = styled.div`
   max-height: 70px;
+  overflow-y: hidden;
 
   padding-left: 20px;
   padding-right: 20px;
@@ -95,8 +97,8 @@ const removeIcon = css`
 const Description = styled.div`
   display: block;
   max-width: 700px;
-  min-height: 50px;
-  max-height: 50px;
+  min-height: 60px;
+  max-height: 60px;
 
   padding-top: 5px;
   padding-left: 5px;
@@ -104,8 +106,6 @@ const Description = styled.div`
 
   font-size: 14px;
   color: ${colors.black2};
-
-  overflow-y: hidden;
 `
 
 interface Props {
@@ -183,17 +183,6 @@ function FeedItem({ boardId, item, feeds, boards, refresh }: Props) {
                 refresh();
               }
              }}><Icon icon="close" /></OptionsItem>
-
-            <Menu
-              show={showMenu}
-              items={boards.map((board) => {
-                return {
-                  text: board.name,
-                  onClick: async () => { setShowMenu(false); Boards.addItem(board.id, item.id) }
-                };
-              })}
-              right={showRemove ? 40 : 10}
-            />
           </Options>
         </TitleContainer>
         
@@ -201,6 +190,18 @@ function FeedItem({ boardId, item, feeds, boards, refresh }: Props) {
 
         <Description dangerouslySetInnerHTML={{__html: sanitizeHtml(item.description, { allowedTags: ['br'], disallowedTagsMode: 'discard' })}} />
       </ContainerInner>
+
+      <Menu
+        show={showMenu}
+        items={boards.map((board) => {
+          return {
+            text: board.name,
+            onClick: async () => { setShowMenu(false); Boards.addItem(board.id, item.id) }
+          };
+        })}
+        top={-79}
+        right={showRemove ? 60 : 30}
+      />
     </Container>
   );
 }
