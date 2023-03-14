@@ -136,6 +136,7 @@ Deploy the cluster:
 ... wait \~10minutes time (until `sudo kubectl get pods` shows all the containers running) ...  
 
 ## TODO
+ - Add timeout to puller
  - Make buttons/font bigger on iPad
  - Don't show empty add to board menu
  - bump jwt expiry
