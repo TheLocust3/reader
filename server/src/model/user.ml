@@ -29,9 +29,7 @@ module Internal = struct
 
   let validate jwk token =
     let** jwt : Jose.Jwt.t = token
-    |> Jose.Jwt.of_string
-    |> Result.map(Jose.Jwt.validate ~jwk) 
-    |> Result.join in
+    |> Jose.Jwt.of_string ~jwk ~now: (Ptime_clock.now ()) in
       match payload_of_yojson jwt.payload with
         | Ok { user_id; expires } ->
           if int_of_float(Unix.time()) > expires

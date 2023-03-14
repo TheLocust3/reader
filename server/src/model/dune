@@ -8,5 +8,6 @@
     ppx_deriving_yojson.runtime
     uuidm
     safepass
-    jose)
+    jose
+    ptime.clock.os)
   (preprocess (pps ppx_deriving_yojson lwt_ppx)))
