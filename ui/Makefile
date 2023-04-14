@@ -2,4 +2,4 @@ install:
 	yarn install
 
 start:
-	yarn start
+	PORT=3000 yarn start

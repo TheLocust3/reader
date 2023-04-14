@@ -6,6 +6,7 @@ A minimal RSS reader written in OCaml. Inspired by Feedly, but without the bloat
 Barebones, totally local development environment.  
 
 ### Dependencies
+ - [central](https://github.com/TheLocust3/central) running locally
  - opam
    - `brew install opam`
  - [dune](https://dune.build)
@@ -136,6 +137,7 @@ Deploy the cluster:
 ... wait \~10minutes time (until `sudo kubectl get pods` shows all the containers running) ...  
 
 ## TODO
+ - Puller age-out
  - Add timeout to puller
  - Make buttons/font bigger on iPad
  - Don't show empty add to board menu

@@ -19,7 +19,7 @@ item-pruner: build
 	export `cat ../database.env` && dune exec job item-pruner
 
 start: build
-	export `cat ../database.env` && dune exec reader
+	export `cat ../database.env` && PORT=2000 CENTRAL_BASE="http://localhost:2001/api" dune exec reader
 
 rollback: build
 	export `cat ../database.env` && dune exec database rollback
