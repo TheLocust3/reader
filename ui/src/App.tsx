@@ -3,10 +3,10 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 import Reader from './components/reader/Reader';
-import Login from './components/Login';
+import Redirect from './components/common/Redirect';
 
 import './global-styles';
-import { colors } from './constants';
+import { colors, login } from './constants';
 
 const Root = styled.div`
   position: relative;
@@ -31,7 +31,7 @@ function App() {
           <Route path="/recently_read" element={<Reader recently_read={true} />} />
           <Route path="/feeds/:feedId" element={<Reader />} />
           <Route path="/boards/:boardId" element={<Reader />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Redirect to={login} />} />
         </Routes>
       </Router>
     </Root>
