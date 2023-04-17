@@ -6,7 +6,6 @@ import { Redirect } from 'central';
 
 import Reader from './components/reader/Reader';
 
-import './global-styles';
 import { colors, login } from './constants';
 
 const Root = styled.div`

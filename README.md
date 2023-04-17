@@ -43,8 +43,8 @@ PGDATABASE=reader
 Navigate to `http://localhost:3000`  
 
 ### Other
-*Refresh central dependencies:*
-`cd ui && make refresh start`
+*Refresh central dependencies:*  
+`cd ui && make refresh start`  
 
 ## Local Deploy
 Deployed as a Kubernetes cluster.  
@@ -141,7 +141,6 @@ Deploy the cluster:
 ... wait \~10minutes time (until `sudo kubectl get pods` shows all the containers running) ...  
 
 ## TODO
- - Scope token cookie to just domain
  - Puller age-out
  - Add timeout to puller
  - Don't show empty add to board menu
