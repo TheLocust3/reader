@@ -6,7 +6,7 @@ A minimal RSS reader written in OCaml. Inspired by Feedly, but without the bloat
 Barebones, totally local development environment.  
 
 ### Dependencies
- - [central](https://github.com/TheLocust3/central) running locally
+ - [central](https://github.com/TheLocust3/central) cloned + running locally
  - opam
    - `brew install opam`
  - [dune](https://dune.build)
@@ -41,6 +41,10 @@ PGDATABASE=reader
 `cd ui && make start`  
   
 Navigate to `http://localhost:3000`  
+
+### Other
+*Refresh central dependencies:*
+`cd ui && make refresh start`
 
 ## Local Deploy
 Deployed as a Kubernetes cluster.  
