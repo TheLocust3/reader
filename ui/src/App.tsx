@@ -2,8 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled from '@emotion/styled';
 
+import { Redirect } from 'central';
+
 import Reader from './components/reader/Reader';
-import Redirect from './components/common/Redirect';
 
 import './global-styles';
 import { colors, login } from './constants';

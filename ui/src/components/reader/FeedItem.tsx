@@ -3,8 +3,7 @@ import { css } from '@emotion/css'
 import styled from '@emotion/styled';
 import sanitizeHtml from 'sanitize-html';
 
-import Icon from '../common/Icon';
-import Menu from '../common/Menu';
+import { Icon, Menu } from 'central';
 
 import Boards from '../../api/boards';
 import UserItems from '../../api/user-items';

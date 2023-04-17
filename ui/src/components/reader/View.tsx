@@ -2,7 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 
-import Icon from '../common/Icon';
+import { Icon } from 'central';
+
 import FeedItem from './FeedItem';
 
 import { Item } from '../../models/item';

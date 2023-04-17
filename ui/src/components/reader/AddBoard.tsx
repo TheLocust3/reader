@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 
-import Card from '../common/Card';
-import Submit from '../common/Submit';
-import Textbox from '../common/Textbox';
+import { Card, Submit, Textbox } from 'central';
 
 import Boards from '../../api/boards';
 

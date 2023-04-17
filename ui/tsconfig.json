@@ -22,6 +22,6 @@
   },
   "include": [
     "src/**/*",
-    "node_modules/central/**/*"
+    "node_modules/central/src/**/*"
   ]
 }
