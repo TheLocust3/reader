@@ -1,4 +1,5 @@
-open Model
+open Common.Api
+
 open Model.BoardEntry.Internal
 
 let make ~board_id ~item_id =

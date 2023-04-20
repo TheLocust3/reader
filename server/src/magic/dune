@@ -1,5 +1,0 @@
-(library
-  (name magic)
-  (libraries
-    ppx_rapper_lwt)
-  (preprocess (pps lwt_ppx ppx_rapper)))

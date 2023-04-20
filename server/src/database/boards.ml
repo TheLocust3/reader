@@ -1,4 +1,5 @@
-open Model
+open Common.Api
+
 open Model.Board.Internal
 
 let make ~id ~user_id ~name =

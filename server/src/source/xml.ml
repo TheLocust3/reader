@@ -2,6 +2,7 @@ open Lwt
 open Cohttp
 open Cohttp_lwt_unix
 open Markup
+open Common
 
 module StringMap = Map.Make(String)
 type xml = Content of string | Node of string * string StringMap.t * xml list

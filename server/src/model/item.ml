@@ -1,4 +1,4 @@
-open Magic.Let
+open Common.Magic.Let
 
 module Internal = struct
   type t = {

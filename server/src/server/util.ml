@@ -1,17 +1,17 @@
 open Lwt
+open Common
 
-open Model
 open Response
 
 let json ?(status = `OK) response encoder =
   response |> encoder |> Yojson.Safe.to_string |> Dream.json ~status: status
 
 let throw_error e = match e with
-  | Error.Frontend.InternalServerError e ->
+  | Api.Error.Frontend.InternalServerError e ->
     json ~status: `Internal_Server_Error { message = e } status_response_to_yojson
-  | Error.Frontend.NotFound ->
+  | Api.Error.Frontend.NotFound ->
     json ~status: `Not_Found { message = "Not found" } status_response_to_yojson
-  | Error.Frontend.BadRequest ->
+  | Api.Error.Frontend.BadRequest ->
     json ~status: `Bad_Request { message = "Bad request" } status_response_to_yojson
 
 let jwk =
@@ -88,10 +88,4 @@ module Middleware = struct
         inner_handler request
       | _ ->
         access_denied ()
-
-  let cors (inner_handler : Dream.handler) (request : Dream.request) : Dream.response Lwt.t =
-    let new_headers = [ ("Access-Control-Allow-Methods", "OPTIONS, GET, HEAD, POST, DELETE"); ("Access-Control-Allow-Origin", "*"); ("Access-Control-Allow-Headers", "*"); ] in
-    let%lwt response = inner_handler request in
-    let _ = new_headers |> List.map (fun (key, value) -> Dream.add_header response key value) in
-      Lwt.return response
 end

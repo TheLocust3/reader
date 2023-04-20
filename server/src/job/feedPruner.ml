@@ -1,3 +1,5 @@
+open Common
+
 let prune connection =
   match%lwt (Database.UserFeeds.garbage_collect connection) with
     | Ok (Some feed) ->
@@ -9,7 +11,7 @@ let prune connection =
       let _ = Dream.log "FeedPruner.prune - nothing to prune" in
         Lwt.return ()
     | Error e ->
-      let _  = Dream.log "FeedPruner.prune - lookup failed with %s" (Model.Error.Database.to_string e) in
+      let _  = Dream.log "FeedPruner.prune - lookup failed with %s" (Api.Error.Database.to_string e) in
         Lwt.return ()
 
 let rec run connection =

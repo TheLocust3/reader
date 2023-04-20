@@ -1,7 +1,7 @@
 (library
   (name reader)
   (libraries
-    magic
+    common
     model
     source
     database

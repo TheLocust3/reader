@@ -1,3 +1,5 @@
+open Common
+
 open Request
 open Response
 open Util
@@ -8,16 +10,16 @@ let add_user_feed user_id source connection =
       Dream.log "[add_user_feed] source: %s - add success" source;
       Lwt.return_ok ()
     | Error e ->
-      let message = Model.Error.Database.to_string e in
+      let message = Api.Error.Database.to_string e in
         Dream.log "[add_user_feed] source: %s - add failed with %s" source message;
-        Lwt.return (Error (Model.Error.Database.to_frontend e)))
+        Lwt.return (Error (Api.Error.Database.to_frontend e)))
 
 let get_all_user_feeds user_id connection =
   match%lwt Database.UserFeeds.feeds_by_user_id user_id connection with
     | Ok feeds ->
       Lwt.return feeds
     | Error e ->
-      Dream.log "[get_all_user_feeds] - lookup failed with %s" (Model.Error.Database.to_string e);
+      Dream.log "[get_all_user_feeds] - lookup failed with %s" (Api.Error.Database.to_string e);
       Lwt.return []
 
 let remove_user_feed user_id source connection =
@@ -25,16 +27,16 @@ let remove_user_feed user_id source connection =
     | Ok _ ->
       Lwt.return_ok ()
     | Error e ->
-      let message = Model.Error.Database.to_string e in
+      let message = Api.Error.Database.to_string e in
         Dream.log "[remove_user_feed] source: %s - add failed with %s" source message;
-        Lwt.return (Error (Model.Error.Database.to_frontend e))
+        Lwt.return (Error (Api.Error.Database.to_frontend e))
 
 let get_items user_id connection =
   match%lwt Database.UserItems.all_items_by_user_id user_id (Database.UserItems.Options.make ~limit: 128 ~read: (Some false)) connection with
     | Ok items ->
       Lwt.return items
     | Error e ->
-      Dream.log "[get_items] user_id: %s - lookup failed with %s" user_id (Model.Error.Database.to_string e);
+      Dream.log "[get_items] user_id: %s - lookup failed with %s" user_id (Api.Error.Database.to_string e);
       Lwt.return []
 
 let get_recently_read_items user_id connection =
@@ -42,12 +44,12 @@ let get_recently_read_items user_id connection =
     | Ok items ->
       Lwt.return items
     | Error e ->
-      Dream.log "[get_recently_read_items] user_id: %s - lookup failed with %s" user_id (Model.Error.Database.to_string e);
+      Dream.log "[get_recently_read_items] user_id: %s - lookup failed with %s" user_id (Api.Error.Database.to_string e);
       Lwt.return []
 
 
 let routes = [
-  Dream.scope "/api/user_feeds" [Util.Middleware.cors; Util.Middleware.require_auth] [
+  Dream.scope "/api/user_feeds" [Common.Middleware.cors; Util.Middleware.require_auth] [
     Dream.post "" (fun request ->
       let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
       let%lwt body = Dream.body request in
@@ -61,10 +63,10 @@ let routes = [
                 Dream.log "[/user_feeds POST] source: %s - add success" uri;
                 json { message = "ok" } status_response_to_yojson
               | Error e ->
-                Dream.log "[/user_feeds POST] source: %s - add failed with %s" uri (Model.Error.Frontend.to_string e);
+                Dream.log "[/user_feeds POST] source: %s - add failed with %s" uri (Api.Error.Frontend.to_string e);
                 throw_error e)
           | _ ->
-            throw_error Model.Error.Frontend.BadRequest
+            throw_error Api.Error.Frontend.BadRequest
     );
 
     Dream.get "/" (fun request ->
@@ -101,7 +103,7 @@ let routes = [
           Dream.log "[/user_feeds/:source DELETE] source: %s - delete success" source;
           json { message = "ok" } status_response_to_yojson
         | Error e ->
-          Dream.log "[/user_feeds/:source DELETE] source: %s - delete failed with %s" source (Model.Error.Frontend.to_string e);
+          Dream.log "[/user_feeds/:source DELETE] source: %s - delete failed with %s" source (Api.Error.Frontend.to_string e);
           throw_error e
     );
   ]

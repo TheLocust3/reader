@@ -1,4 +1,5 @@
-open Model
+open Common.Api
+
 open Model.Item.Internal
 
 let make ~id ~from_feed ~link ~title ~description =

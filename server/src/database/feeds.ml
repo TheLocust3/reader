@@ -1,4 +1,5 @@
-open Model
+open Common.Api
+
 open Model.Feed.Internal
 
 let make ~source ~title ~description ~link =

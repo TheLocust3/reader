@@ -1,4 +1,5 @@
-open Model
+open Common.Api
+
 open Model.User.Internal
 
 let make ~id ~email ~password =

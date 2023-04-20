@@ -1,5 +1,6 @@
 open Lwt
-open Magic.Let
+open Common
+open Common.Magic.Let
 
 type t = {
   feed : Model.Feed.Internal.t;

@@ -1,4 +1,5 @@
-open Model
+open Common.Api
+
 open Model.UserFeed.Internal
 
 let make ~user_id ~feed_id =

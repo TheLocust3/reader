@@ -1,3 +1,5 @@
+open Common
+
 open Request
 open Response
 open Util
@@ -12,19 +14,19 @@ let create_feed source connection =
           Dream.log "[create_feed] uri: %s - add success" source;
           Lwt.return_ok ()
         | Error e ->
-          let message = Model.Error.Database.to_string e in
+          let message = Api.Error.Database.to_string e in
             Dream.log "[create_feed] uri: %s - add failed with %s" source message;
-            Lwt.return (Error (Model.Error.Database.to_frontend e)))
+            Lwt.return (Error (Api.Error.Database.to_frontend e)))
     | None ->
       Dream.log "[create_feed] uri: %s - Not found" source;
-      Lwt.return (Error Model.Error.Frontend.NotFound)
+      Lwt.return (Error Api.Error.Frontend.NotFound)
 
 let get_feed source connection =
   match%lwt Database.Feeds.by_source source connection with
     | Ok feed ->
       Lwt.return (Some feed)
     | Error e ->
-      Dream.log "[get_feed] uri: %s - lookup failed with %s" (Uri.to_string source) (Model.Error.Database.to_string e);
+      Dream.log "[get_feed] uri: %s - lookup failed with %s" (Uri.to_string source) (Api.Error.Database.to_string e);
       let%lwt document = Source.Rss.from_uri source in
         document |> Option.map (fun (doc : Source.Rss.t) -> doc.feed) |> Lwt.return
 
@@ -35,14 +37,14 @@ let get_feed_items (user_id) (source) (connection) : Model.UserItem.Internal.t l
         | Ok items ->
           Lwt.return (Some items)
         | Error e ->
-          Dream.log "[get_feed_items] uri: %s - items lookup failed with %s" (Uri.to_string source) (Model.Error.Database.to_string e);
+          Dream.log "[get_feed_items] uri: %s - items lookup failed with %s" (Uri.to_string source) (Api.Error.Database.to_string e);
           Lwt.return None)
     | Error e ->
-      Dream.log "[get_feed_items] uri: %s - feed lookup failed with %s" (Uri.to_string source) (Model.Error.Database.to_string e);
+      Dream.log "[get_feed_items] uri: %s - feed lookup failed with %s" (Uri.to_string source) (Api.Error.Database.to_string e);
       Lwt.return None
 
 let routes = [
-  Dream.scope "/api/feeds" [Util.Middleware.cors; Util.Middleware.require_auth] [
+  Dream.scope "/api/feeds" [Common.Middleware.cors; Util.Middleware.require_auth] [
     Dream.post "" (fun request ->
       let%lwt body = Dream.body request in
 
@@ -55,10 +57,10 @@ let routes = [
                 Dream.log "[/feeds POST] uri: %s - add success" uri;
                 json { message = "ok" } status_response_to_yojson
               | Error e ->
-                Dream.log "[/feeds POST] uri: %s - add failed with %s" uri (Model.Error.Frontend.to_string e);
+                Dream.log "[/feeds POST] uri: %s - add failed with %s" uri (Api.Error.Frontend.to_string e);
                 throw_error e)
           | _ ->
-            throw_error Model.Error.Frontend.BadRequest
+            throw_error Api.Error.Frontend.BadRequest
     );
 
     Dream.get "/:source" (fun request ->
@@ -70,7 +72,7 @@ let routes = [
           | Some feed ->
             json { feed = Model.Feed.Frontend.to_frontend feed } feed_response_to_yojson
           | None ->
-            throw_error Model.Error.Frontend.NotFound
+            throw_error Api.Error.Frontend.NotFound
     );
 
     Dream.get "/:source/items" (fun request ->
@@ -83,7 +85,7 @@ let routes = [
           | Some items ->
             json { items = List.map Model.UserItem.Frontend.to_frontend items } items_response_to_yojson
           | None ->
-            throw_error Model.Error.Frontend.NotFound
+            throw_error Api.Error.Frontend.NotFound
     );
   ]
 ]

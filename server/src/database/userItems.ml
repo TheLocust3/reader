@@ -1,4 +1,5 @@
-open Model
+open Common.Api
+
 open Model.UserItem.Database
 
 let make ~user_id ~item_id ~read =
