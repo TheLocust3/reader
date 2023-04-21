@@ -1,7 +1,7 @@
 open Common
+open Common.Api
 
 open Response
-open Util
 
 let set_read user_id item_id connection =
   (match%lwt Database.UserItems.set_read user_id item_id connection with
@@ -14,9 +14,9 @@ let set_read user_id item_id connection =
         Lwt.return (Error (Api.Error.Database.to_frontend e)))
 
 let routes = [
-  Dream.scope "/api/user_items" [Common.Middleware.cors; Util.Middleware.require_auth] [
+  Dream.scope "/api/user_items" [Common.Middleware.cors; Common.Middleware.Auth.require_auth] [
     Dream.post "/:item_id/read" (fun request ->
-      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
+      let user_id = Dream.field request Common.Middleware.Auth.user_id |> Option.get in
       let item_id = Dream.param request "item_id" in
 
       Dream.log "[/user_items/:item_id/read POST] item_id: %s" item_id;

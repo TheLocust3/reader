@@ -1,8 +1,8 @@
 open Common
+open Common.Api
 
 open Request
 open Response
-open Util
 
 let add_user_feed user_id source connection =
   (match%lwt Database.UserFeeds.create { user_id = user_id; feed_id = source } connection with
@@ -49,9 +49,9 @@ let get_recently_read_items user_id connection =
 
 
 let routes = [
-  Dream.scope "/api/user_feeds" [Common.Middleware.cors; Util.Middleware.require_auth] [
+  Dream.scope "/api/user_feeds" [Common.Middleware.cors; Common.Middleware.Auth.require_auth] [
     Dream.post "" (fun request ->
-      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
+      let user_id = Dream.field request Common.Middleware.Auth.user_id |> Option.get in
       let%lwt body = Dream.body request in
 
       let req = body |> Yojson.Safe.from_string |> user_feed_add_request_of_yojson in
@@ -70,7 +70,7 @@ let routes = [
     );
 
     Dream.get "/" (fun request ->
-      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
+      let user_id = Dream.field request Common.Middleware.Auth.user_id |> Option.get in
 
       let _ = Dream.log "[/user_feeds/ GET]" in
       let%lwt feeds = Dream.sql request (get_all_user_feeds user_id) in
@@ -78,7 +78,7 @@ let routes = [
     );
 
     Dream.get "/items" (fun request ->
-      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
+      let user_id = Dream.field request Common.Middleware.Auth.user_id |> Option.get in
 
       let _ = Dream.log "[/user_feeds/ GET]" in
       let%lwt items = Dream.sql request (get_items user_id) in
@@ -86,7 +86,7 @@ let routes = [
     );
 
     Dream.get "/items/read" (fun request ->
-      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
+      let user_id = Dream.field request Common.Middleware.Auth.user_id |> Option.get in
 
       let _ = Dream.log "[/user_feeds/ GET]" in
       let%lwt items = Dream.sql request (get_recently_read_items user_id) in
@@ -94,7 +94,7 @@ let routes = [
     );
 
     Dream.delete "/:source" (fun request ->
-      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
+      let user_id = Dream.field request Common.Middleware.Auth.user_id |> Option.get in
       let source = Dream.param request "source" in
 
       let _ = Dream.log "[/user_feeds/:source DELETE] source: %s" source in

@@ -1,8 +1,8 @@
 open Common
+open Common.Api
 
 open Request
 open Response
-open Util
 
 let create_feed source connection =
   match%lwt (Source.Rss.from_uri (Uri.of_string source)) with
@@ -44,7 +44,7 @@ let get_feed_items (user_id) (source) (connection) : Model.UserItem.Internal.t l
       Lwt.return None
 
 let routes = [
-  Dream.scope "/api/feeds" [Common.Middleware.cors; Util.Middleware.require_auth] [
+  Dream.scope "/api/feeds" [Common.Middleware.cors; Common.Middleware.Auth.require_auth] [
     Dream.post "" (fun request ->
       let%lwt body = Dream.body request in
 
@@ -76,7 +76,7 @@ let routes = [
     );
 
     Dream.get "/:source/items" (fun request ->
-      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
+      let user_id = Dream.field request Common.Middleware.Auth.user_id |> Option.get in
       let source = Dream.param request "source" |> Uri.of_string in
 
       let _ = Dream.log "[/feeds/:uri/items GET] uri: %s" (Uri.to_string source) in

@@ -1,8 +1,8 @@
 open Common
+open Common.Api
 
 open Request
 open Response
-open Util
 
 let create_board user_id name connection =
   (match%lwt Database.Boards.create (Model.Board.Internal.build ~user_id: user_id ~name: name) connection with
@@ -76,9 +76,9 @@ let remove_item user_id board_id item_id connection =
       Lwt.return (Error (Api.Error.Database.to_frontend e))
 
 let routes = [
-  Dream.scope "/api/boards" [Common.Middleware.cors; Util.Middleware.require_auth] [
+  Dream.scope "/api/boards" [Common.Middleware.cors; Common.Middleware.Auth.require_auth] [
     Dream.post "" (fun request ->
-      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
+      let user_id = Dream.field request Common.Middleware.Auth.user_id |> Option.get in
       let%lwt body = Dream.body request in
 
       let req = body |> Yojson.Safe.from_string |> board_create_request_of_yojson in
@@ -97,7 +97,7 @@ let routes = [
     );
 
     Dream.get "/" (fun request ->
-      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
+      let user_id = Dream.field request Common.Middleware.Auth.user_id |> Option.get in
 
       let _ = Dream.log "[/boards/ GET]" in
       let%lwt boards = Dream.sql request (get_all_boards user_id) in
@@ -105,7 +105,7 @@ let routes = [
     );
 
     Dream.get "/:id" (fun request ->
-      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
+      let user_id = Dream.field request Common.Middleware.Auth.user_id |> Option.get in
       let id = Dream.param request "id" in
 
       let _ = Dream.log "[/boards/:id GET] id: %s" id in
@@ -117,7 +117,7 @@ let routes = [
     );
 
     Dream.delete "/:id" (fun request ->
-      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
+      let user_id = Dream.field request Common.Middleware.Auth.user_id |> Option.get in
       let id = Dream.param request "id" in
 
       let _ = Dream.log "[/boards/:id DELETE] id: %s" id in
@@ -131,7 +131,7 @@ let routes = [
     );
 
     Dream.get "/:id/items" (fun request ->
-      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
+      let user_id = Dream.field request Common.Middleware.Auth.user_id |> Option.get in
       let id = Dream.param request "id" in
 
       let _ = Dream.log "[/boards/:id/items GET] id: %s" id in
@@ -143,7 +143,7 @@ let routes = [
     );
 
     Dream.post "/:id/items" (fun request ->
-      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
+      let user_id = Dream.field request Common.Middleware.Auth.user_id |> Option.get in
       let board_id = Dream.param request "id" in
       let%lwt body = Dream.body request in
 
@@ -163,7 +163,7 @@ let routes = [
     );
 
     Dream.delete "/:board_id/items/:item_id" (fun request ->
-      let user_id = Dream.field request Util.Middleware.user_id |> Option.get in
+      let user_id = Dream.field request Common.Middleware.Auth.user_id |> Option.get in
       let board_id = Dream.param request "board_id" in
       let item_id = Dream.param request "item_id" in
 
