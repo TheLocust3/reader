@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: feed-pruner
+  name: reader-feed-pruner
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: feed-pruner
+      app: reader-feed-pruner
   template:
     metadata:
       labels:
-        app: feed-pruner
+        app: reader-feed-pruner
     spec:
       containers:
-        - name: feed-pruner
+        - name: reader-feed-pruner
           image: $IMAGE
           envFrom:
             - configMapRef:
-                name: config
+                name: reader-config
           imagePullPolicy: $IMAGE_POLICY
           command: ["/bin/sh", "-c", "./job/main.exe feed-pruner"]
       initContainers:

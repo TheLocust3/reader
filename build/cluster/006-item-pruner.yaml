@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: item-pruner
+  name: reader-item-pruner
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: item-pruner
+      app: reader-item-pruner
   template:
     metadata:
       labels:
-        app: item-pruner
+        app: reader-item-pruner
     spec:
       containers:
-        - name: item-pruner
+        - name: reader-item-pruner
           image: $IMAGE
           envFrom:
             - configMapRef:
-                name: config
+                name: reader-config
           imagePullPolicy: $IMAGE_POLICY
           command: ["/bin/sh", "-c", "./job/main.exe item-pruner"]
       initContainers:

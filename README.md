@@ -61,6 +61,7 @@ Deployed as a Kubernetes cluster.
 `eval $(minikube docker-env)`  
 `minikube addons enable ingress`  
 `minikube tunnel`  
+`sudo sh -c 'echo "127.0.0.1       reader.localhost" >> /etc/hosts'`
   
 Create a certificate called `cert`:
 ```

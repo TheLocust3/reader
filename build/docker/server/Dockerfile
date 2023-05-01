@@ -1,6 +1,6 @@
-FROM ocaml/opam:alpine-ocaml-4.14
+FROM common_ocaml
 
-WORKDIR server
+WORKDIR /home/opam/server
 
 ADD server/reader.opam .
 RUN opam pin add -yn reader . && \

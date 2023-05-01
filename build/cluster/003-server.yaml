@@ -1,25 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: reader-server
+spec:
+  selector:
+    app: reader-server
+  ports:
+    - port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: puller
+  name: reader-server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: puller
+      app: reader-server
   template:
     metadata:
       labels:
-        app: puller
+        app: reader-server
     spec:
       containers:
-        - name: puller
+        - name: reader-server
           image: $IMAGE
+          ports:
+            - containerPort: 8080
           envFrom:
             - configMapRef:
-                name: config
+                name: reader-config
           imagePullPolicy: $IMAGE_POLICY
-          command: ["/bin/sh", "-c", "./job/main.exe puller"]
+          command: ["/bin/sh", "-c", "./server/main.exe"]
       initContainers:
         - name: wait-for-postgres
           image: postgres:13.4

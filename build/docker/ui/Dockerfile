@@ -1,11 +1,13 @@
-FROM node:16
+FROM common_react
 
-WORKDIR ui
+WORKDIR /ui
 
 ADD ui/package.json .
 RUN yarn install
 
 ADD ui/public/ public/
+ADD ui/scripts/ scripts/
+ADD ui/config/ config/
 ADD ui/src/ src/
 ADD ui/tsconfig.json tsconfig.json
 RUN yarn run build
