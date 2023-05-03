@@ -142,8 +142,6 @@ Deploy the cluster:
 ... wait \~10minutes time (until `sudo kubectl get pods` shows all the containers running) ...  
 
 ## TODO
- - Puller age-out
- - Add timeout to puller
  - Don't show empty add to board menu
  - prevent overwriting existing feeds
    - need to normalize feed source urls (so that different forms of URL are equal to eachother)

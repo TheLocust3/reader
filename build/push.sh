@@ -15,7 +15,7 @@ mkdir -p tmp/build/cluster/
 
 for f in build/cluster/*.yaml; do envsubst < $f > tmp/$f; done
 
-ssh ubuntu@"${CONTROL_PLANE_IP}" "mkdir ~/cluster/"
+ssh ubuntu@"${CONTROL_PLANE_IP}" "mkdir -p ~/cluster/reader/"
 
 scp -r secrets.env ubuntu@"${CONTROL_PLANE_IP}":~/secrets.env
-scp -r tmp/build/cluster/* ubuntu@"${CONTROL_PLANE_IP}":~/cluster/
+scp -r tmp/build/cluster/* ubuntu@"${CONTROL_PLANE_IP}":~/cluster/reader/

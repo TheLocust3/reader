@@ -19,7 +19,7 @@ spec:
             - configMapRef:
                 name: reader-config
           imagePullPolicy: $IMAGE_POLICY
-          command: ["/bin/sh", "-c", "./job/main.exe puller"]
+          command: ["/bin/sh", "-c", "trap \"exit\" SIGINT SIGTERM && timeout 1800s ./job/main.exe puller"]
       initContainers:
         - name: wait-for-postgres
           image: postgres:13.4
