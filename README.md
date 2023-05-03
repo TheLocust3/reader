@@ -86,7 +86,7 @@ USER_PASSWORD=???
 ... some amount of waiting ...  
 `kubectl get pods` should show the containers starting up  
   
-Navigate to `https://localhost`  
+Navigate to `https://reader.localhost`  
 
 ## Cloud Deploy
 Deploy a single node Kubernetes cluster in AWS.  
@@ -121,7 +121,7 @@ Set up the ECR repo:
 `make aws-repo`
 
 ### AWS Build
-Manually create+install an EC2 Key Pair in the AWS Console called "budgeting".  
+Manually create+install an EC2 Key Pair in the AWS Console called "reader".  
 
 Build the resources:  
 `make aws-build`  
@@ -145,6 +145,5 @@ Deploy the cluster:
  - Puller age-out
  - Add timeout to puller
  - Don't show empty add to board menu
- - bump jwt expiry
  - prevent overwriting existing feeds
    - need to normalize feed source urls (so that different forms of URL are equal to eachother)

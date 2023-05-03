@@ -10,3 +10,4 @@ data:
   PGPORT: "5432"
   PGUSER: jakekinsella
   PGPASSWORD: foobar
+  CENTRAL_BASE: $CENTRAL_BASE

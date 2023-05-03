@@ -16,6 +16,7 @@ spec:
       targetPort: 5432
   type: LoadBalancer"
 export HOST="reader.localhost"
+export CENTRAL_BASE="http://central-server:8080/api"
 
 kubectl create secret generic reader-secrets --from-env-file secrets.env
 kubectl create secret tls reader-cert --key=cert.key --cert=cert.crt
