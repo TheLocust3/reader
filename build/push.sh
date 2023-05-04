@@ -8,7 +8,7 @@ export IMAGE="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/reader:$
 export UI_IMAGE="$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/reader_ui:$VERSION"
 export IMAGE_POLICY="IfNotPresent"
 export HOST="reader.jakekinsella.com"
-export CENTRAL_BASE="https://central.jakekinsella/api"
+export CENTRAL_BASE="http://central-server:8080/api"
 
 rm -rf tmp/
 mkdir -p tmp/build/cluster/
