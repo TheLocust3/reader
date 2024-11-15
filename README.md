@@ -141,7 +141,8 @@ Deploy the cluster:
 
 ... wait \~10minutes time (until `sudo kubectl get pods` shows all the containers running) ...  
 
-## TODO
+## To-Do
+ - Fix intermittent UI delete weirdness where article will be removed from board but remain in the UI until refresh
  - Don't show empty add to board menu
- - prevent overwriting existing feeds
+ - Prevent overwriting existing feeds
    - need to normalize feed source urls (so that different forms of URL are equal to eachother)
