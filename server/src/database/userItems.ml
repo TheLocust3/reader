@@ -35,7 +35,6 @@ let migrate_query = [%rapper
       user_id TEXT NOT NULL,
       item_id TEXT NOT NULL,
       read BOOLEAN NOT NULL,
-      FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
       FOREIGN KEY(item_id) REFERENCES items(id) ON DELETE CASCADE,
       PRIMARY KEY(user_id, item_id)
     )

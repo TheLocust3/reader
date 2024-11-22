@@ -18,11 +18,7 @@ Barebones, totally local development environment.
    - `brew install openssl`
 
 ### Initial Setup
-`initdb data`  
-`pg_ctl -D data -l logfile start`  
-`createdb reader`  
-`make install`  
-`cd server && make migrate`  
+Complete the prerequisites found at [Central](https://github.com/TheLocust3/central?tab=readme-ov-file#initial-setup).  
   
 Create `database.env` at the root of the repository:
 ```
@@ -32,6 +28,10 @@ PGHOST=localhost
 PGPORT=5432
 PGDATABASE=reader
 ```
+
+`createdb reader`  
+`make install`  
+`cd server && make migrate`  
 
 ### Run
 `cd server && make start`  
@@ -47,61 +47,20 @@ Navigate to `http://localhost:3000`
 `cd ui && make refresh start`  
 
 ## Local Deploy
-Deployed as a Kubernetes cluster.  
-
-### Dependencies
- - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
- - [minikube](https://minikube.sigs.k8s.io/docs/)
- - [dune](https://dune.build)
- - [yarn](https://yarnpkg.com)
-
-### Initial Setup
-
-`minikube start`  
+Complete the prerequisites found at [Central](https://github.com/TheLocust3/central?tab=readme-ov-file#local-deploy).  
+  
 `eval $(minikube docker-env)`  
-`minikube addons enable ingress`  
-`minikube tunnel`  
 `sudo sh -c 'echo "127.0.0.1       reader.localhost" >> /etc/hosts'`
   
-Create a certificate called `cert`:
-```
-openssl req -newkey rsa:4096 \
-            -x509 \
-            -sha256 \
-            -days 3650 \
-            -nodes \
-            -out cert.crt \
-            -keyout cert.key
-```
-  
-Create `secrets.env` in the root of the repo:
-```
-USER_PASSWORD=???
-```
-
 ### Build+Deploy
 `make local-publish`  
 `make local-deploy`  
-
-... some amount of waiting ...  
-`kubectl get pods` should show the containers starting up  
   
 Navigate to `https://reader.localhost`  
 
 ## Cloud Deploy
-Deploy a single node Kubernetes cluster in AWS.  
+Complete the prerequisites found at [Central](https://github.com/TheLocust3/central?tab=readme-ov-file#cloud-deploy).  
 
-### Dependencies
- - [Packer](http://packer.io)
- - [Terraform](https://www.terraform.io)
-
-### Initial Setup
-
-Create `secrets.env` in the root of the repo:
-```
-USER_PASSWORD=???
-```
-  
 Environment variables:
 ```
 export AWS_ACCESS_KEY_ID=???
@@ -120,16 +79,6 @@ Build the AMI:
 Set up the ECR repo:  
 `make aws-repo`
 
-### AWS Build
-Manually create+install an EC2 Key Pair in the AWS Console called "reader".  
-
-Build the resources:  
-`make aws-build`  
-  
-Note the value of `control_plane_ip`.  
-  
-... wait _awhile_ ...  
-
 ### Cluster Deploy
 
 Export the Control Plane IP:  
@@ -138,8 +87,6 @@ Export the Control Plane IP:
 Deploy the cluster:  
 `make cluster-publish`  
 `make cluster-deploy VERSION=???`  
-
-... wait \~10minutes time (until `sudo kubectl get pods` shows all the containers running) ...  
 
 ## To-Do
  - Fix intermittent UI delete weirdness where article will be removed from board but remain in the UI until refresh
