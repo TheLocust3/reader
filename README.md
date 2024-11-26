@@ -57,7 +57,7 @@ Complete the prerequisites found at [Central](https://github.com/TheLocust3/cent
 `make local-publish`  
 `make local-deploy`  
   
-Navigate to `https://reader.localhost`  
+Navigate to `https://reader.cluster.local`  
 
 ## Cloud Deploy
 Complete the prerequisites found at [Central](https://github.com/TheLocust3/central?tab=readme-ov-file#cloud-deploy).  
