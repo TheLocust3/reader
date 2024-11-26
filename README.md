@@ -50,9 +50,10 @@ Navigate to `http://localhost:3000`
 Complete the prerequisites found at [Central](https://github.com/TheLocust3/central?tab=readme-ov-file#local-deploy).  
   
 `eval $(minikube docker-env)`  
-`sudo sh -c 'echo "127.0.0.1       reader.localhost" >> /etc/hosts'`
+`sudo sh -c 'echo "127.0.0.1       reader.cluster.local" >> /etc/hosts'`
   
 ### Build+Deploy
+`eval $(minikube docker-env)`
 `make local-publish`  
 `make local-deploy`  
   
