@@ -3,6 +3,7 @@ FROM common_react
 WORKDIR /ui
 
 ADD ui/package.json .
+RUN yarn config set network-timeout 300000
 RUN yarn install
 
 ADD ui/public/ public/

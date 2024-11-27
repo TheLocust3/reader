@@ -28,3 +28,4 @@ spec:
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh", "-c", "createdb -h postgres -p 5432 reader || echo 0"]
       restartPolicy: OnFailure
+$NODE_SELECTOR

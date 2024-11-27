@@ -30,3 +30,4 @@ spec:
           ports:
             - containerPort: 80
           imagePullPolicy: $IMAGE_POLICY
+$NODE_SELECTOR
