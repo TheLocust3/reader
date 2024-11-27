@@ -105,28 +105,30 @@ function Reader({ recently_read = false } : Props) {
     return () => document.removeEventListener("click", listener)
   }, []);
 
-  if (JSON.stringify(current) !== JSON.stringify(last)) { // structural equality
-    setLast(current);
-    
-    window.scrollTo(0, 0);
+  useEffect(() => {
+    if (JSON.stringify(current) !== JSON.stringify(last)) { // structural equality
+      setLast(current);
+      
+      window.scrollTo(0, 0);
 
-    Boards.all().then((lists) => setBoards(lists));
-    UserFeeds.all().then((feeds) => setFeeds(feeds));
+      Boards.all().then((lists) => setBoards(lists));
+      UserFeeds.all().then((feeds) => setFeeds(feeds));
 
-    if (boardId !== undefined) {
-      Boards.get(boardId).then((board) => setTitle(board.name));
-      Boards.items(boardId).then((items) => setItems(items));
-    } else if (feedId !== undefined) {
-      Feeds.get(feedId).then((feed) => setTitle(feed.title));
-      Feeds.items(feedId).then((items) => setItems(items));
-    } else if (recently_read) {
-      setTitle("Recently Read");
-      UserFeeds.recently_read_items().then((items) => setItems(items));
-    } else {
-      setTitle("All Feeds");
-      UserFeeds.items().then((items) => setItems(items));
+      if (boardId !== undefined) {
+        Boards.get(boardId).then((board) => setTitle(board.name));
+        Boards.items(boardId).then((items) => setItems(items));
+      } else if (feedId !== undefined) {
+        Feeds.get(feedId).then((feed) => setTitle(feed.title));
+        Feeds.items(feedId).then((items) => setItems(items));
+      } else if (recently_read) {
+        setTitle("Recently Read");
+        UserFeeds.recently_read_items().then((items) => setItems(items));
+      } else {
+        setTitle("All Feeds");
+        UserFeeds.items().then((items) => setItems(items));
+      }
     }
-  }
+  }, [last])
 
   return (
     <Root>
